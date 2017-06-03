@@ -1,0 +1,13 @@
+{
+  "name": "remote",
+  "globalDependencies": {
+    "chrome": "registry:dt/chrome#0.0.0+20160509083626",
+    "filesystem": "github:Dashlane/DefinitelyTyped/filesystem/filesystem.d.ts#16dacc5c4e39139d6e1b0457b4ec8c3599048604",
+    "filewriter": "github:Dashlane/DefinitelyTyped/filewriter/filewriter.d.ts#16dacc5c4e39139d6e1b0457b4ec8c3599048604",
+    "node": "github:Dashlane/DefinitelyTyped/node/node.d.ts#eb39e9bc0d59c5dbf6fab6242455e905d37f59e0",
+    "superagent": "github:Dashlane/DefinitelyTyped/superagent/superagent.d.ts#16dacc5c4e39139d6e1b0457b4ec8c3599048604"
+  },
+  "dependencies": {
+    "uuid": "registry:npm/uuid#3.0.1+20161206160008"
+  }
+}

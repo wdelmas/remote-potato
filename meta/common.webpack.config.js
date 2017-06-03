@@ -14,7 +14,8 @@ module.exports = (options) => {
         node:{
             fs: 'empty'
         },
-        externals: {}
+        externals: {},
+        outputPath : path.join(__dirname, '../build')
     }
 
     options = Object.assign({}, defaultOptions, options)
@@ -41,8 +42,8 @@ module.exports = (options) => {
         node: options.node,
         output: {
             filename: '[name].js',
-            libraryTarget: options.libraryTarget,
-            path: path.join(__dirname, '../build')
+         
+            path: options.outputPath
         },
         externals: options.externals,
         plugins: [].concat(options.pluginsAppend),
