@@ -1,0 +1,7 @@
+Goals of MVP #1:
+
+- on fmovies.se/9anime.to, we should be able to perform actions such as:
+    - Play/Pause player
+    - Previous/Next (episode)
+    - Previous/Next (5-10 secondes)
+    - Switch Player to full screen
