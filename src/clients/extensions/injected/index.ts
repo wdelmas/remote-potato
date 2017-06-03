@@ -1,13 +1,31 @@
 console.log("plop")
 
 
-chrome.runtime.onMessage.addListener(  function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(  function (request, sender: any, sendResponse) {
 
+    console.log(sender)
     console.log(request)
-
-    sendResponse(
+    switch(request.action){
+        case 'player_play':
+        console.log('firePlayer')
+        eventFire(document.getElementsByClassName('cover')[0], 'click');
+         sendResponse(
         {
-            result : 'test '
+            result : 'done '
         }
     )
+        break
+
+    }
+   
 })
+
+function eventFire(el : any, etype: any){
+  if (el.fireEvent) {
+    el.fireEvent('on' + etype);
+  } else {
+    var evObj = document.createEvent('Events');
+    evObj.initEvent(etype, true, false);
+    el.dispatchEvent(evObj);
+  }
+}
