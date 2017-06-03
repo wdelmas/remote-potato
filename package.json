@@ -6,8 +6,8 @@
   "scripts": {
     "start": "npm run server:build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "extension:build": "rm -rf ./build && webpack --config meta/extensions.webpack.config.js --display-error-details",
-    "server:build": "rm -rf ./build && webpack --config meta/server.webpack.config.js --display-error-details"
+    "extension:build": "rm -rf ./build/extensions && webpack --config meta/extensions.webpack.config.js --display-error-details",
+    "server:build": "rm -rf ./build/server && webpack --config meta/server.webpack.config.js --display-error-details"
 
   },
   "repository": {

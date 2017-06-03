@@ -10,24 +10,25 @@ let app = http.createServer(handler)
 const io = SocketIO(app);
 
 app.listen(PORT, () => {
-    console.log('server running on: '+ PORT)
+    console.log('server running on: ' + PORT)
 });
-function handler(request:http.IncomingMessage, response: http.ServerResponse) {
-  fs.readFile(__dirname + '/index.html',
-  function (err: Error, data : any) {
-      console.log(data)
-    if (err) {
-      response.writeHead(500);
-      return response.end('Error loading index.html');
-    }
-    response.writeHead(200);
-    response.end(data);
-  });
+function handler(request: http.IncomingMessage, response: http.ServerResponse) {
+    fs.readFile(__dirname + '/index.html',
+        function (err: Error, data: any) {
+            console.log(data)
+            if (err) {
+                response.writeHead(500);
+                return response.end('Error loading index.html');
+            }
+            response.writeHead(200);
+            response.end(data);
+        });
 }
 
 io.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data: any ) {
-    console.log(data);
-  });
+    console.log('Connected to WS Client')
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data: any) {
+        console.log(data);
+    });
 });
