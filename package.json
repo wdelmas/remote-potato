@@ -4,9 +4,10 @@
   "description": "Remote for browsers",
   "main": "index.js",
   "scripts": {
-    "start": "npm run extension:build",
+    "start": "npm run server:build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "extension:build": "rm -rf ./build && webpack --config meta/dev.webpack.config.js --display-error-details"
+    "extension:build": "rm -rf ./build && webpack --config meta/extensions.webpack.config.js --display-error-details",
+    "server:build": "rm -rf ./build && webpack --config meta/server.webpack.config.js --display-error-details"
 
   },
   "repository": {
@@ -33,6 +34,8 @@
     "babel-register": "~6.11.0",
     "babel-runtime": "^6.23.0",
     "copy-webpack-plugin": "^4.0.1",
+    "socket.io": "^1.4.5",
+    "socket.io-client": "^1.4.5",
     "typescript": "^2.2.1",
     "ts-loader": "^2.0.3",
     "webpack": "^2.5.1",

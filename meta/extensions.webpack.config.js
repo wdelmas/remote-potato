@@ -10,6 +10,7 @@ module.exports = commonConfig({
     'injected': ['./src/clients/extensions/injected/index.ts'],
   },
   outputPath: path.join(__dirname, '../build/extensions'),
+  libraryTarget: 'umd',
   pluginsAppend: [
     new CopyWebpackPlugin([{
         from: path.join(__dirname, '../src/clients/extensions/manifest.json'),
