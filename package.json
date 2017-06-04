@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "npm run typings",
-    "start": "npm run build:all && ",
+    "start": "npm run build:all ",
     "__test": "----------- TEST -----------",
     "test": "echo \"Error: no test specified\" && exit 1",
     "__build": "----------- BUILD -----------",
