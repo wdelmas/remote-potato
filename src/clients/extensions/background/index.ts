@@ -1,12 +1,15 @@
-import * as SocketIOClient from 'socket.io-client'
+import { HOST, MESSAGE_TO_EXTENSION, PORT } from '../../../communication/constants';
+import * as SocketIOClient from 'socket.io-client';
 
-const socket = SocketIOClient.connect('http://localhost:3002');
+const socket = SocketIOClient.connect(`http://${HOST}:${PORT}`);
 
-
-chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs: chrome.tabs.Tab[]) => {
-    const tab = tabs[0];
-    injectScript(tab)
-})
+export const getCurrentTab = () => {
+    return new Promise((resolve) => {
+        chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs: chrome.tabs.Tab[]) => {
+            return resolve(tabs[0]);
+        })
+    })
+}
 
 chrome.tabs.onUpdated.addListener((tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) => {
     console.log(changeInfo)
@@ -32,7 +35,15 @@ const injectScript = (tab: chrome.tabs.Tab) => {
 }
 
 
-socket.on('news', function (data: any) {
-    console.log(data);
-    socket.emit('my other event', { my: 'data' });
+socket.on(MESSAGE_TO_EXTENSION, function (data: any) {
+    console.log(data)
+    getCurrentTab()
+        .then((tab: chrome.tabs.Tab) => {
+            console.log(tab)
+            chrome.tabs.sendMessage(tab.id, data, function (response) {
+                console.log(response)
+            });
+        })
 });
+
+    // socket.emit('my other event', { my: 'data' });

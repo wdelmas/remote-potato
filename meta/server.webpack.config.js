@@ -5,8 +5,7 @@ const path = require('path')
 
 module.exports = commonConfig({
   entry: {
-    'index': ['./src/server/index.ts'],
-    'client': ['./src/server/client.ts']
+    'index': ['./src/server/index.ts']
   },
   outputPath: path.join(__dirname, '../build/server'),
   libraryTarget: 'commonjs2',

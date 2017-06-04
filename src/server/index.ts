@@ -1,10 +1,7 @@
-import * as http from 'http'
+import { MESSAGE_FROM_CLIENT, MESSAGE_TO_EXTENSION, PORT } from '../communication/constants';
+import * as http from 'http';
 const fs = require('fs');
-import * as SocketIO from 'socket.io'
-
-
-const PORT = 3002
-
+import * as SocketIO from 'socket.io';
 
 let app = http.createServer(handler)
 const io = SocketIO(app);
@@ -12,10 +9,12 @@ const io = SocketIO(app);
 app.listen(PORT, () => {
     console.log('server running on: ' + PORT)
 });
+
 function handler(request: http.IncomingMessage, response: http.ServerResponse) {
-    fs.readFile(__dirname + '/index.html',
+    const filePath = request.url === '/client.js' ? '/../client/index.js' : '/index.html'
+    console.log(__dirname + filePath)
+    fs.readFile(__dirname + filePath,
         function (err: Error, data: any) {
-            console.log(data)
             if (err) {
                 response.writeHead(500);
                 return response.end('Error loading index.html');
@@ -25,10 +24,10 @@ function handler(request: http.IncomingMessage, response: http.ServerResponse) {
         });
 }
 
-io.on('connection', function (socket) {
+io.on('connection', (socket) => {
     console.log('Connected to WS Client')
-    socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data: any) {
+    socket.on(MESSAGE_FROM_CLIENT, function (data: any) {
         console.log(data);
+        socket.broadcast.emit(MESSAGE_TO_EXTENSION, data);
     });
 });
