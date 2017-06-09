@@ -11,7 +11,7 @@ app.listen(PORT, () => {
 });
 
 function handler(request: http.IncomingMessage, response: http.ServerResponse) {
-    const filePath = request.url === '/client.js' ? '/../client/index.js' : '/index.html'
+    const filePath = request.url === '/client.js' ? '/../clients/index.js' : '../clients/index.html'
     console.log(__dirname + filePath)
     fs.readFile(__dirname + filePath,
         function (err: Error, data: any) {
