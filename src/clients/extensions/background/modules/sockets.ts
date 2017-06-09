@@ -7,7 +7,6 @@ const socket = SocketIOClient.connect(`http://${HOST}:${PORT}`);
 export const initSockets = () => {
 
     socket.on(MESSAGE_TO_EXTENSION, function (data: any) {
-        console.log(data)
         return sendMessageToCurrentTab(data)
     });
 }

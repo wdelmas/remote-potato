@@ -6,17 +6,17 @@ export const getCurrentTab = () => {
     })
 }
 
-export const onUpdateTabsListener = (func: Function) => {
+export const onUpdateTabsListener = (callback: Function) => {
     chrome.tabs.onUpdated.addListener((tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) => {
         if (changeInfo.status === 'complete')
-            return func(tab)
+            return callback(tab)
     })
 }
 
 export const sendMessageToCurrentTab = (data: any) => {
     return getCurrentTab()
         .then((tab: chrome.tabs.Tab) => {
-            console.log(tab)
+            console.log(data)
             chrome.tabs.sendMessage(tab.id, data, function (response) {
                 console.log(response)
             });

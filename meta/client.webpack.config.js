@@ -7,7 +7,7 @@ module.exports = commonConfig({
   entry: {
     'index': ['./src/clients/mobiles/index.ts']
   },
-  outputPath: path.join(__dirname, '../build/client'),
+  outputPath: path.join(__dirname, '../build/clients'),
   libraryTarget: 'umd',
   pluginsAppend: [
     new CopyWebpackPlugin([{
@@ -16,7 +16,7 @@ module.exports = commonConfig({
       },
       {
         from: path.join(__dirname, '../src/clients/mobiles/index.html'),
-        to: path.join(__dirname, '../build/clients/indx.html')
+        to: path.join(__dirname, '../build/clients/index.html')
       }
 
     ]),
