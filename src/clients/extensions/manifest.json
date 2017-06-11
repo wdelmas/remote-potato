@@ -1,17 +1,24 @@
 {
-  "name": "A browser action with a popup that changes the page color",
+  "name": "Remote",
   "description": "Change the current page color",
   "version": "1.0",
   "permissions": [
     "tabs", "http://*/*", "https://*/*"
   ],
-   "background": {
+  "background": {
     "page": "background.html"
   },
+  "content_scripts": [{
+    "matches": ["http://*/*", "https://*/*"],
+    "js": ["injected.js"],
+    "match_about_blank": true,
+    "run_at": "document_start",
+    "all_frames": true
+  }],
   "browser_action": {
-      "default_title": "Set this page's color.",
-      "default_icon": "icon.png",
-      "default_popup": "popup.html"
+    "default_title": "Set this page's color.",
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
   },
   "manifest_version": 2
 }

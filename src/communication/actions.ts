@@ -1,3 +1,5 @@
+export const HANDSHAKE = 'HANDSHAKE'
+
 export const PLAYER_PLAY = 'PLAYER_PLAY'
 export const PLAYER_PAUSE = 'PLAYER_PAUSE'
 export const PLAYER_SEEK_FORWARD = 'PLAYER_SEEK_FORWARD'
@@ -9,6 +11,7 @@ export type messageType = PLAYER_ACTIONS
 
 
 export interface message {
+    extensionId: string
     type: messageType
     action?: string
 }

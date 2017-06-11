@@ -5,11 +5,21 @@ const path = require('path')
 
 module.exports = commonConfig({
   entry: {
-    'index': ['./src/server/client.ts']
+    'index': ['./src/clients/mobiles/index.ts']
   },
-  outputPath: path.join(__dirname, '../build/client'),
+  outputPath: path.join(__dirname, '../build/clients'),
   libraryTarget: 'umd',
-  pluginsAppend: [  
+  pluginsAppend: [
+    new CopyWebpackPlugin([{
+        from: path.join(__dirname, '../src/clients/mobiles/dist/'),
+        to: path.join(__dirname, '../build/clients/dist/')
+      },
+      {
+        from: path.join(__dirname, '../src/clients/mobiles/index.html'),
+        to: path.join(__dirname, '../build/clients/index.html')
+      }
+
+    ]),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('development')

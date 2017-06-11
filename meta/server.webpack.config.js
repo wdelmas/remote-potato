@@ -18,13 +18,7 @@ module.exports = commonConfig({
         child_process: "empty"
     },
   externals: ["ws", "socket.io"],
-  pluginsAppend: [
-    new CopyWebpackPlugin([
-      {
-        from: path.join(__dirname, '../src/server/index.html'),
-        to: path.join(__dirname, '../build/server/index.html')
-      }
-    ]),
+  pluginsAppend: [   
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('development')
