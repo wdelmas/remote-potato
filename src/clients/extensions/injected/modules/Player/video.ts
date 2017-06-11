@@ -9,11 +9,16 @@ export interface VideoPlayer {
     seekBackward: (seconds: number) => void
 }
 
-export const getCurrentPlayerByDomain = (domain: string): VideoPlayer => {    
+export const getCurrentPlayerByDomain = (domain: string): VideoPlayer => {
+    let player: HTMLVideoElement = null
+
     if (FMOVIES_DOMAIN.indexOf(domain) > -1) {
-        const player = getFMoviesPlayer()
-        return loadVideoPlayer(player)
+        player = getFMoviesPlayer()
     }
+
+    if (player)
+        return loadVideoPlayer(player)
+
     return null
 }
 
@@ -21,7 +26,7 @@ export const getFMoviesPlayer = (): HTMLVideoElement => {
     //only compatible with basic HTML5 player     
     const cover = document.getElementsByClassName('cover')[0]
     if (cover)
-        eventFire(cover, 'click');  
+        eventFire(cover, 'click');
     const player = document.getElementsByClassName('jw-video jw-reset')[0]
     return player as HTMLVideoElement
 }
