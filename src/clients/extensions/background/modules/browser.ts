@@ -1,3 +1,5 @@
+import { Debugger } from "../../../../communication/Debugger";
+
 export const getCurrentTab = () => {
     return new Promise((resolve) => {
         chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs: chrome.tabs.Tab[]) => {
@@ -16,9 +18,9 @@ export const onUpdateTabsListener = (callback: Function) => {
 export const sendMessageToCurrentTab = (data: any) => {
     return getCurrentTab()
         .then((tab: chrome.tabs.Tab) => {
-            console.log(data)
+            Debugger.log(data)
             chrome.tabs.sendMessage(tab.id, data, function (response) {
-                console.log(response)
+                Debugger.log(response)
             });
         })
 }

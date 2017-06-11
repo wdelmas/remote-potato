@@ -2,12 +2,13 @@ import { MESSAGE_FROM_CLIENT, MESSAGE_TO_EXTENSION, PORT, HOST } from '../commun
 import * as http from 'http';
 const fs = require('fs');
 import * as SocketIO from 'socket.io';
+import { Debugger } from "../communication/Debugger";
 
 let app = http.createServer(handler)
 const io = SocketIO(app);
 
 app.listen(PORT, () => {
-    console.log('server running on: ' + HOST + ':' + PORT)
+    Debugger.log('server running on: ' + HOST + ':' + PORT)
 });
 
 export const rooter = (url: string) => {
@@ -24,7 +25,7 @@ export const rooter = (url: string) => {
 function handler(request: http.IncomingMessage, response: http.ServerResponse) {
 
     const filePath = rooter(request.url)
-    console.log(request.url + ' => ' + __dirname + filePath)
+    Debugger.log(request.url + ' => ' + __dirname + filePath)
 
     fs.readFile(__dirname + filePath,
         function (err: Error, data: any) {
@@ -38,9 +39,9 @@ function handler(request: http.IncomingMessage, response: http.ServerResponse) {
 }
 
 io.on('connection', (socket) => {
-    console.log('Connected to WS Client')
+    Debugger.log('Connected to WS Client')
     socket.on(MESSAGE_FROM_CLIENT, function (data: any) {
-        console.log(data);
+        Debugger.log(data);
         socket.broadcast.emit(MESSAGE_TO_EXTENSION, data);
     });
 });

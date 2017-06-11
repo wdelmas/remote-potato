@@ -11,6 +11,7 @@ export type messageType = PLAYER_ACTIONS
 
 
 export interface message {
+    extensionId: string
     type: messageType
     action?: string
 }

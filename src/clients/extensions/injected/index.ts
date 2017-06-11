@@ -1,6 +1,7 @@
 import { addMessageListener } from "./modules/browser";
 import { initActions } from "./modules/events";
+import { Debugger } from "../../../communication/Debugger";
 
-console.log("Script Remote Injected")
+Debugger.log("Script Remote Injected")
 
 addMessageListener(initActions)

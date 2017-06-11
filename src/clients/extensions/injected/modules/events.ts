@@ -2,14 +2,15 @@ import { getCurrentPlayerByDomain } from './Player/video'
 import { sendOkResponse } from "./messaging";
 import { PLAYER_PLAY, PLAYER_PAUSE, message, PLAYER_SEEK_BACKWARD, PLAYER_SEEK_FORWARD } from "../../../../communication/actions";
 import { getCurrentDomain } from "./browser";
+import { Debugger } from "../../../../communication/Debugger";
 
 export const initActions = (request: message, sender: any, sendResponse: (response: any) => void) => {
-    console.log(request)
+    Debugger.log(request)
     const currentDomain = getCurrentDomain()
     const player = getCurrentPlayerByDomain(currentDomain)
 
     if (!player) {
-        console.log('player not found')
+        Debugger.log('player not found')
         return;
     }
     switch (request.type) {
