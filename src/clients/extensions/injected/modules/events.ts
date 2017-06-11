@@ -8,8 +8,10 @@ export const initActions = (request: message, sender: any, sendResponse: (respon
     const currentDomain = getCurrentDomain()
     const player = getCurrentPlayerByDomain(currentDomain)
 
-    if (!player)
+    if (!player) {
         console.log('player not found')
+        return;
+    }
     switch (request.type) {
         case PLAYER_PLAY:
             player.play()
