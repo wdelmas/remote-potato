@@ -1,8 +1,9 @@
 import { Debugger } from "../../../../communication/Debugger";
 
+
 export const getCurrentTab = () => {
     return new Promise((resolve) => {
-        chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs: chrome.tabs.Tab[]) => {
+        chrome.tabs.query({ active: true }, (tabs: chrome.tabs.Tab[]) => {
             return resolve(tabs[0]);
         })
     })

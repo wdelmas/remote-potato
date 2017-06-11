@@ -8,7 +8,7 @@ const IO_SERVER = `http://${HOST}:${PORT}`
 var socket = SocketIOClient.connect(IO_SERVER);
 socket.on('connect', () => {
     Debugger.log('Connected to WS Server: ' + IO_SERVER)
-    socket.emit('hub', EXT_ID);
+    socket.emit('room', EXT_ID);
 })
 
 socket.on(MESSAGE_FROM_SERVER, function (data: any) {

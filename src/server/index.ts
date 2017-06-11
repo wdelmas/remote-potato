@@ -41,17 +41,18 @@ function handler(request: http.IncomingMessage, response: http.ServerResponse) {
 
 io.on('connection', (socket) => {
     Debugger.log('Connected to WS Client')
-    socket.on('hub', function (hubId: string) {
+    socket.on('room', function (hubId: string) {
+        Debugger.log('Server Join hub: ' + hubId)
         if (hubs.indexOf(hubId) === -1) {
-            Debugger.log('Server Join hub: ' + hubId)
             hubs.push(hubId)
-            socket.join(hubId);
         }
+        socket.join(hubId);
     })
 
     socket.on(MESSAGE_FROM_CLIENT, function (data: message) {
         Debugger.log(data);
         socket.in(data.extensionId).broadcast.emit(MESSAGE_TO_EXTENSION, data);
+        // socket.broadcast.emit(MESSAGE_TO_EXTENSION, data);
     });
 });
 

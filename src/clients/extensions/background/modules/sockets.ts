@@ -10,7 +10,7 @@ const socket = SocketIOClient.connect(IO_SERVER);
 export const initSockets = () => {
     socket.on('connect', () => {
         Debugger.log('Connected to WS Server: ' + IO_SERVER)
-        socket.emit('hub', EXT_ID);
+        socket.emit('room', EXT_ID);
     })
 
     socket.on(MESSAGE_TO_EXTENSION, function (data: any) {
