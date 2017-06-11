@@ -6,7 +6,9 @@ export const addMessageListener = (callback: Function) => {
     })
 }
 
-
 export const getCurrentDomain = (): string => {
-    return location.host.split('.')[1]
+    const host = location.host.split('.')
+    if (host.length > 0)
+        return host[host.length - 2]
+    return null
 }
