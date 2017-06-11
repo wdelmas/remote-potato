@@ -3,7 +3,14 @@ import * as SocketIOClient from 'socket.io-client';
 import { message, PLAYER_PLAY, PLAYER_PAUSE, PLAYER_SEEK_BACKWARD, PLAYER_SEEK_FORWARD } from "../../communication/actions";
 import { Debugger } from "../../communication/Debugger";
 
-var socket = SocketIOClient.connect(`http://${HOST}:${PORT}`);
+const IO_SERVER = `http://${HOST}:${PORT}`
+
+var socket = SocketIOClient.connect(IO_SERVER);
+socket.on('connect', () => {
+    Debugger.log('Connected to WS Server: ' + IO_SERVER)
+    socket.emit('hub', EXT_ID);
+})
+
 socket.on(MESSAGE_FROM_SERVER, function (data: any) {
     Debugger.log(data);
 });

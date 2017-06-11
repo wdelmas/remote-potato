@@ -3,10 +3,11 @@ import * as http from 'http';
 const fs = require('fs');
 import * as SocketIO from 'socket.io';
 import { Debugger } from "../communication/Debugger";
+import { message } from "../communication/actions";
 
 let app = http.createServer(handler)
 const io = SocketIO(app);
-
+let hubs: string[] = []
 app.listen(PORT, () => {
     Debugger.log('server running on: ' + HOST + ':' + PORT)
 });
@@ -40,8 +41,17 @@ function handler(request: http.IncomingMessage, response: http.ServerResponse) {
 
 io.on('connection', (socket) => {
     Debugger.log('Connected to WS Client')
-    socket.on(MESSAGE_FROM_CLIENT, function (data: any) {
+    socket.on('hub', function (hubId: string) {
+        if (hubs.indexOf(hubId) === -1) {
+            Debugger.log('Server Join hub: ' + hubId)
+            hubs.push(hubId)
+            socket.join(hubId);
+        }
+    })
+
+    socket.on(MESSAGE_FROM_CLIENT, function (data: message) {
         Debugger.log(data);
-        socket.broadcast.emit(MESSAGE_TO_EXTENSION, data);
+        socket.in(data.extensionId).broadcast.emit(MESSAGE_TO_EXTENSION, data);
     });
 });
+
