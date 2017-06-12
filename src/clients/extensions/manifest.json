@@ -1,10 +1,13 @@
 {
   "name": "Remote",
-  "description": "Change the current page color",
+  "description": "Remote for your favorite player.",
   "version": "1.0",
   "permissions": [
     "tabs", "http://*/*", "https://*/*"
   ],
+   "icons": {
+        "128": "icon-128.png"
+    },
   "background": {
     "page": "background.html"
   },
@@ -16,7 +19,7 @@
     "all_frames": true
   }],
   "browser_action": {
-    "default_title": "Set this page's color.",
+    "default_title": "Remote for your favorite player.",
     "default_icon": "icon.png",
     "default_popup": "popup.html"
   },

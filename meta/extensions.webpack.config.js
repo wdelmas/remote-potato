@@ -21,6 +21,10 @@ module.exports = commonConfig({
         to: path.join(__dirname, '../build/extensions/icon.png')
       },
       {
+        from: path.join(__dirname, '../src/clients/extensions/icon-128.png'),
+        to: path.join(__dirname, '../build/extensions/icon-128.png')
+      },
+      {
         from: path.join(__dirname, '../src/clients/extensions/popup.html'),
         to: path.join(__dirname, '../build/extensions/popup.html')
       },
