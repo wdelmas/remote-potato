@@ -1,9 +1,7 @@
-import { HOST, MESSAGE_FROM_CLIENT, MESSAGE_FROM_SERVER, PORT, EXT_ID } from '../../communication/constants';
+import { HOST, MESSAGE_FROM_CLIENT, MESSAGE_FROM_SERVER, PORT, EXT_ID, IO_SERVER } from '../../communication/constants';
 import * as SocketIOClient from 'socket.io-client';
 import { message, PLAYER_PLAY, PLAYER_PAUSE, PLAYER_SEEK_BACKWARD, PLAYER_SEEK_FORWARD } from "../../communication/actions";
 import { Debugger } from "../../communication/Debugger";
-
-const IO_SERVER = `http://${HOST}:${PORT}`
 
 var socket = SocketIOClient.connect(IO_SERVER);
 socket.on('connect', () => {
