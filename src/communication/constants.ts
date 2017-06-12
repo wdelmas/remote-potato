@@ -3,6 +3,7 @@ export const HOST_DAVID = '192.168.1.97'
 export const EXT_ID = 'hllblcmblpjpoefmopbcnfgncdjmceel'
 export const HOST = HOST_WILLIAM
 export const PORT = 3002
+export const IO_SERVER = `http://${HOST}:${PORT}`
 
 export const MESSAGE_FROM_CLIENT = 'MESSAGE_FROM_CLIENT'
 export const MESSAGE_TO_EXTENSION = 'MESSAGE_TO_EXTENSION'
