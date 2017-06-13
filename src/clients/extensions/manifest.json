@@ -14,8 +14,7 @@
   "content_scripts": [{
     "matches": ["http://*/*", "https://*/*"],
     "js": ["injected.js"],
-    "match_about_blank": true,
-    "run_at": "document_start",
+    "run_at": "document_end",
     "all_frames": true
   }],
   "browser_action": {

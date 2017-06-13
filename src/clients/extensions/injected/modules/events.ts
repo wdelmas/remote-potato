@@ -48,9 +48,12 @@ export const initActions = (request: message, sender: any, sendResponse: (respon
             sendOkResponse(sendResponse)
             break
         case PLAYER_ENTER_FULLSCREEN:
+            chrome.runtime.sendMessage({name: 'requestFullScreen'});
+            const playerContainer = document.getElementById('jw');
+            playerContainer.style.position = "fixed";
+            playerContainer.style.top = "0";
+            playerContainer.style.left = "0";
             sendOkResponse(sendResponse)
             break
-
-
     }
 }
