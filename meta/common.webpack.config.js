@@ -1,5 +1,20 @@
 const path = require('path')
 const webpack = require('webpack')
+var os = require('os');
+
+const getInternalIp = () => {
+  var interfaces = os.networkInterfaces();
+  var addresses = [];
+  for (var k in interfaces) {
+    for (var k2 in interfaces[k]) {
+      var address = interfaces[k][k2];
+      if (address.family === 'IPv4' && !address.internal) {
+        addresses.push(address.address);
+      }
+    }
+  }
+  return addresses[0]
+}
 
 module.exports = (options) => {
   const defaultOptions = {
@@ -45,7 +60,11 @@ module.exports = (options) => {
       path: options.outputPath
     },
     externals: options.externals,
-    plugins: [].concat(options.pluginsAppend),
+    plugins: [
+      new webpack.DefinePlugin({
+        WEBPACK_HOST: `"${getInternalIp()}"`
+      })
+    ].concat(options.pluginsAppend),
     resolve: {
       extensions: ['.json', '.js', '.ts'],
       modules: ['node_modules', 'src']
