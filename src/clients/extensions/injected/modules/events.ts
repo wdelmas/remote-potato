@@ -1,6 +1,15 @@
 import { getCurrentPlayerByDomain } from './Player/video'
 import { sendOkResponse } from "./messaging";
-import { PLAYER_PLAY, PLAYER_PAUSE, message, PLAYER_SEEK_BACKWARD, PLAYER_SEEK_FORWARD } from "../../../../communication/actions";
+import {
+    PLAYER_PLAY,
+    PLAYER_PAUSE,
+    message,
+    PLAYER_SEEK_BACKWARD,
+    PLAYER_SEEK_FORWARD,
+    PLAYER_VOLUME_UP,
+    PLAYER_VOLUME_DOWN,
+    PLAYER_ENTER_FULLSCREEN
+} from "../../../../communication/actions";
 import { getCurrentDomain } from "./browser";
 import { Debugger } from "../../../../communication/Debugger";
 
@@ -30,5 +39,18 @@ export const initActions = (request: message, sender: any, sendResponse: (respon
             player.seekForward(parseInt(request.action))
             sendOkResponse(sendResponse)
             break
+        case PLAYER_VOLUME_UP:
+            player.volumeUp(parseFloat(request.action))
+            sendOkResponse(sendResponse)
+            break
+        case PLAYER_VOLUME_DOWN:
+            player.volumeDown(parseFloat(request.action))
+            sendOkResponse(sendResponse)
+            break
+        case PLAYER_ENTER_FULLSCREEN:
+            sendOkResponse(sendResponse)
+            break
+
+
     }
 }

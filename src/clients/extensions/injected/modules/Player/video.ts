@@ -11,7 +11,9 @@ export interface VideoPlayer {
     play: () => void,
     pause: () => void,
     seekForward: (seconds: number) => void,
-    seekBackward: (seconds: number) => void
+    seekBackward: (seconds: number) => void,
+    volumeUp: (seconds: number) => void,
+    volumeDown: (seconds: number) => void
 }
 
 export const getCurrentPlayerByDomain = (domain: string): VideoPlayer => {
@@ -62,6 +64,14 @@ export const loadVideoPlayer = (player: HTMLVideoElement): VideoPlayer => {
         },
         seekForward: function (seconds: number) {
             player.currentTime += seconds
+        },
+        volumeUp: function (seconds: number) {
+            if (player.volume < 1)
+                player.volume += seconds
+        },
+        volumeDown: function (seconds: number) {
+            if (player.volume > 0)
+                player.volume -= seconds
         }
     }
 }
