@@ -19,6 +19,7 @@ const getInternalIp = () => {
 module.exports = (options) => {
   const defaultOptions = {
     devtool: false,
+    debug: true,
     entry: {
       'extensions': ['./src/clients/extensions/index.ts']
     },
@@ -40,17 +41,17 @@ module.exports = (options) => {
     entry: options.entry,
     module: {
       rules: [{
-          test: /\.js$/,
-          use: options.loadersPrepend.concat(['babel-loader']),
-          include: path.join(__dirname, 'src')
-        },
-        {
-          test: /\.ts$/,
-          use: options.loadersPrepend.concat(['babel-loader', {
-            loader: 'ts-loader',
-            options: { noEmit: true }
-          }])
-        }
+        test: /\.js$/,
+        use: options.loadersPrepend.concat(['babel-loader']),
+        include: path.join(__dirname, 'src')
+      },
+      {
+        test: /\.ts$/,
+        use: options.loadersPrepend.concat(['babel-loader', {
+          loader: 'ts-loader',
+          options: { noEmit: true }
+        }])
+      }
       ]
     },
     node: options.node,
@@ -62,6 +63,7 @@ module.exports = (options) => {
     externals: options.externals,
     plugins: [
       new webpack.DefinePlugin({
+        debug: options.debug,
         WEBPACK_HOST: `"${getInternalIp()}"`
       })
     ].concat(options.pluginsAppend),
