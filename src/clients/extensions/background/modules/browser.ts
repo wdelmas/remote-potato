@@ -4,7 +4,8 @@ import { IO_SERVER } from "../../../../communication/constants";
 import { uuid } from "../../../../communication/helpers";
 
 const extensionId = chrome.runtime.id
-export const roomId = `${extensionId}-${uuid()}`
+
+export const roomId = `${extensionId}-${debug ? '958ea70e-6c71-3f49-8c63-7b5f80c7faa1' : uuid()}`
 export const webAppUrl = `${IO_SERVER}?id=${roomId}`
 
 export const getCurrentTab = () => {
