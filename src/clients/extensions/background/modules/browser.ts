@@ -1,4 +1,5 @@
 import { Debugger } from "../../../../communication/Debugger";
+import { PLAYER_ENTER_FULLSCREEN, message } from "../../../../communication/actions";
 
 
 export const getCurrentTab = () => {
@@ -24,4 +25,20 @@ export const sendMessageToCurrentTab = (data: any) => {
                 Debugger.log(response)
             });
         })
+}
+
+const enterFullScreenWindow = (windowId: number) => {
+    chrome.windows.update(windowId, { state: "fullscreen" });
+}
+
+export const initMessageEventListener = () => {
+    chrome.runtime.onMessage.addListener((message: message) => {
+        if (message.type === PLAYER_ENTER_FULLSCREEN) {
+            chrome.tabs.query({ active: true }, (tabs) => {
+                const windowId = tabs[0].windowId;
+                enterFullScreenWindow(windowId)
+            }
+            )
+        }
+    })
 }

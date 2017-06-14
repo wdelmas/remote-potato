@@ -1,14 +1,11 @@
 
 import { initSockets } from "./modules/sockets";
+import { message, PLAYER_ENTER_FULLSCREEN } from "../../../communication/actions";
+import { initMessageEventListener } from "./modules/browser";
 
 initSockets()
+initMessageEventListener()
 
-chrome.runtime.onMessage.addListener(function request(request) {
-    if (request.name == "requestFullScreen") {
-        chrome.tabs.query({active: true}, function (tabs) {
-                let windowId = tabs[0].windowId;
-                chrome.windows.update(windowId, { state: "fullscreen" });
-            }
-        );
-    }
-});
+
+
+
