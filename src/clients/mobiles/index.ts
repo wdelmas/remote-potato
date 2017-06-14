@@ -1,4 +1,4 @@
-import { HOST, MESSAGE_FROM_CLIENT, MESSAGE_FROM_SERVER, PORT, EXT_ID, IO_SERVER } from '../../communication/constants';
+import { HOST, MESSAGE_FROM_CLIENT, MESSAGE_FROM_SERVER, PORT, IO_SERVER } from '../../communication/constants';
 import * as SocketIOClient from 'socket.io-client';
 import {
     message,
@@ -11,11 +11,16 @@ import {
     PLAYER_ENTER_FULLSCREEN
 } from "../../communication/actions";
 import { Debugger } from "../../communication/Debugger";
+export const getRoomId = () => {
+    const url = new URL(location.href);
+    return url.searchParams.get("id");
+}
+const ROOM_ID = getRoomId()
 
 var socket = SocketIOClient.connect(IO_SERVER);
 socket.on('connect', () => {
     Debugger.log('Connected to WS Server: ' + IO_SERVER)
-    socket.emit('room', EXT_ID);
+    socket.emit('room', ROOM_ID);
 })
 
 socket.on(MESSAGE_FROM_SERVER, function (data: any) {
@@ -23,7 +28,7 @@ socket.on(MESSAGE_FROM_SERVER, function (data: any) {
 });
 
 const BASE_MESSAGE = {
-    extensionId: EXT_ID
+    extensionId: ROOM_ID
 }
 
 export const play = () => {
@@ -73,7 +78,7 @@ export const volumeDown = (number: number) => {
 }
 
 export const enterFullScreen = () => {
-    const message =Object.assign({}, {
+    const message = Object.assign({}, {
         type: PLAYER_ENTER_FULLSCREEN,
     }, BASE_MESSAGE) as message
     socket.emit(MESSAGE_FROM_CLIENT, message);
