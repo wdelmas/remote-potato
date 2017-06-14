@@ -1,6 +1,15 @@
 import { HOST, MESSAGE_FROM_CLIENT, MESSAGE_FROM_SERVER, PORT, EXT_ID, IO_SERVER } from '../../communication/constants';
 import * as SocketIOClient from 'socket.io-client';
-import { message, PLAYER_PLAY, PLAYER_PAUSE, PLAYER_SEEK_BACKWARD, PLAYER_SEEK_FORWARD } from "../../communication/actions";
+import {
+    message,
+    PLAYER_PLAY,
+    PLAYER_PAUSE,
+    PLAYER_SEEK_BACKWARD,
+    PLAYER_SEEK_FORWARD,
+    PLAYER_VOLUME_UP,
+    PLAYER_VOLUME_DOWN,
+    PLAYER_ENTER_FULLSCREEN
+} from "../../communication/actions";
 import { Debugger } from "../../communication/Debugger";
 
 var socket = SocketIOClient.connect(IO_SERVER);
@@ -43,6 +52,29 @@ export const seekForward = (number: number) => {
     const message = Object.assign({}, {
         type: PLAYER_SEEK_FORWARD,
         action: number.toString()
+    }, BASE_MESSAGE) as message
+    socket.emit(MESSAGE_FROM_CLIENT, message);
+}
+
+export const volumeUp = (number: number) => {
+    const message = Object.assign({}, {
+        type: PLAYER_VOLUME_UP,
+        action: number.toString()
+    }, BASE_MESSAGE) as message
+    socket.emit(MESSAGE_FROM_CLIENT, message);
+}
+
+export const volumeDown = (number: number) => {
+    const message = Object.assign({}, {
+        type: PLAYER_VOLUME_DOWN,
+        action: number.toString()
+    }, BASE_MESSAGE) as message
+    socket.emit(MESSAGE_FROM_CLIENT, message);
+}
+
+export const enterFullScreen = () => {
+    const message =Object.assign({}, {
+        type: PLAYER_ENTER_FULLSCREEN,
     }, BASE_MESSAGE) as message
     socket.emit(MESSAGE_FROM_CLIENT, message);
 }

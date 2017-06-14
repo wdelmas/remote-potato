@@ -11,25 +11,36 @@ export interface VideoPlayer {
     play: () => void,
     pause: () => void,
     seekForward: (seconds: number) => void,
-    seekBackward: (seconds: number) => void
+    seekBackward: (seconds: number) => void,
+    volumeUp: (seconds: number) => void,
+    volumeDown: (seconds: number) => void,
+    enterFullScreen: () => void
+
+}
+
+export interface VideoPlayerWrapper {
+    player: HTMLVideoElement,
+    container?: HTMLElement
 }
 
 export const getCurrentPlayerByDomain = (domain: string): VideoPlayer => {
-    let player: HTMLVideoElement = null
+    let videoPlayer: VideoPlayerWrapper = null
 
     if (PLAYERS_DOMAIN.indexOf(domain) > -1) {
-        player = getVideoPlayer(domain)
+        videoPlayer = getVideoPlayer(domain)
     }
 
-    if (player)
-        return loadVideoPlayer(player)
+    if (videoPlayer && videoPlayer.player)
+        return loadVideoPlayer(videoPlayer)
 
     return null
 }
 
-export const getVideoPlayer = (domain: string): HTMLVideoElement => {
+export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
 
-    let player: HTMLVideoElement = null
+    let playerWrapper: VideoPlayerWrapper = {
+        player: null
+    }
 
     switch (domain) {
         case MY_CLOUD:
@@ -39,29 +50,47 @@ export const getVideoPlayer = (domain: string): HTMLVideoElement => {
             const cover = document.getElementsByClassName('cover')[0]
             if (cover)
                 eventFire(cover, 'click');
-            player = document.getElementsByClassName('jw-video jw-reset')[0] as HTMLVideoElement
+            playerWrapper.player = document.getElementsByClassName('jw-video jw-reset')[0] as HTMLVideoElement
+            playerWrapper.container = document.getElementById('jw')
+
+            Debugger.log(playerWrapper)
             break
     }
 
-    if (player)
-        Debugger.log('Player loaded from: '+ window.location.href)
+    if (playerWrapper.player)
+        Debugger.log('Player loaded from: ' + window.location.href)
 
-    return player
+    return playerWrapper
 }
 
-export const loadVideoPlayer = (player: HTMLVideoElement): VideoPlayer => {
+
+
+export const loadVideoPlayer = (wrapper: VideoPlayerWrapper): VideoPlayer => {
     return {
         play: function () {
-            player.play()
+            wrapper.player.play()
         },
         pause: function () {
-            player.pause()
+            wrapper.player.pause()
         },
         seekBackward: function (seconds: number) {
-            player.currentTime -= seconds
+            wrapper.player.currentTime -= seconds
         },
         seekForward: function (seconds: number) {
-            player.currentTime += seconds
+            wrapper.player.currentTime += seconds
+        },
+        volumeUp: function (seconds: number) {
+            if (wrapper.player.volume < 1)
+                wrapper.player.volume += seconds
+        },
+        volumeDown: function (seconds: number) {
+            if (wrapper.player.volume > 0)
+                wrapper.player.volume -= seconds
+        },
+        enterFullScreen: function () {
+            wrapper.container.style.position = "fixed";
+            wrapper.container.style.top = "0";
+            wrapper.container.style.left = "0";
         }
     }
 }

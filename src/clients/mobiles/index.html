@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
   <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
       <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   </head>
@@ -34,11 +35,14 @@
           height: calc(100vh - 20px);
           position: absolute;
       }
+      button.btn--alt {
+          color: #ccc;
+      }
   </style>
       <div class="row">
+          <button onclick="volumeDown(0.1)" class="btn--alt"><i class="fa fa-volume-down"></i></button>
           <div class="empty"></div>
-          <button onclick="pause()" ><i class="fa fa-pause"></i></button>
-          <div class="empty"></div>
+          <button onclick="volumeUp(0.1)" class="btn--alt"><i class="fa fa-volume-up"></i></button>
       </div>
 
       <div class="row">
@@ -48,9 +52,9 @@
       </div>
 
       <div class="row">
+          <button onclick="enterFullScreen()" class="btn--alt"><i class="fa fa-expand"></i></button>
           <div class="empty"></div>
-          <button onclick="pause()" ><i class="fa fa-cogs"></i></button>
-          <div class="empty"></div>
+          <button onclick="pause()" class="btn--alt"><i class="fa fa-pause"></i></button>
       </div>
 
     <script src="./client.js"></script>
