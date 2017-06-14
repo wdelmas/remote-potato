@@ -1,13 +1,47 @@
 import { Debugger } from "../../communication/Debugger";
 import { IO_SERVER } from "../../communication/constants";
+import { POPUP_OPENED, message, WEB_APP_URL } from "../../communication/actions";
 const QRious = require('qrious');
 
+const sendEventPopUpOpened = () => {
+    console.log('POPUP_OPENED')
+    const message = {
+        type: POPUP_OPENED
+    } as message
+    chrome.runtime.sendMessage(message);
+}
 
-const qr = new QRious({
-    value: IO_SERVER,
-    element: document.getElementById('qrcode'),
-    background: 'white',
-    padding: 25,
-    size: 200
-});
-document.getElementById('qrcode').appendChild(qr.image)
+const initMessageEventListener = () => {
+    chrome.runtime.onMessage.addListener((message: message) => {
+        switch (message.type) {
+            case WEB_APP_URL:
+                const qr = new QRious({
+                    value: message.action,
+                    element: document.getElementById('qrcode'),
+                    background: 'white',
+                    padding: 25,
+                    size: 200
+                });
+                document.getElementById('qrcode').appendChild(qr.image)
+
+                const displayWebApplink = () => {
+                    var a = document.createElement('a');
+                    var linkText = document.createTextNode("webAppUrl");
+                    a.appendChild(linkText);
+                    a.title = message.action;
+                    a.href = message.action;
+                    document.body.appendChild(a)
+                }
+
+                if (debug)
+                    displayWebApplink()
+                break
+
+        }
+    })
+}
+
+
+sendEventPopUpOpened()
+initMessageEventListener()
+

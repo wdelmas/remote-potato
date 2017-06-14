@@ -1,6 +1,12 @@
 import { Debugger } from "../../../../communication/Debugger";
-import { PLAYER_ENTER_FULLSCREEN, message } from "../../../../communication/actions";
+import { PLAYER_ENTER_FULLSCREEN, message, POPUP_OPENED, WEB_APP_URL } from "../../../../communication/actions";
+import { IO_SERVER } from "../../../../communication/constants";
+import { uuid } from "../../../../communication/helpers";
 
+const extensionId = chrome.runtime.id
+
+export const roomId = `${extensionId}-${debug ? '958ea70e-6c71-3f49-8c63-7b5f80c7faa1' : uuid()}`
+export const webAppUrl = `${IO_SERVER}?id=${roomId}`
 
 export const getCurrentTab = () => {
     return new Promise((resolve) => {
@@ -33,12 +39,20 @@ const enterFullScreenWindow = (windowId: number) => {
 
 export const initMessageEventListener = () => {
     chrome.runtime.onMessage.addListener((message: message) => {
-        if (message.type === PLAYER_ENTER_FULLSCREEN) {
-            chrome.tabs.query({ active: true }, (tabs) => {
-                const windowId = tabs[0].windowId;
-                enterFullScreenWindow(windowId)
-            }
-            )
+        switch (message.type) {
+            case PLAYER_ENTER_FULLSCREEN:
+                chrome.tabs.query({ active: true }, (tabs) => {
+                    const windowId = tabs[0].windowId;
+                    enterFullScreenWindow(windowId)
+                })
+                break
+            case POPUP_OPENED:
+                chrome.runtime.sendMessage({
+                    type: WEB_APP_URL,
+                    action: webAppUrl
+                } as message);
+                break
+
         }
     })
 }
