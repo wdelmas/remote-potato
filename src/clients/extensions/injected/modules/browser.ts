@@ -1,5 +1,6 @@
 import { message, PLAYER_EXIT_FULLSCREEN } from "../../../../communication/actions";
 import { initActions } from "./events";
+const noop = () => {}
 
 export const addMessageListener = (callback: Function) => {
     chrome.runtime.onMessage.addListener(function (request: message, sender: any, sendResponse: (response: any) => void) {
@@ -21,7 +22,7 @@ export const addKeyboardListeners = () => {
             case ESC_KEY:
                 initActions({
                     type: PLAYER_EXIT_FULLSCREEN
-                }, null, null);
+                }, null, noop);
                 break;
         }
     };
