@@ -8,7 +8,8 @@ import {
     PLAYER_SEEK_FORWARD,
     PLAYER_VOLUME_UP,
     PLAYER_VOLUME_DOWN,
-    PLAYER_ENTER_FULLSCREEN
+    PLAYER_ENTER_FULLSCREEN,
+    PLAYER_EXIT_FULLSCREEN
 } from "../../../../communication/actions";
 import { getCurrentDomain } from "./browser";
 import { Debugger } from "../../../../communication/Debugger";
@@ -57,6 +58,11 @@ export const initActions = (request: message, sender: any, sendResponse: (respon
             player.enterFullScreen()
             chrome.runtime.sendMessage(request);
             sendOkResponse(sendResponse)
+            break
+        case PLAYER_EXIT_FULLSCREEN:
+            player.exitFullScreen();
+            chrome.runtime.sendMessage(request);
+            sendOkResponse(sendResponse);
             break
     }
 }

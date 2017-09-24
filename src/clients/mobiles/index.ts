@@ -8,7 +8,8 @@ import {
     PLAYER_SEEK_FORWARD,
     PLAYER_VOLUME_UP,
     PLAYER_VOLUME_DOWN,
-    PLAYER_ENTER_FULLSCREEN
+    PLAYER_ENTER_FULLSCREEN,
+    PLAYER_EXIT_FULLSCREEN
 } from "../../communication/actions";
 import { Debugger } from "../../communication/Debugger";
 export const getRoomId = () => {
@@ -80,6 +81,13 @@ export const volumeDown = (number: number) => {
 export const enterFullScreen = () => {
     const message = Object.assign({}, {
         type: PLAYER_ENTER_FULLSCREEN,
+    }, BASE_MESSAGE) as message
+    socket.emit(MESSAGE_FROM_CLIENT, message);
+}
+
+export const exitFullScreen = () => {
+    const message = Object.assign({}, {
+        type: PLAYER_EXIT_FULLSCREEN,
     }, BASE_MESSAGE) as message
     socket.emit(MESSAGE_FROM_CLIENT, message);
 }
