@@ -1,4 +1,4 @@
-import { getCurrentPlayerByDomain } from './Player/video'
+import { getCurrentPlayerByDomain, VideoPlayer } from './Player/video'
 import { sendOkResponse } from "./messaging";
 import {
     PLAYER_PLAY,
@@ -13,15 +13,21 @@ import {
 import { getCurrentDomain } from "./browser";
 import { Debugger } from "../../../../communication/Debugger";
 
-export const initActions = (request: message, sender: any, sendResponse: (response: any) => void) => {
-    Debugger.log(request)
-    const currentDomain = getCurrentDomain()
-    const player = getCurrentPlayerByDomain(currentDomain)
+let player: VideoPlayer = null
+let findPlayerTry = 0
+const MAX_PLAYER_SEARCHED = 1
 
-    if (!player) {
-        Debugger.log('player not found')
-        return;
+export const initActions = (request: message, sender: any, sendResponse: (response: any) => void) => {
+    if (!player && findPlayerTry < MAX_PLAYER_SEARCHED) {
+        const currentDomain = getCurrentDomain()
+        player = getCurrentPlayerByDomain(currentDomain)
+        findPlayerTry++
     }
+    if (!player)
+        return
+
+    Debugger.log(request)
+
     switch (request.type) {
         case PLAYER_PLAY:
             player.play()

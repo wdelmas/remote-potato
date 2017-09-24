@@ -22,7 +22,8 @@ export interface VideoPlayer {
 
 export interface VideoPlayerWrapper {
     player: HTMLVideoElement,
-    container?: HTMLElement
+    container?: HTMLElement[]
+    customBehavior?: Partial<VideoPlayer>
 }
 
 export const getCurrentPlayerByDomain = (domain: string): VideoPlayer => {
@@ -32,8 +33,9 @@ export const getCurrentPlayerByDomain = (domain: string): VideoPlayer => {
         videoPlayer = getVideoPlayer(domain)
     }
 
-    if (videoPlayer && videoPlayer.player)
-        return loadVideoPlayer(videoPlayer)
+    if (videoPlayer && videoPlayer.player) {
+        return loadVideoPlayer(videoPlayer, videoPlayer.customBehavior)
+    }
 
     return null
 }
@@ -43,7 +45,6 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
     let playerWrapper: VideoPlayerWrapper = {
         player: null
     }
-    debugger
     switch (domain) {
         case MY_CLOUD:
         case FMOVIES:
@@ -53,30 +54,35 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
             if (cover)
                 eventFire(cover, 'click');
             playerWrapper.player = document.getElementsByClassName('jw-video jw-reset')[0] as HTMLVideoElement
-            playerWrapper.container = document.getElementById('player')
+            playerWrapper.container = [document.getElementById('player')]
 
-            Debugger.log(playerWrapper)
             break
         case VIMEO:
             //only compatible with basic HTML5 player     
             playerWrapper.player = document.getElementsByTagName('video')[0] as HTMLVideoElement
-            playerWrapper.container = document.getElementsByClassName('video-wrapper')[0] as any
-            eventFire(playerWrapper.player, 'click');
+            playerWrapper.container = [
+                document.getElementsByClassName("player js-player player")[0] as any,
+                document.getElementsByClassName("player_area")[0] as any]
 
-            Debugger.log(playerWrapper)
+            if (playerWrapper.player)
+                eventFire(playerWrapper.player, 'click');
+
             break
     }
 
-    if (playerWrapper.player)
+    if (playerWrapper.player) {
+
         Debugger.log('Player loaded from: ' + window.location.href)
+        Debugger.log(playerWrapper)
+    }
 
     return playerWrapper
 }
 
 
 
-export const loadVideoPlayer = (wrapper: VideoPlayerWrapper): VideoPlayer => {
-    return {
+export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?: Partial<VideoPlayer>): VideoPlayer => {
+    const videoPlayer = {
         play: function () {
             wrapper.player.play()
         },
@@ -98,11 +104,13 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper): VideoPlayer => {
                 wrapper.player.volume -= seconds
         },
         enterFullScreen: function () {
-            debugger
-            wrapper.container.style.position = "fixed";
-            wrapper.container.style.top = "0";
-            wrapper.container.style.left = "0";
-            wrapper.container.style.zIndex = "9990";
+            wrapper.container.forEach((c) => {
+                c.style.position = "fixed";
+                c.style.top = "0";
+                c.style.zIndex = "9990";
+                c.style.left = "0";
+            })
         }
     }
+    return customVideoPlayer ? Object.assign({}, videoPlayer, customVideoPlayer) : videoPlayer
 }
