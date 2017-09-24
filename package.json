@@ -4,8 +4,8 @@
   "description": "Remote for browsers",
   "main": "index.js",
   "scripts": {
-    "postinstall": "npm run typings",
-    "start": "npm run build:all ",
+    "postinstall": "npm run typings && npm run server:build",
+    "start": "npm run server:start",
     "__test": "----------- TEST -----------",
     "test": "echo \"Error: no test specified\" && exit 1",
     "__build": "----------- BUILD -----------",
