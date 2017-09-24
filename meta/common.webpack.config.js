@@ -64,7 +64,8 @@ module.exports = (options) => {
     plugins: [
       new webpack.DefinePlugin({
         debug: options.debug,
-        WEBPACK_HOST: `"${getInternalIp()}"`
+        WEBPACK_HOST: `"${getInternalIp()}"`,
+        HEROKU_PORT: process.env.PORT ? `"${process.env.PORT}"` : null
       })
     ].concat(options.pluginsAppend),
     resolve: {
