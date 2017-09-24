@@ -10,7 +10,7 @@ export const webAppUrl = `${IO_SERVER}?id=${roomId}`
 
 export const getCurrentTab = () => {
     return new Promise((resolve) => {
-        chrome.tabs.query({ active: true }, (tabs: chrome.tabs.Tab[]) => {
+        chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, (tabs: chrome.tabs.Tab[]) => {
             return resolve(tabs[0]);
         })
     })
@@ -28,7 +28,10 @@ export const sendMessageToCurrentTab = (data: any) => {
         .then((tab: chrome.tabs.Tab) => {
             Debugger.log(data)
             chrome.tabs.sendMessage(tab.id, data, function (response) {
-                Debugger.log(response)
+                if (response)
+                    Debugger.log(response)
+                else
+                    Debugger.log('Answer from InjectedJS')
             });
         })
 }

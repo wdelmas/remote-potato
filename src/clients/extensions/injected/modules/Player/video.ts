@@ -43,7 +43,6 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
     let playerWrapper: VideoPlayerWrapper = {
         player: null
     }
-    debugger
     switch (domain) {
         case MY_CLOUD:
         case FMOVIES:
@@ -55,20 +54,22 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
             playerWrapper.player = document.getElementsByClassName('jw-video jw-reset')[0] as HTMLVideoElement
             playerWrapper.container = document.getElementById('player')
 
-            Debugger.log(playerWrapper)
             break
         case VIMEO:
             //only compatible with basic HTML5 player     
             playerWrapper.player = document.getElementsByTagName('video')[0] as HTMLVideoElement
             playerWrapper.container = document.getElementsByClassName('video-wrapper')[0] as any
-            eventFire(playerWrapper.player, 'click');
+            if (playerWrapper.player)
+                eventFire(playerWrapper.player, 'click');
 
-            Debugger.log(playerWrapper)
             break
     }
 
-    if (playerWrapper.player)
+    if (playerWrapper.player) {
+
         Debugger.log('Player loaded from: ' + window.location.href)
+        Debugger.log(playerWrapper)
+    }
 
     return playerWrapper
 }
@@ -98,7 +99,6 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper): VideoPlayer => {
                 wrapper.player.volume -= seconds
         },
         enterFullScreen: function () {
-            debugger
             wrapper.container.style.position = "fixed";
             wrapper.container.style.top = "0";
             wrapper.container.style.left = "0";
