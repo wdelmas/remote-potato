@@ -14,11 +14,10 @@ export interface VideoPlayer {
     pause: () => void,
     seekForward: (seconds: number) => void,
     seekBackward: (seconds: number) => void,
-    volumeUp: (seconds: number) => void,
-    volumeDown: (seconds: number) => void,
+    volumeUp: (seconds: number) => number,
+    volumeDown: (seconds: number) => number,
     enterFullScreen: () => void,
     exitFullScreen: () => void
-
 }
 
 export interface VideoPlayerWrapper {
@@ -97,12 +96,14 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
             wrapper.player.currentTime += seconds
         },
         volumeUp: function (seconds: number) {
-            if (wrapper.player.volume < 1)
+            if (wrapper.player.volume + seconds < 1)
                 wrapper.player.volume += seconds
+            return wrapper.player.volume
         },
         volumeDown: function (seconds: number) {
-            if (wrapper.player.volume > 0)
+            if (wrapper.player.volume - seconds > 0)
                 wrapper.player.volume -= seconds
+            return wrapper.player.volume
         },
         enterFullScreen: function () {
             wrapper.container.forEach((c) => {
