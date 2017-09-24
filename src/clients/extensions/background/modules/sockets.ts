@@ -19,3 +19,5 @@ export const initSockets = () => {
         return sendMessageToCurrentTab(data)
     });
 }
+
+export const getSocketBackground = () => socket

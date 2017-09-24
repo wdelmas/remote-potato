@@ -1,4 +1,4 @@
-import { MESSAGE_FROM_CLIENT, MESSAGE_TO_EXTENSION, PORT, HOST } from '../communication/constants';
+import { MESSAGE_FROM_CLIENT, MESSAGE_TO_EXTENSION, PORT, HOST, MESSAGE_FROM_EXTENSION } from '../communication/constants';
 import * as http from 'http';
 const fs = require('fs');
 import * as SocketIO from 'socket.io';
@@ -52,6 +52,11 @@ io.on('connection', (socket) => {
     socket.on(MESSAGE_FROM_CLIENT, function (data: message) {
         Debugger.log(data);
         socket.in(data.extensionId).broadcast.emit(MESSAGE_TO_EXTENSION, data);
+        // socket.broadcast.emit(MESSAGE_TO_EXTENSION, data);
+    });
+    socket.on(MESSAGE_FROM_EXTENSION, function (data: message) {
+        Debugger.log(data);
+        socket.in(data.extensionId).broadcast.emit(MESSAGE_FROM_EXTENSION, data);
         // socket.broadcast.emit(MESSAGE_TO_EXTENSION, data);
     });
 });

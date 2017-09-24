@@ -1,4 +1,4 @@
-import { HOST, MESSAGE_FROM_CLIENT, MESSAGE_FROM_SERVER, PORT, IO_SERVER } from '../../communication/constants';
+import { HOST, MESSAGE_FROM_CLIENT, MESSAGE_FROM_EXTENSION, PORT, IO_SERVER } from '../../communication/constants';
 import * as SocketIOClient from 'socket.io-client';
 import {
     message,
@@ -24,8 +24,13 @@ socket.on('connect', () => {
     socket.emit('room', ROOM_ID);
 })
 
-socket.on(MESSAGE_FROM_SERVER, function (data: any) {
-    Debugger.log(data);
+socket.on(MESSAGE_FROM_EXTENSION, function (data: message) {
+    switch (data.type) {
+        case 'PLAYER_VOLUME_UP':
+        case 'PLAYER_VOLUME_DOWN':
+            console.log(data.action)
+            break
+    }
 });
 
 const BASE_MESSAGE = {

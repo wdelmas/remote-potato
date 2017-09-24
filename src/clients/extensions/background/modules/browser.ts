@@ -1,7 +1,8 @@
 import { Debugger } from "../../../../communication/Debugger";
 import { PLAYER_ENTER_FULLSCREEN, PLAYER_EXIT_FULLSCREEN, message, POPUP_OPENED, WEB_APP_URL } from "../../../../communication/actions";
-import { IO_SERVER } from "../../../../communication/constants";
+import { IO_SERVER, MESSAGE_FROM_EXTENSION } from "../../../../communication/constants";
 import { uuid } from "../../../../communication/helpers";
+import { getSocketBackground } from "./sockets";
 
 const extensionId = chrome.runtime.id;
 
@@ -27,9 +28,9 @@ export const sendMessageToCurrentTab = (data: any) => {
     return getCurrentTab()
         .then((tab: chrome.tabs.Tab) => {
             Debugger.log(data)
-            chrome.tabs.sendMessage(tab.id, data, function (response) {
-                if (response)
-                    Debugger.log(response)
+            chrome.tabs.sendMessage(tab.id, data, function (response: message) {
+                if (response && response.extensionId)
+                    getSocketBackground().emit(MESSAGE_FROM_EXTENSION, response);
                 else
                     Debugger.log('Answer from InjectedJS')
             });
@@ -59,7 +60,6 @@ export const initMessageEventListener = () => {
                     action: webAppUrl
                 } as message);
                 break
-
         }
     })
 }

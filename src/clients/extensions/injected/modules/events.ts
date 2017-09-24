@@ -28,7 +28,7 @@ export const initActions = (request: message, sender: any, sendResponse: (respon
         return
 
     Debugger.log(request)
-
+    let result: message = null
     switch (request.type) {
         case PLAYER_PLAY:
             player.play()
@@ -47,12 +47,20 @@ export const initActions = (request: message, sender: any, sendResponse: (respon
             sendOkResponse(sendResponse)
             break
         case PLAYER_VOLUME_UP:
-            player.volumeUp(parseFloat(request.action))
-            sendOkResponse(sendResponse)
+            result = {
+                extensionId: request.extensionId,
+                action: `${player.volumeUp(parseFloat(request.action))}`,
+                type: 'PLAYER_VOLUME_UP'
+            }
+            sendResponse(result)
             break
         case PLAYER_VOLUME_DOWN:
-            player.volumeDown(parseFloat(request.action))
-            sendOkResponse(sendResponse)
+            result = {
+                extensionId: request.extensionId,
+                action: `${player.volumeDown(parseFloat(request.action))}`,
+                type: 'PLAYER_VOLUME_DOWN'
+            }
+            sendResponse(result)
             break
         case PLAYER_ENTER_FULLSCREEN:
             player.enterFullScreen()
