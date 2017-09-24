@@ -19,7 +19,7 @@ const getInternalIp = () => {
 module.exports = (options) => {
   const defaultOptions = {
     devtool: false,
-    debug: true,
+    debug: process.env.NODE_ENV !== 'production',
     entry: {
       'extensions': ['./src/clients/extensions/index.ts']
     },
@@ -65,7 +65,8 @@ module.exports = (options) => {
       new webpack.DefinePlugin({
         debug: options.debug,
         WEBPACK_HOST: `"${getInternalIp()}"`,
-        HEROKU_PORT: process.env.PORT ? `"${process.env.PORT}"` : null
+        HEROKU_PORT: process.env.PORT ? `"${process.env.PORT}"` : null,
+        HEROKU_HOST: options.debug ? null : `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/`
       })
     ].concat(options.pluginsAppend),
     resolve: {

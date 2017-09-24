@@ -16,7 +16,8 @@ export interface VideoPlayer {
     seekBackward: (seconds: number) => void,
     volumeUp: (seconds: number) => void,
     volumeDown: (seconds: number) => void,
-    enterFullScreen: () => void
+    enterFullScreen: () => void,
+    exitFullScreen: () => void
 
 }
 
@@ -110,7 +111,15 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                 c.style.zIndex = "9990";
                 c.style.left = "0";
             })
+        },
+        exitFullScreen: function () {
+            wrapper.container.forEach((c) => {
+                c.style.position = "inherit";
+                c.style.top = "auto";
+                c.style.zIndex = "auto";
+                c.style.left = "auto";
+            })
         }
-    }
+    };
     return customVideoPlayer ? Object.assign({}, videoPlayer, customVideoPlayer) : videoPlayer
 }
