@@ -4,8 +4,10 @@ import { Debugger } from "../../../../../communication/Debugger";
 const FMOVIES = 'fmovies'
 const NINE_ANIME = '9anime'
 const MY_CLOUD = 'mycloud'
+const VIMEO = 'vimeo'
 
-const PLAYERS_DOMAIN = [FMOVIES, NINE_ANIME, MY_CLOUD]
+
+const PLAYERS_DOMAIN = [FMOVIES, NINE_ANIME, MY_CLOUD, VIMEO]
 
 export interface VideoPlayer {
     play: () => void,
@@ -41,7 +43,7 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
     let playerWrapper: VideoPlayerWrapper = {
         player: null
     }
-
+    debugger
     switch (domain) {
         case MY_CLOUD:
         case FMOVIES:
@@ -51,7 +53,15 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
             if (cover)
                 eventFire(cover, 'click');
             playerWrapper.player = document.getElementsByClassName('jw-video jw-reset')[0] as HTMLVideoElement
-            playerWrapper.container = document.getElementById('jw')
+            playerWrapper.container = document.getElementById('player')
+
+            Debugger.log(playerWrapper)
+            break
+        case VIMEO:
+            //only compatible with basic HTML5 player     
+            playerWrapper.player = document.getElementsByTagName('video')[0] as HTMLVideoElement
+            playerWrapper.container = document.getElementsByClassName('video-wrapper')[0] as any
+            eventFire(playerWrapper.player, 'click');
 
             Debugger.log(playerWrapper)
             break
@@ -88,9 +98,11 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper): VideoPlayer => {
                 wrapper.player.volume -= seconds
         },
         enterFullScreen: function () {
+            debugger
             wrapper.container.style.position = "fixed";
             wrapper.container.style.top = "0";
             wrapper.container.style.left = "0";
+            wrapper.container.style.zIndex = "9990";
         }
     }
 }
