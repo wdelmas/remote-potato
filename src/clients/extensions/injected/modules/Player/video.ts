@@ -5,9 +5,10 @@ const FMOVIES = 'fmovies'
 const NINE_ANIME = '9anime'
 const MY_CLOUD = 'mycloud'
 const VIMEO = 'vimeo'
+const AMAZON = 'primevideo'
 
 
-const PLAYERS_DOMAIN = [FMOVIES, NINE_ANIME, MY_CLOUD, VIMEO]
+const PLAYERS_DOMAIN = [FMOVIES, NINE_ANIME, MY_CLOUD, VIMEO, AMAZON]
 
 export interface VideoPlayer {
     play: () => void,
@@ -66,6 +67,17 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
 
             if (playerWrapper.player)
                 eventFire(playerWrapper.player, 'click');
+
+            break
+        case AMAZON:
+            //only compatible with basic HTML5 player     
+            playerWrapper.player = document.getElementsByTagName('video')[0] as HTMLVideoElement
+            playerWrapper.container = [
+                document.getElementsByClassName("webPlayerContainer")[0] as any]
+
+            const playBtn = document.getElementsByClassName('av-play-icon js-deeplinkable')[0]
+            if (playBtn)
+                eventFire(playBtn, 'click');
 
             break
     }
