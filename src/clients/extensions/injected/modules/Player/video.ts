@@ -111,6 +111,8 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                 c.style.top = "0";
                 c.style.zIndex = "9990";
                 c.style.left = "0";
+                c.style.maxHeight = "inherit";
+                c.style.height = "100vh";
             })
         },
         exitFullScreen: function () {
@@ -119,6 +121,7 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                 c.style.top = "auto";
                 c.style.zIndex = "auto";
                 c.style.left = "auto";
+                c.style.height = "inherit";
             })
         }
     };
