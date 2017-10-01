@@ -5,7 +5,7 @@
       <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   </head>
-  <body>
+  <body ontouchstart>
   <style>
       body {
           display: flex;
@@ -17,6 +17,8 @@
       .row {
           display: flex;
           flex: 1;
+          width: 100vw;
+          overflow: hidden;
       }
       button {
           width: 100vw;
@@ -26,6 +28,7 @@
           border: 0;
           color: white;
           font-size: 8vw;
+          -webkit-tap-highlight-color: rgba(0,0,0,0);
       }
       .big-circle {
           background: transparent;
@@ -38,24 +41,53 @@
       button.btn--alt {
           color: #ccc;
       }
+
+      button:focus, button:active {outline:0;}
+
+      .ripple {
+          position: relative;
+          transform: translate3d(0, 0, 0);
+      }
+      .ripple:after {
+          content: "";
+          display: block;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          pointer-events: none;
+          background-image: radial-gradient(circle, #000 10%, transparent 10.01%);
+          background-repeat: no-repeat;
+          background-position: 50%;
+          transform: scale(8, 8);
+          opacity: 0;
+          transition: transform .5s, opacity 0.8s;
+      }
+      .ripple:active:after {
+          transform: scale(0, 0);
+          opacity: .2;
+          transition: 0s;
+      }
   </style>
+
       <div class="row">
-          <button onclick="volumeDown(0.1)" class="btn--alt"><i class="fa fa-volume-down"></i></button>
+          <button onclick="volumeDown(0.1)" class="btn--alt ripple"><i class="fa fa-volume-down"></i></button>
           <div class="empty"></div>
-          <button onclick="volumeUp(0.1)" class="btn--alt"><i class="fa fa-volume-up"></i></button>
+          <button onclick="volumeUp(0.1)" class="btn--alt ripple"><i class="fa fa-volume-up"></i></button>
       </div>
 
       <div class="row">
-          <button onclick="seekBackward(5)"><i class="fa fa-backward"></i></button>
-          <button onclick="play()" ><i class="fa fa-play"></i></button>
-          <button onclick="seekForward(5)"><i class="fa fa-forward"></i></button>
+          <button class="ripple" onclick="seekBackward(5)"><i class="fa fa-backward"></i></button>
+          <button class="ripple" onclick="play()" ><i class="fa fa-play"></i></button>
+          <button class="ripple" onclick="seekForward(5)"><i class="fa fa-forward"></i></button>
       </div>
 
       <div class="row">
-          <button onclick="enterFullScreen()" class="btn--alt"><i class="fa fa-expand"></i></button>
-          <button onclick="exitFullScreen()" class="btn--alt"><i class="fa fa-compress"></i></button>
+          <button onclick="enterFullScreen()" class="btn--alt ripple"><i class="fa fa-expand"></i></button>
+          <button onclick="exitFullScreen()" class="btn--alt ripple"><i class="fa fa-compress"></i></button>
           <div class="empty"></div>
-          <button onclick="pause()" class="btn--alt"><i class="fa fa-pause"></i></button>
+          <button onclick="pause()" class="btn--alt ripple"><i class="fa fa-pause"></i></button>
       </div>
 
     <script src="./client.js"></script>
