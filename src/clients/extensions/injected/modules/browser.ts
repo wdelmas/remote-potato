@@ -21,6 +21,7 @@ export const addKeyboardListeners = () => {
         switch (evt.keyCode) {
             case ESC_KEY:
                 initActions({
+                    from:'webapp',
                     type: PLAYER_EXIT_FULLSCREEN
                 }, null, noop);
                 break;

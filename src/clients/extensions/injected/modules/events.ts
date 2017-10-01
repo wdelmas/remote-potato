@@ -28,50 +28,42 @@ export const initActions = (request: message, sender: any, sendResponse: (respon
         return
 
     Debugger.log(request)
-    let result: message = null
+    let result: message = {
+        from: 'extension',
+        extensionId: request.extensionId,
+        type: request.type
+    }
     switch (request.type) {
         case PLAYER_PLAY:
             player.play()
-            sendOkResponse(sendResponse)
             break
         case PLAYER_PAUSE:
             player.pause()
-            sendOkResponse(sendResponse)
             break
         case PLAYER_SEEK_BACKWARD:
             player.seekBackward(parseInt(request.action))
-            sendOkResponse(sendResponse)
             break
         case PLAYER_SEEK_FORWARD:
             player.seekForward(parseInt(request.action))
-            sendOkResponse(sendResponse)
             break
         case PLAYER_VOLUME_UP:
-            result = {
-                extensionId: request.extensionId,
-                action: `${player.volumeUp(parseFloat(request.action))}`,
-                type: 'PLAYER_VOLUME_UP'
-            }
-            sendResponse(result)
+            result.action = `${player.volumeUp(parseFloat(request.action))}`
             break
         case PLAYER_VOLUME_DOWN:
-            result = {
-                extensionId: request.extensionId,
-                action: `${player.volumeDown(parseFloat(request.action))}`,
-                type: 'PLAYER_VOLUME_DOWN'
-            }
-            sendResponse(result)
+            result.action = `${player.volumeUp(parseFloat(request.action))}`
             break
         case PLAYER_ENTER_FULLSCREEN:
             player.enterFullScreen()
             chrome.runtime.sendMessage(request);
-            sendOkResponse(sendResponse)
             break
         case PLAYER_EXIT_FULLSCREEN:
             player.exitFullScreen();
             chrome.runtime.sendMessage(request);
-            sendOkResponse(sendResponse);
             break
     }
     player.setFeedBackAction(request.type);
+    result.infos = player.getResponse()
+    sendOkResponse(sendResponse, {
+        result
+    })
 }

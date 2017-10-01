@@ -28,13 +28,13 @@ socket.on(MESSAGE_FROM_EXTENSION, function (data: message) {
     switch (data.type) {
         case 'PLAYER_VOLUME_UP':
         case 'PLAYER_VOLUME_DOWN':
-            console.log(data.action)
             break
     }
 });
 
 const BASE_MESSAGE = {
-    extensionId: ROOM_ID
+    extensionId: ROOM_ID,
+    from: 'webapp'
 }
 
 

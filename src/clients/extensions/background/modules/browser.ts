@@ -29,8 +29,9 @@ export const sendMessageToCurrentTab = (data: any) => {
         .then((tab: chrome.tabs.Tab) => {
             Debugger.log(data)
             chrome.tabs.sendMessage(tab.id, data, function (response: message) {
-                if (response && response.extensionId)
+                if (response && response.extensionId) {
                     getSocketBackground().emit(MESSAGE_FROM_EXTENSION, response);
+                }
                 else
                     Debugger.log('Answer from InjectedJS')
             });
