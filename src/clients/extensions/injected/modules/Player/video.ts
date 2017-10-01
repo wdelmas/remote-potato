@@ -1,7 +1,7 @@
 import { eventFire } from "../dom";
 import { Debugger } from "../../../../../communication/Debugger";
 import { messageType } from "../../../../../communication/actions";
-import {StatusComponent, appendStatusToContainer} from "./status";
+import { FeedbackComponent, appendFeedbackComponentToContainer } from "./feedbackAction";
 
 const FMOVIES = 'fmovies'
 const NINE_ANIME = '9anime'
@@ -12,8 +12,6 @@ const AMAZON = 'primevideo'
 
 const PLAYERS_DOMAIN = [FMOVIES, NINE_ANIME, MY_CLOUD, VIMEO, AMAZON]
 
-var statusTimeout: any;
-
 export interface VideoPlayer {
     play: () => void,
     pause: () => void,
@@ -23,22 +21,20 @@ export interface VideoPlayer {
     volumeDown: (seconds: number) => number,
     enterFullScreen: () => void,
     exitFullScreen: () => void,
-    setStatus: (messageType: messageType) => void
+    setFeedBackAction: (messageType: messageType) => void
 }
 
 export interface VideoPlayerWrapper {
     player: HTMLVideoElement,
     container?: HTMLElement[]
-    status?: StatusComponent
+    feedBackAction?: FeedbackComponent
     customBehavior?: Partial<VideoPlayer>
 }
 
 export const getCurrentPlayerByDomain = (domain: string): VideoPlayer => {
     let videoPlayer: VideoPlayerWrapper = null
 
-    if (PLAYERS_DOMAIN.indexOf(domain) > -1) {
-        videoPlayer = getVideoPlayer(domain)
-    }
+    videoPlayer = getVideoPlayer(domain)
 
     if (videoPlayer && videoPlayer.player) {
         return loadVideoPlayer(videoPlayer, videoPlayer.customBehavior)
@@ -56,7 +52,6 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
         case MY_CLOUD:
         case FMOVIES:
         case NINE_ANIME:
-            //only compatible with basic HTML5 player     
             const cover = document.getElementsByClassName('cover')[0]
             if (cover)
                 eventFire(cover, 'click');
@@ -65,7 +60,6 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
 
             break
         case VIMEO:
-            //only compatible with basic HTML5 player     
             playerWrapper.player = document.getElementsByTagName('video')[0] as HTMLVideoElement
             playerWrapper.container = [
                 document.getElementsByClassName("player js-player player")[0] as any,
@@ -76,7 +70,6 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
 
             break
         case AMAZON:
-            //only compatible with basic HTML5 player     
             playerWrapper.player = document.getElementsByTagName('video')[0] as HTMLVideoElement
             playerWrapper.container = [
                 document.getElementsByClassName("webPlayerContainer")[0] as any]
@@ -84,12 +77,16 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
             const playBtn = document.getElementsByClassName('av-play-icon js-deeplinkable')[0]
             if (playBtn)
                 eventFire(playBtn, 'click');
+            break
 
+        default:
+            playerWrapper.player = document.getElementsByTagName('video')[0] as HTMLVideoElement
+            playerWrapper.container = [document.getElementsByTagName('video')[0] as HTMLVideoElement]
             break
     }
 
     if (playerWrapper.player) {
-        playerWrapper.status = appendStatusToContainer(playerWrapper.container[0]);
+        playerWrapper.feedBackAction = appendFeedbackComponentToContainer(playerWrapper.container[0]);
         Debugger.log('Player loaded from: ' + window.location.href)
         Debugger.log(playerWrapper)
     }
@@ -97,40 +94,40 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
     return playerWrapper
 }
 
-
+let feedBackTimeout: any;
 
 export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?: Partial<VideoPlayer>): VideoPlayer => {
     const videoPlayer = {
         play: function () {
             wrapper.player.play()
-            wrapper.status.value.textContent = getCurrentPercentage(wrapper.player);
+            wrapper.feedBackAction.value.textContent = getCurrentTimeAsPercentage(wrapper.player);
         },
         pause: function () {
             wrapper.player.pause()
-            wrapper.status.value.textContent = getCurrentPercentage(wrapper.player);
+            wrapper.feedBackAction.value.textContent = getCurrentTimeAsPercentage(wrapper.player);
         },
         seekBackward: function (seconds: number) {
             wrapper.player.currentTime -= seconds
-            wrapper.status.value.textContent = getCurrentPercentage(wrapper.player);
+            wrapper.feedBackAction.value.textContent = getCurrentTimeAsPercentage(wrapper.player);
         },
         seekForward: function (seconds: number) {
             wrapper.player.currentTime += seconds
-            wrapper.status.value.textContent = getCurrentPercentage(wrapper.player);
+            wrapper.feedBackAction.value.textContent = getCurrentTimeAsPercentage(wrapper.player);
         },
         volumeUp: function (seconds: number) {
             if (wrapper.player.volume + seconds < 1)
                 wrapper.player.volume += seconds
-            wrapper.status.value.textContent = (wrapper.player.volume*100).toFixed(0).toString();
+            wrapper.feedBackAction.value.textContent = (wrapper.player.volume * 100).toFixed(0).toString();
             return wrapper.player.volume
         },
         volumeDown: function (seconds: number) {
             if (wrapper.player.volume - seconds > 0)
                 wrapper.player.volume -= seconds
-            wrapper.status.value.textContent = (wrapper.player.volume*100).toFixed(0).toString();
+            wrapper.feedBackAction.value.textContent = (wrapper.player.volume * 100).toFixed(0).toString();
             return wrapper.player.volume
         },
         enterFullScreen: function () {
-            wrapper.status.value.textContent = ""
+            wrapper.feedBackAction.value.textContent = ""
             wrapper.container.forEach((c) => {
                 c.style.position = "fixed";
                 c.style.top = "0";
@@ -141,7 +138,7 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
             })
         },
         exitFullScreen: function () {
-            wrapper.status.value.textContent = ""
+            wrapper.feedBackAction.value.textContent = ""
             wrapper.container.forEach((c) => {
                 c.style.position = "inherit";
                 c.style.top = "auto";
@@ -150,21 +147,21 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                 c.style.height = "inherit";
             })
         },
-        setStatus: function(messageType: messageType) {
-            clearTimeout(statusTimeout)
+        setFeedBackAction: function (messageType: messageType) {
+            clearTimeout(feedBackTimeout)
 
-            wrapper.status.component.className = 'visible';
-            wrapper.status.component.className = messageType;
+            wrapper.feedBackAction.component.className = 'visible';
+            wrapper.feedBackAction.component.className = messageType;
 
-            statusTimeout = setTimeout(function(){
-                wrapper.status.component.className = 'hidden';
+            feedBackTimeout = setTimeout(function () {
+                wrapper.feedBackAction.component.className = 'hidden';
             }, 1000);
         }
     };
     return customVideoPlayer ? Object.assign({}, videoPlayer, customVideoPlayer) : videoPlayer
 }
 
-function getCurrentPercentage(player: HTMLVideoElement) {
-    let percentage = ((100*player.currentTime)/player.duration).toFixed(0).toString();
+function getCurrentTimeAsPercentage(player: HTMLVideoElement) {
+    const percentage = ((100 * player.currentTime) / player.duration).toFixed(0).toString();
     return `${percentage}%`;
 }

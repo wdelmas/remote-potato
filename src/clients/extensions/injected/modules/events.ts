@@ -73,5 +73,5 @@ export const initActions = (request: message, sender: any, sendResponse: (respon
             sendOkResponse(sendResponse);
             break
     }
-    player.setStatus(request.type);
+    player.setFeedBackAction(request.type);
 }

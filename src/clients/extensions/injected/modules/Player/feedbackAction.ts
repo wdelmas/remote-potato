@@ -2,12 +2,12 @@ const fonts = [
     'Montserrat'
 ]
 
-export interface StatusComponent {
+export interface FeedbackComponent {
     component: HTMLElement
     value: HTMLElement
 }
 
-export const appendStatusToContainer = (container: HTMLElement) => {
+export const appendFeedbackComponentToContainer = (container: HTMLElement): FeedbackComponent => {
     let statusComponent = document.createElement('div');
     statusComponent.id = 'status-couch-potatoe';
 
@@ -23,10 +23,10 @@ export const appendStatusToContainer = (container: HTMLElement) => {
     return {
         component: statusComponent,
         value: statusValue
-    } as StatusComponent;
+    };
 }
 
-export const appendFont = (font: string) => {
+ const appendFont = (font: string) => {
     let link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = `https://fonts.googleapis.com/css?family=${font}:100,200,400`;
