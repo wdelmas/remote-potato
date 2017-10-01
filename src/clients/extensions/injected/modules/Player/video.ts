@@ -1,5 +1,7 @@
 import { eventFire } from "../dom";
 import { Debugger } from "../../../../../communication/Debugger";
+import { messageType } from "../../../../../communication/actions";
+import {StatusComponent, appendStatusToContainer} from "./status";
 
 const FMOVIES = 'fmovies'
 const NINE_ANIME = '9anime'
@@ -10,6 +12,8 @@ const AMAZON = 'primevideo'
 
 const PLAYERS_DOMAIN = [FMOVIES, NINE_ANIME, MY_CLOUD, VIMEO, AMAZON]
 
+var statusTimeout: any;
+
 export interface VideoPlayer {
     play: () => void,
     pause: () => void,
@@ -18,12 +22,14 @@ export interface VideoPlayer {
     volumeUp: (seconds: number) => number,
     volumeDown: (seconds: number) => number,
     enterFullScreen: () => void,
-    exitFullScreen: () => void
+    exitFullScreen: () => void,
+    setStatus: (messageType: messageType) => void
 }
 
 export interface VideoPlayerWrapper {
     player: HTMLVideoElement,
     container?: HTMLElement[]
+    status?: StatusComponent
     customBehavior?: Partial<VideoPlayer>
 }
 
@@ -83,7 +89,7 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
     }
 
     if (playerWrapper.player) {
-
+        playerWrapper.status = appendStatusToContainer(playerWrapper.container[0]);
         Debugger.log('Player loaded from: ' + window.location.href)
         Debugger.log(playerWrapper)
     }
@@ -97,27 +103,34 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
     const videoPlayer = {
         play: function () {
             wrapper.player.play()
+            wrapper.status.value.textContent = getCurrentPercentage(wrapper.player);
         },
         pause: function () {
             wrapper.player.pause()
+            wrapper.status.value.textContent = getCurrentPercentage(wrapper.player);
         },
         seekBackward: function (seconds: number) {
             wrapper.player.currentTime -= seconds
+            wrapper.status.value.textContent = getCurrentPercentage(wrapper.player);
         },
         seekForward: function (seconds: number) {
             wrapper.player.currentTime += seconds
+            wrapper.status.value.textContent = getCurrentPercentage(wrapper.player);
         },
         volumeUp: function (seconds: number) {
             if (wrapper.player.volume + seconds < 1)
                 wrapper.player.volume += seconds
+            wrapper.status.value.textContent = (wrapper.player.volume*100).toFixed(0).toString();
             return wrapper.player.volume
         },
         volumeDown: function (seconds: number) {
             if (wrapper.player.volume - seconds > 0)
                 wrapper.player.volume -= seconds
+            wrapper.status.value.textContent = (wrapper.player.volume*100).toFixed(0).toString();
             return wrapper.player.volume
         },
         enterFullScreen: function () {
+            wrapper.status.value.textContent = ""
             wrapper.container.forEach((c) => {
                 c.style.position = "fixed";
                 c.style.top = "0";
@@ -128,6 +141,7 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
             })
         },
         exitFullScreen: function () {
+            wrapper.status.value.textContent = ""
             wrapper.container.forEach((c) => {
                 c.style.position = "inherit";
                 c.style.top = "auto";
@@ -135,7 +149,22 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                 c.style.left = "auto";
                 c.style.height = "inherit";
             })
+        },
+        setStatus: function(messageType: messageType) {
+            clearTimeout(statusTimeout)
+
+            wrapper.status.component.className = 'visible';
+            wrapper.status.component.className = messageType;
+
+            statusTimeout = setTimeout(function(){
+                wrapper.status.component.className = 'hidden';
+            }, 1000);
         }
     };
     return customVideoPlayer ? Object.assign({}, videoPlayer, customVideoPlayer) : videoPlayer
+}
+
+function getCurrentPercentage(player: HTMLVideoElement) {
+    let percentage = ((100*player.currentTime)/player.duration).toFixed(0).toString();
+    return `${percentage}%`;
 }
