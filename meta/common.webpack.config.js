@@ -3,10 +3,10 @@ const webpack = require('webpack')
 var os = require('os');
 
 const prod = process.argv.indexOf('-p') !== -1;
-
+const heroku_host = `https://${process.env.HEROKU_APP_NAME || 'remote-potato'}.herokuapp.com/`
 console.log('-- PRODUCTION MODE : ' + prod)
 if (prod)
-  console.log('--  HOST URL : ' + `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/`)
+  console.log('--  HOST URL : ' + `${heroku_host}`)
 
 const getInternalIp = () => {
   var interfaces = os.networkInterfaces();
@@ -72,7 +72,7 @@ module.exports = (options) => {
         debug: options.debug,
         WEBPACK_HOST: `"${getInternalIp()}"`,
         HEROKU_PORT: process.env.PORT ? `"${process.env.PORT}"` : null,
-        HEROKU_HOST: options.debug ? null : `"https://${process.env.HEROKU_APP_NAME}.herokuapp.com/"`
+        HEROKU_HOST: options.debug ? null : `"${heroku_host}"`
       })
     ].concat(options.pluginsAppend),
     resolve: {
