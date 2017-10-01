@@ -30,10 +30,10 @@ Install it directly from the [Chrome Webstore](https://chrome.google.com/webstor
 ### Build it locally
 
 ```
-npm i               # Installs dependencies
-typings install     # Install typings
-npm run build:all   # Builds the server, the client and the extension
-npm start           # Launches the server
+npm i                   # Installs dependencies
+typings install         # Install typings
+npm run build:all       # Builds the server, the client and the extension
+npm run server:start    # Launches the server
 ```
 
 Now you can add the remote to Chrome via [chrome://extensions](chrome://extensions)
@@ -46,6 +46,21 @@ Scan the QRCode given by the extension when you click on it
 
 ... and that's it 😄 Happy controlling !
 
+## Compatibility and features
+
+Compatible with all HTML5 video players with the following features :
+- Play
+- Pause
+- Forwards (+5s)
+- Backwards (-5s)
+- Volume up (+10)
+- Volume down (-10)
+
+Enter and exit fullscreen for:
+- [Vimeo](https://vimeo.com/)
+- [9anime](https://9anime.to/)
+- [fmovies](https://fmovies.se/)
+- [AmazonPrime](https://www.primevideo.com/)
 
 ## Contributing
 Changes and improvements are more than welcome!

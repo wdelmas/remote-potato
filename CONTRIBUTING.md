@@ -23,7 +23,7 @@ Please follow those guidelines to have a bigger chance of your contribution bein
 
 ## Development Setup
 
-You will need [Node.js](http://nodejs.org) **version 6+** and [Java Runtime Environment](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (needed for running Selenium server during e2e tests).
+You will need [Node.js](http://nodejs.org) **version 6+**.
 
 After cloning the repo, run:
 
@@ -35,7 +35,7 @@ $ npm install
 
 Start server
 ```
-npm start
+npm run server:start
 ```
 
 ## Project Structure
