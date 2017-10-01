@@ -61,6 +61,7 @@ Enter and exit fullscreen for:
 - [9anime](https://9anime.to/)
 - [fmovies](https://fmovies.se/)
 - [AmazonPrime](https://www.primevideo.com/)
+- [Canal+](https://www.mycanal.fr/)
 
 ## Contributing
 Changes and improvements are more than welcome!
