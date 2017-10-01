@@ -16,6 +16,11 @@ However your browser is not always accessible straight from your TV,
 Remote is the missing controller for your browser, 
  especially when you're showing video content on TV.
 
+
+## Demo
+
+![demo](./demo.gif)
+
 ## Installing
 
 ### Chrome Webstore
