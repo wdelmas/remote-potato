@@ -31,6 +31,10 @@ module.exports = commonConfig({
       {
         from: path.join(__dirname, '../src/clients/extensions/background.html'),
         to: path.join(__dirname, '../build/extensions/background.html')
+      },
+      {
+        from: path.join(__dirname, '../src/clients/extensions/injected.css'),
+        to: path.join(__dirname, '../build/extensions/injected.css')
       }
     ]),
     new webpack.DefinePlugin({
