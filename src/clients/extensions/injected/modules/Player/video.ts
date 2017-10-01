@@ -81,7 +81,7 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
 
         default:
             playerWrapper.player = document.getElementsByTagName('video')[0] as HTMLVideoElement
-            playerWrapper.container = [document.getElementsByTagName('video')[0] as HTMLVideoElement]
+            playerWrapper.container = [document.getElementsByTagName('video')[0] && document.getElementsByTagName('video')[0].parentNode as HTMLVideoElement]
             break
     }
 
