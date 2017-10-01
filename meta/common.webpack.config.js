@@ -2,6 +2,12 @@ const path = require('path')
 const webpack = require('webpack')
 var os = require('os');
 
+const prod = process.argv.indexOf('-p') !== -1;
+
+console.log('-- PRODUCTION MODE : ' + prod)
+if (prod)
+  console.log('--  HOST URL : ' + `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/`)
+
 const getInternalIp = () => {
   var interfaces = os.networkInterfaces();
   var addresses = [];
@@ -19,7 +25,7 @@ const getInternalIp = () => {
 module.exports = (options) => {
   const defaultOptions = {
     devtool: false,
-    debug: process.env.NODE_ENV !== 'production',
+    debug: !prod,
     entry: {
       'extensions': ['./src/clients/extensions/index.ts']
     },
@@ -41,17 +47,17 @@ module.exports = (options) => {
     entry: options.entry,
     module: {
       rules: [{
-        test: /\.js$/,
-        use: options.loadersPrepend.concat(['babel-loader']),
-        include: path.join(__dirname, 'src')
-      },
-      {
-        test: /\.ts$/,
-        use: options.loadersPrepend.concat(['babel-loader', {
-          loader: 'ts-loader',
-          options: { noEmit: true }
-        }])
-      }
+          test: /\.js/,
+          use: options.loadersPrepend.concat(['babel-loader']),
+          include: path.join(__dirname, 'src')
+        },
+        {
+          test: /\.ts/,
+          use: options.loadersPrepend.concat(['babel-loader', {
+            loader: 'ts-loader',
+            options: { noEmit: false }
+          }])
+        }
       ]
     },
     node: options.node,
@@ -66,7 +72,7 @@ module.exports = (options) => {
         debug: options.debug,
         WEBPACK_HOST: `"${getInternalIp()}"`,
         HEROKU_PORT: process.env.PORT ? `"${process.env.PORT}"` : null,
-        HEROKU_HOST: options.debug ? null : `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/`
+        HEROKU_HOST: options.debug ? null : `"https://${process.env.HEROKU_APP_NAME}.herokuapp.com/"`
       })
     ].concat(options.pluginsAppend),
     resolve: {

@@ -1,4 +1,4 @@
-import { MESSAGE_FROM_CLIENT, MESSAGE_TO_EXTENSION, PORT, HOST, MESSAGE_FROM_EXTENSION } from '../communication/constants';
+import { MESSAGE_FROM_CLIENT, MESSAGE_TO_EXTENSION, PORT, HOST, MESSAGE_FROM_EXTENSION, IO_SERVER } from '../communication/constants';
 import * as http from 'http';
 const fs = require('fs');
 import * as SocketIO from 'socket.io';
@@ -9,7 +9,7 @@ let app = http.createServer(handler)
 const io = SocketIO(app);
 let hubs: string[] = []
 app.listen(PORT, () => {
-    Debugger.log('server running on: ' + HOST + ':' + PORT)
+    Debugger.log('server running on: ' + IO_SERVER)
 });
 
 export const rooter = (url: string) => {
