@@ -21,7 +21,18 @@ export type messageType = PLAYER_ACTIONS | COMMONS
 
 
 export interface message {
+    from : 'extension' | 'webapp'
     extensionId?: string
     type: messageType
     action?: string
+    infos?: VideoPlayerMessage
+}
+
+export interface VideoPlayerMessage {
+    title: string
+    domain: string
+    currentTime: number
+    currentTimeAsPercentage: string
+    volume: number
+    volumeAsPercentage: string
 }

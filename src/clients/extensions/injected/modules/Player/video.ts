@@ -1,6 +1,6 @@
 import { eventFire } from "../dom";
 import { Debugger } from "../../../../../communication/Debugger";
-import { messageType } from "../../../../../communication/actions";
+import { messageType, VideoPlayerMessage } from "../../../../../communication/actions";
 import { FeedbackComponent, appendFeedbackComponentToContainer } from "./feedbackAction";
 
 const FMOVIES = 'fmovies'
@@ -22,6 +22,7 @@ export interface VideoPlayer {
     enterFullScreen: () => void,
     exitFullScreen: () => void,
     setFeedBackAction: (messageType: messageType) => void
+    getResponse: () => VideoPlayerMessage
 }
 
 export interface VideoPlayerWrapper {
@@ -97,7 +98,7 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
 let feedBackTimeout: any;
 
 export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?: Partial<VideoPlayer>): VideoPlayer => {
-    const videoPlayer = {
+    const videoPlayer: VideoPlayer = {
         play: function () {
             wrapper.player.play()
             wrapper.feedBackAction.value.textContent = getCurrentTimeAsPercentage(wrapper.player);
@@ -156,6 +157,16 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
             feedBackTimeout = setTimeout(function () {
                 wrapper.feedBackAction.component.className = 'hidden';
             }, 1000);
+        },
+        getResponse: (): VideoPlayerMessage => {
+            return {
+                currentTime: wrapper.player.currentTime,
+                currentTimeAsPercentage: getCurrentTimeAsPercentage(wrapper.player),
+                domain: window.location.host,
+                title: document.title,
+                volume: wrapper.player.volume,
+                volumeAsPercentage: (wrapper.player.volume * 100).toFixed(0).toString() + '%'
+            }
         }
     };
     return customVideoPlayer ? Object.assign({}, videoPlayer, customVideoPlayer) : videoPlayer
