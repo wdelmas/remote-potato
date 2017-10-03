@@ -17,8 +17,7 @@
     "server:build:prod": "npm run server:build -- -p",
     "server:build:watch": "npm run server:build -- --watch",
     "client:build": "rm -rf ./build/client && webpack --config meta/client.webpack.config.js --display-error-details",
-    "client:build": "rm -rf ./build/client && webpack --config meta/client.webpack.config.js --display-error-details",
-    "client:build:prod": "npm run client:build -- -p",    
+    "client:build:prod": "npm run client:build -- -p",
     "client:build:watch": "npm run client:build -- --watch",
     "__server": "----------- SERVER -----------",
     "server:start": "node build/server/index.js",
@@ -37,6 +36,9 @@
   "homepage": "https://github.com/wdelmas/remote#readme",
   "devDependencies": {},
   "dependencies": {
+    "@types/react": "^16.0.8",
+    "@types/react-dom": "^16.0.0",
+    "awesome-typescript-loader": "^3.2.3",
     "babel-cli": "~6.11.0",
     "babel-core": "^6.24.1",
     "babel-loader": "^6.4.1",
@@ -50,13 +52,16 @@
     "babel-register": "~6.11.0",
     "babel-runtime": "^6.23.0",
     "copy-webpack-plugin": "^4.0.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
     "socket.io": "^1.4.5",
     "socket.io-client": "^1.4.5",
-    "typescript": "^2.2.1",
+    "source-map-loader": "^0.2.2",
     "ts-loader": "^2.0.3",
+    "typescript": "^2.5.3",
+    "typings": "^2.1.0",
     "webpack": "^2.5.1",
     "webpack-dev-server": "^2.4.5",
-    "typings": "^2.1.0",
     "qrious": "^4.0.2"
   }
 }
