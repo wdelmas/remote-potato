@@ -1,4 +1,4 @@
-import { getCurrentPlayerByDomain, VideoPlayer } from './Player/video'
+import { getCurrentPlayerByDomain, VideoPlayer } from './video'
 import { sendOkResponse } from "./messaging";
 import {
     PLAYER_PLAY,

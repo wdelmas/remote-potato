@@ -2,12 +2,17 @@ import { eventFire } from "../dom";
 import { Debugger } from "../../../../../communication/Debugger";
 import { messageType, VideoPlayerMessage } from "../../../../../communication/actions";
 import { FeedbackComponent, appendFeedbackComponentToContainer } from "./feedbackAction";
+import { loadYoutubePlayer } from "./players/youtube";
+import { loadAmazonPlayer } from "./players/amazon";
+import { loadVimeoPlayer } from "./players/vimeo";
+import { loadDefaultPlayer } from "./players/default";
 
 const FMOVIES = 'fmovies'
 const NINE_ANIME = '9anime'
 const MY_CLOUD = 'mycloud'
 const VIMEO = 'vimeo'
 const AMAZON = 'primevideo'
+const YOUTUBE = 'youtube'
 
 
 const PLAYERS_DOMAIN = [FMOVIES, NINE_ANIME, MY_CLOUD, VIMEO, AMAZON]
@@ -50,7 +55,6 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
         player: null
     }
     switch (domain) {
-        case MY_CLOUD:
         case FMOVIES:
         case NINE_ANIME:
             const cover = document.getElementsByClassName('cover')[0]
@@ -61,28 +65,16 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
 
             break
         case VIMEO:
-            playerWrapper.player = document.getElementsByTagName('video')[0] as HTMLVideoElement
-            playerWrapper.container = [
-                document.getElementsByClassName("player js-player player")[0] as any,
-                document.getElementsByClassName("player_area")[0] as any]
-
-            if (playerWrapper.player)
-                eventFire(playerWrapper.player, 'click');
-
+            loadVimeoPlayer(playerWrapper)
             break
         case AMAZON:
-            playerWrapper.player = document.getElementsByTagName('video')[0] as HTMLVideoElement
-            playerWrapper.container = [
-                document.getElementsByClassName("webPlayerContainer")[0] as any]
-
-            const playBtn = document.getElementsByClassName('av-play-icon js-deeplinkable')[0]
-            if (playBtn)
-                eventFire(playBtn, 'click');
+            loadAmazonPlayer(playerWrapper)
             break
-
+        case YOUTUBE:
+            loadYoutubePlayer(playerWrapper)
+            break;
         default:
-            playerWrapper.player = document.getElementsByTagName('video')[0] as HTMLVideoElement
-            playerWrapper.container = [document.getElementsByTagName('video')[0] && document.getElementsByTagName('video')[0].parentNode as HTMLVideoElement]
+            loadDefaultPlayer(playerWrapper)
             break
     }
 
@@ -128,25 +120,10 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
             return wrapper.player.volume
         },
         enterFullScreen: function () {
-            wrapper.feedBackAction.value.textContent = ""
-            wrapper.container.forEach((c) => {
-                c.style.position = "fixed";
-                c.style.top = "0";
-                c.style.zIndex = "9990";
-                c.style.left = "0";
-                c.style.maxHeight = "inherit";
-                c.style.height = "100vh";
-            })
+            defaultFullScreenBehavior(wrapper)
         },
         exitFullScreen: function () {
-            wrapper.feedBackAction.value.textContent = ""
-            wrapper.container.forEach((c) => {
-                c.style.position = "inherit";
-                c.style.top = "auto";
-                c.style.zIndex = "auto";
-                c.style.left = "auto";
-                c.style.height = "inherit";
-            })
+            defaultExitFullScreenBehavior(wrapper)
         },
         setFeedBackAction: function (messageType: messageType) {
             clearTimeout(feedBackTimeout)
@@ -172,6 +149,27 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
     return customVideoPlayer ? Object.assign({}, videoPlayer, customVideoPlayer) : videoPlayer
 }
 
+export const defaultFullScreenBehavior = (wrapper: VideoPlayerWrapper) => {
+    wrapper.feedBackAction.value.textContent = ""
+    wrapper.container.forEach((c) => {
+        c.style.position = "fixed";
+        c.style.top = "0";
+        c.style.zIndex = "9990";
+        c.style.left = "0";
+        c.style.maxHeight = "inherit";
+        c.style.height = "100vh";
+    })
+}
+export const defaultExitFullScreenBehavior = (wrapper: VideoPlayerWrapper) => {
+    wrapper.feedBackAction.value.textContent = ""
+    wrapper.container.forEach((c) => {
+        c.style.position = "inherit";
+        c.style.top = "auto";
+        c.style.zIndex = "auto";
+        c.style.left = "auto";
+        c.style.height = "inherit";
+    })
+}
 function getCurrentTimeAsPercentage(player: HTMLVideoElement) {
     const percentage = ((100 * player.currentTime) / player.duration).toFixed(0).toString();
     return `${percentage}%`;
