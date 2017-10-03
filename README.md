@@ -1,7 +1,6 @@
 ![Logo](https://cdn.pbrd.co/images/GMVq2ib.png)
 
 [![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](./LICENSE.md)
-[![David](https://img.shields.io/david/wdelmas/remote.svg)](https://david-dm.org/wdelmas/remote)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/rating/hifbccioeoaheffkmedjiphppjpcbfeh.svg)](https://chrome.google.com/webstore/detail/remote/hifbccioeoaheffkmedjiphppjpcbfeh)
 ![Coolness](https://img.shields.io/badge/coolness-OVER_9000-green.svg)
 
