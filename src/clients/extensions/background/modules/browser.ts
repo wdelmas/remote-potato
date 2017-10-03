@@ -6,7 +6,18 @@ import { getSocketBackground } from "./sockets";
 
 const extensionId = chrome.runtime.id;
 
-export const roomId = `${extensionId}-${debug ? '958ea70e-6c71-3f49-8c63-7b5f80c7faa1' : uuid()}`;
+const getRoomId = () => {   
+    if (window.localStorage['roomId'])
+        return window.localStorage['roomId']
+
+    const roomId = `${extensionId}-${debug ? '958ea70e-6c71-3f49-8c63-7b5f80c7faa1' : uuid()}`
+    window.localStorage['roomId'] = roomId
+    return roomId
+}
+
+export const roomId = getRoomId()
+
+
 export const webAppUrl = `${IO_SERVER}?id=${roomId}`;
 
 export const getCurrentTab = () => {
