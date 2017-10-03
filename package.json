@@ -4,7 +4,7 @@
   "description": "Remote for browsers",
   "main": "index.js",
   "scripts": {
-    "prestart": "npm run typings && npm run client:build:prod && npm run server:build:prod",
+    "prestart": "npm run typings && rm -rf node_modules/@types/node && npm run client:build:prod && npm run server:build:prod",
     "start": "npm run server:start",
     "__test": "----------- TEST -----------",
     "test": "echo \"Error: no test specified\" && exit 1",

@@ -57,7 +57,6 @@ module.exports = (options) => {
         test: /\.ts/,
         use: ['babel-loader', {
           loader: 'ts-loader'
-        
         }]
       }
       ])
