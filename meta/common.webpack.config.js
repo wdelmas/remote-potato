@@ -54,7 +54,7 @@ module.exports = (options) => {
         include: path.join(__dirname, 'src')
       },
       {
-        test: /\.ts(x?)$/,
+          test: /\.ts/,
         use: ['babel-loader', {
           loader: 'ts-loader'
         }]
