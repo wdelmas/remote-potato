@@ -33,7 +33,7 @@ const initMessageEventListener = () => {
                     document.body.appendChild(a)
                 }
 
-                if (debug)
+                if (DEBUG)
                     displayWebApplink()
                 break
 

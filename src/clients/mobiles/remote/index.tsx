@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as SocketIOClient from 'socket.io-client';
 
-import { HOST, MESSAGE_FROM_CLIENT, MESSAGE_FROM_EXTENSION, PORT, IO_SERVER } from '../../../communication/constants';
+import { MESSAGE_FROM_CLIENT, MESSAGE_FROM_EXTENSION, IO_SERVER } from '../../../communication/constants';
 import {
     message,
     PLAYER_PLAY,

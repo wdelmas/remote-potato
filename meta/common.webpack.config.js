@@ -5,6 +5,8 @@ var os = require('os');
 const prod = process.argv.indexOf('-p') !== -1;
 const heroku_host = `https://${process.env.HEROKU_APP_NAME || 'remote-potato'}.herokuapp.com/`
 console.log('-- PRODUCTION MODE : ' + prod)
+console.log('-- PORT : ' + process.env.PORT)
+
 if (prod)
   console.log('--  HOST URL : ' + `${heroku_host}`)
 
@@ -46,19 +48,17 @@ module.exports = (options) => {
     devtool: options.devtool,
     entry: options.entry,
     module: {
-      rules:
-      options.rulesAppend.concat([
+      rules: options.rulesAppend.concat([{
+          test: /\.js/,
+          use: ['babel-loader'],
+          include: path.join(__dirname, 'src')
+        },
         {
-        test: /\.js/,
-        use: ['babel-loader'],
-        include: path.join(__dirname, 'src')
-      },
-      {
           test: /\.ts/,
-        use: ['babel-loader', {
-          loader: 'ts-loader'
-        }]
-      }
+          use: ['babel-loader', {
+            loader: 'ts-loader'
+          }]
+        }
       ])
     },
     node: options.node,
@@ -70,14 +70,14 @@ module.exports = (options) => {
     externals: options.externals,
     plugins: [
       new webpack.DefinePlugin({
-        debug: options.debug,
-        WEBPACK_HOST: `"${getInternalIp()}"`,
-        HEROKU_PORT: process.env.PORT ? `"${process.env.PORT}"` : null,
-        HEROKU_HOST: options.debug ? null : `"${heroku_host}"`
+        DEBUG: options.debug,
+        LOCAL_HOST: `"${getInternalIp()}"`,
+        HEROKU_HOST: options.debug ? null : `"${heroku_host}"`,
+        HEROKU_PORT: process.env.PORT ? `"${process.env.PORT}"` : null
       })
     ].concat(options.pluginsAppend),
     resolve: {
-      extensions: ['.json', '.jsx','.js', '.ts', '.tsx'],
+      extensions: ['.json', '.jsx', '.js', '.ts', '.tsx'],
       modules: ['node_modules', 'src']
     },
     target: options.target
