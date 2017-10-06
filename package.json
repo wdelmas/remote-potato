@@ -17,13 +17,16 @@
     "server:build:prod": "npm run server:build -- -p",
     "server:build:watch": "npm run server:build -- --watch",
     "client:build": "rm -rf ./build/client && webpack --config meta/client.webpack.config.js --display-error-details",
-    "client:build": "rm -rf ./build/client && webpack --config meta/client.webpack.config.js --display-error-details",
-    "client:build:prod": "npm run client:build -- -p",    
+    "client:build:prod": "npm run client:build -- -p",
     "client:build:watch": "npm run client:build -- --watch",
     "__server": "----------- SERVER -----------",
     "server:start": "node build/server/index.js",
     "__validation": "----------- VALIDATION -----------",
-    "typings": "typings install"
+    "typings": "typings install",
+    "__versions": "----------- VERSIONS -----------",
+    "version:patch":"release-it patch",
+    "version:minor":"release-it minor",
+    "version:major":"release-it major"
   },
   "repository": {
     "type": "git",
@@ -35,7 +38,9 @@
     "url": "https://github.com/wdelmas/remote/issues"
   },
   "homepage": "https://github.com/wdelmas/remote#readme",
-  "devDependencies": {},
+  "devDependencies": {
+    "release-it": "^3.0.2"    
+  },
   "dependencies": {
     "babel-cli": "~6.11.0",
     "babel-core": "^6.24.1",
@@ -50,13 +55,13 @@
     "babel-register": "~6.11.0",
     "babel-runtime": "^6.23.0",
     "copy-webpack-plugin": "^4.0.1",
+    "qrious": "^4.0.2",
     "socket.io": "^1.4.5",
     "socket.io-client": "^1.4.5",
-    "typescript": "^2.2.1",
     "ts-loader": "^2.0.3",
-    "webpack": "^2.5.1",
-    "webpack-dev-server": "^2.4.5",
+    "typescript": "^2.2.1",
     "typings": "^2.1.0",
-    "qrious": "^4.0.2"
+    "webpack": "^2.5.1",
+    "webpack-dev-server": "^2.4.5"
   }
 }
