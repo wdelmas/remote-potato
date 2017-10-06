@@ -1,4 +1,4 @@
-import { MESSAGE_FROM_CLIENT, MESSAGE_TO_EXTENSION, PORT, HOST, MESSAGE_FROM_EXTENSION, IO_SERVER } from '../communication/constants';
+import { MESSAGE_FROM_CLIENT, MESSAGE_TO_EXTENSION, LOCAL_PORT, MESSAGE_FROM_EXTENSION, IO_SERVER } from '../communication/constants';
 import * as http from 'http';
 const fs = require('fs');
 import * as SocketIO from 'socket.io';
@@ -8,8 +8,10 @@ import { message } from "../communication/actions";
 let app = http.createServer(handler)
 const io = SocketIO(app);
 let hubs: string[] = []
-app.listen(PORT, () => {
-    Debugger.log('server running on: ' + IO_SERVER)
+const serverPort = DEBUG ? LOCAL_PORT : `${HEROKU_PORT}`
+
+app.listen(serverPort, () => {
+    Debugger.log('server running on: ' + IO_SERVER + ':' + serverPort)
 });
 
 export const rooter = (url: string) => {
@@ -50,16 +52,16 @@ io.on('connection', (socket) => {
     })
 
     socket.on(MESSAGE_FROM_CLIENT, function (data: message) {
-        Debugger.log('--'+MESSAGE_FROM_CLIENT+'--');
+        Debugger.log('--' + MESSAGE_FROM_CLIENT + '--');
         Debugger.log(data);
-        Debugger.log('--'+MESSAGE_FROM_CLIENT+'--');
+        Debugger.log('--' + MESSAGE_FROM_CLIENT + '--');
         socket.in(data.extensionId).broadcast.emit(MESSAGE_TO_EXTENSION, data);
         // socket.broadcast.emit(MESSAGE_TO_EXTENSION, data);
     });
     socket.on(MESSAGE_FROM_EXTENSION, function (data: message) {
-        Debugger.log('--'+MESSAGE_FROM_EXTENSION+'--');
+        Debugger.log('--' + MESSAGE_FROM_EXTENSION + '--');
         Debugger.log(data);
-        Debugger.log('--'+MESSAGE_FROM_EXTENSION+'--');
+        Debugger.log('--' + MESSAGE_FROM_EXTENSION + '--');
         socket.in(data.extensionId).broadcast.emit(MESSAGE_FROM_EXTENSION, data);
         // socket.broadcast.emit(MESSAGE_TO_EXTENSION, data);
     });
