@@ -18,7 +18,7 @@ import { Debugger } from "../../../communication/Debugger";
 const styles = require('./index.css')
 import * as classnames from 'classnames'
 import { connect, Dispatch } from "react-redux";
-import { State, Dispatcher, mapDispatchToProps, StoreAsProps, mapStateToProps } from "../store/index";
+import { State, Dispatcher, mapDispatchToProps, mapStateToProps, ReduxStore, ReduxState } from "../store/index";
 import { bindActionCreators } from "redux";
 import { SocketReducer } from "../store/socket/index";
 import { connectedToWsServer } from "../store/socket/actions";
@@ -30,7 +30,7 @@ export interface RemoteProps {
 }
 
 const getSocket = (): any => { }
-class Remote extends React.Component<RemoteProps & StoreAsProps, {}>  {
+class Remote extends React.Component<RemoteProps & ReduxStore, {}>  {
 
     public play = () => {
         this.props.dispatch(playBtn_Clicked(true))
@@ -109,6 +109,6 @@ class Remote extends React.Component<RemoteProps & StoreAsProps, {}>  {
 }
 
 export default connect(
-    (state: State, props: RemoteProps) => mapStateToProps<RemoteProps>(state, props),
+    (state: ReduxState, props: RemoteProps) => mapStateToProps<RemoteProps>(state, props),
     mapDispatchToProps)(Remote)
 
