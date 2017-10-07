@@ -26,7 +26,6 @@ export const initActions = (request: message, sender: any, sendResponse: (respon
     }
     if (!player)
         return
-
     Debugger.log(request)
     let result: message = {
         from: 'extension',
@@ -50,7 +49,7 @@ export const initActions = (request: message, sender: any, sendResponse: (respon
             result.action = `${player.volumeUp(parseFloat(request.action))}`
             break
         case PLAYER_VOLUME_DOWN:
-            result.action = `${player.volumeUp(parseFloat(request.action))}`
+            result.action = `${player.volumeDown(parseFloat(request.action))}`
             break
         case PLAYER_ENTER_FULLSCREEN:
             player.enterFullScreen()
