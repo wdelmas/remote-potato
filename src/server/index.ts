@@ -11,7 +11,7 @@ let hubs: string[] = []
 const serverPort = DEBUG ? LOCAL_PORT : `${HEROKU_PORT}`
 
 app.listen(serverPort, () => {
-    Debugger.log('server running on: ' + IO_SERVER + ':' + serverPort)
+    Debugger.log('server running on: ' + IO_SERVER)
 });
 
 export const rooter = (url: string) => {
