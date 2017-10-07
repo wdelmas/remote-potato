@@ -34,7 +34,11 @@ export const createReduxStore = (history: any): Store<State> => {
 export interface Dispatcher {
     dispatch: (fn: any) => void,
 }
-export type StoreAsProps = State & Dispatcher
+export type ReduxStore = ReduxState & Dispatcher
+
+export interface ReduxState {
+    reduxState: State
+}
 
 export function mapDispatchToProps(dispatch: Dispatch<State>): Dispatcher {
     return {
@@ -42,9 +46,6 @@ export function mapDispatchToProps(dispatch: Dispatch<State>): Dispatcher {
     }
 }
 
-export const mapStateToProps = <T>(state: State, props: T) => {
-    const newProps = Object.assign({}, props,
-        { socketReducer: state.socketReducer }
-    )
-    return newProps
+export const mapStateToProps = <T>(reduxState: ReduxState, props: T): ReduxState & T => {
+    return Object.assign<{}, T, ReduxState>({}, props, reduxState)
 }
