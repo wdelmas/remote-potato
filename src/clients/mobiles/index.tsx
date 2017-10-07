@@ -1,62 +1,33 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import * as SocketIOClient from 'socket.io-client';
 
-import { Remote } from "./remote";
+import App from "./app";
 import { Debugger } from "../../communication/Debugger";
-import { IO_SERVER, MESSAGE_FROM_EXTENSION } from "../../communication/constants";
 import { message } from "../../communication/actions";
+import { createReduxStore } from "./store/index";
+import { syncHistoryWithStore } from "react-router-redux";
+import { browserHistory, Router, Route } from "react-router";
+import { Provider } from "react-redux";
+import { loadRoomId } from "./store/socket/actions";
+import { removeDoubleTapZoom } from "./utils/mobileHandler";
+import { initSocket } from "./utils/socket";
 
 
-
- const getRoomId = () => {
-    const url = new URL(location.href);
-    return url.searchParams.get("id");
-}
-const ROOM_ID = getRoomId()
-
-var socket = SocketIOClient.connect(IO_SERVER);
-socket.on('connect', () => {
-    Debugger.log('Connected to WS Server: ' + IO_SERVER)
-    socket.emit('room', ROOM_ID);
-})
-
-socket.on(MESSAGE_FROM_EXTENSION, function (data: message) {
-    switch (data.type) {
-        case 'PLAYER_VOLUME_UP':
-        case 'PLAYER_VOLUME_DOWN':
-            break
-    }
-});
-
-export const BASE_MESSAGE = {
-    extensionId: ROOM_ID,
-    from: 'webapp'
-}
 
 removeDoubleTapZoom('button');
 
-function removeDoubleTapZoom(tagName: string) {
-    let tags = document.getElementsByTagName(tagName)
-    for (let i = tags.length; i--;) {
-        tags[i].addEventListener('touchstart', preventZoom)
-    }
-}
+const store = createReduxStore(browserHistory)
 
-function preventZoom(e: any) {
-    var t2 = e.timeStamp;
-    var t1 = e.currentTarget.dataset.lastTouch || t2;
-    var dt = t2 - t1;
-    var fingers = e.touches.length;
-    e.currentTarget.dataset.lastTouch = t2;
-
-    if (!dt || dt > 500 || fingers > 1) return; // not double-tap
-
-    e.preventDefault();
-    e.target.click();
-}
+// Create an enhanced history that syncs navigation events with the store
+const history = syncHistoryWithStore(browserHistory, store)
+const socket = initSocket(store)
 
 ReactDOM.render(
-    <Remote socket={socket} />,
-    document.getElementById("app")
-);
+    <Provider store={store}>
+        <Router history={history}>
+            <Route path="/" component={() => <App socket={socket} />}>
+            </Route>
+        </Router>
+    </Provider >,
+    document.getElementById('app')
+)
