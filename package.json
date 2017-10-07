@@ -4,7 +4,7 @@
   "description": "Remote for browsers",
   "main": "index.js",
   "scripts": {
-    "prestart": "npm run typings && npm run client:build:prod && npm run server:build:prod",
+    "postinstall": " npm run client:build:prod && npm run server:build:prod",
     "start": "npm run server:start",
     "__test": "----------- TEST -----------",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -39,9 +39,15 @@
   },
   "homepage": "https://github.com/wdelmas/remote#readme",
   "devDependencies": {
-    "release-it": "^3.0.2"    
+    "release-it": "^3.0.2"
   },
   "dependencies": {
+    "@types/chrome": "0.0.49",
+    "@types/react": "^16.0.8",
+    "@types/react-dom": "^16.0.0",
+    "@types/socket.io": "^1.4.31",
+    "@types/socket.io-client": "^1.4.30",
+    "awesome-typescript-loader": "^3.2.3",
     "babel-cli": "~6.11.0",
     "babel-core": "^6.24.1",
     "babel-loader": "^6.4.1",
@@ -56,11 +62,13 @@
     "babel-runtime": "^6.23.0",
     "copy-webpack-plugin": "^4.0.1",
     "qrious": "^4.0.2",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
     "socket.io": "^1.4.5",
     "socket.io-client": "^1.4.5",
+    "source-map-loader": "^0.2.2",
     "ts-loader": "^2.0.3",
-    "typescript": "^2.2.1",
-    "typings": "^2.1.0",
+    "typescript": "^2.5.3",
     "webpack": "^2.5.1",
     "webpack-dev-server": "^2.4.5"
   }

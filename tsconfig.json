@@ -9,7 +9,8 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "suppressImplicitAnyIndexErrors": true,
-    "inlineSourceMap": true
+    "inlineSourceMap": true,
+    "jsx": "react"
   },
   "include": [
     "src/**/*",
@@ -19,5 +20,5 @@
   "exclude": [
     "node_modules"
   ],
-  "compileOnSave": false
+  "typeRoots": ["node_modules/@types"]
 }

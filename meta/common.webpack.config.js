@@ -30,7 +30,7 @@ module.exports = (options) => {
       'extensions': ['./src/clients/extensions/index.ts']
     },
     libraryTarget: 'commonjs2',
-    loadersPrepend: [],
+    rulesAppend: [],
     pluginsAppend: [],
     target: 'web',
     node: {
@@ -46,19 +46,20 @@ module.exports = (options) => {
     devtool: options.devtool,
     entry: options.entry,
     module: {
-      rules: [{
-          test: /\.js/,
-          use: options.loadersPrepend.concat(['babel-loader']),
-          include: path.join(__dirname, 'src')
-        },
+      rules:
+      options.rulesAppend.concat([
         {
+        test: /\.js/,
+        use: ['babel-loader'],
+        include: path.join(__dirname, 'src')
+      },
+      {
           test: /\.ts/,
-          use: options.loadersPrepend.concat(['babel-loader', {
-            loader: 'ts-loader',
-            options: { noEmit: false }
-          }])
-        }
-      ]
+        use: ['babel-loader', {
+          loader: 'ts-loader'
+        }]
+      }
+      ])
     },
     node: options.node,
     output: {
@@ -76,7 +77,7 @@ module.exports = (options) => {
       })
     ].concat(options.pluginsAppend),
     resolve: {
-      extensions: ['.json', '.js', '.ts'],
+      extensions: ['.json', '.jsx','.js', '.ts', '.tsx'],
       modules: ['node_modules', 'src']
     },
     target: options.target
