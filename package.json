@@ -10,6 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "__build": "----------- BUILD -----------",
     "build:all": "npm run extension:build && npm run server:build &&  npm run client:build",
+    "build:all:prod": "npm run extension:build:prod && npm run server:build:prod &&  npm run client:build:prod",
     "extension:build": "rm -rf ./build/extensions && webpack --config meta/extensions.webpack.config.js --display-error-details",
     "extension:build:prod": "npm run extension:build -- -p",
     "extension:build:watch": "npm run extension:build -- --watch",
@@ -24,9 +25,9 @@
     "__validation": "----------- VALIDATION -----------",
     "typings": "typings install",
     "__versions": "----------- VERSIONS -----------",
-    "version:patch":"release-it patch",
-    "version:minor":"release-it minor",
-    "version:major":"release-it major"
+    "version:patch": "release-it patch",
+    "version:minor": "release-it minor",
+    "version:major": "release-it major"
   },
   "repository": {
     "type": "git",
