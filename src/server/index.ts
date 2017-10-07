@@ -18,6 +18,8 @@ export const rooter = (url: string) => {
     switch (url) {
         case '/client.js':
             return '/../clients/index.js';
+        case '/index.css':
+            return '/../clients/index.css';
         case '/styles.css':
             return '/../clients/dist/styles/font-awesome.min.css';
         default:
