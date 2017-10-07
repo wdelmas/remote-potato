@@ -11,6 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "__build": "----------- BUILD -----------",
     "build:all": "npm run extension:build && npm run server:build &&  npm run client:build",
+    "build:all:prod": "npm run extension:build:prod && npm run server:build:prod &&  npm run client:build:prod",
     "extension:build": "rm -rf ./build/extensions && webpack --config meta/extensions.webpack.config.js --display-error-details",
     "extension:build:prod": "npm run extension:build -- -p",
     "extension:build:watch": "npm run extension:build -- --watch",
@@ -21,7 +22,13 @@
     "client:build:prod": "npm run client:build -- -p",
     "client:build:watch": "npm run client:build -- --watch",
     "__server": "----------- SERVER -----------",
-    "server:start": "node build/server/index.js"
+    "server:start": "node build/server/index.js",
+    "__validation": "----------- VALIDATION -----------",
+    "typings": "typings install",
+    "__versions": "----------- VERSIONS -----------",
+    "version:patch": "release-it patch",
+    "version:minor": "release-it minor",
+    "version:major": "release-it major"
   },
   "repository": {
     "type": "git",
@@ -33,7 +40,9 @@
     "url": "https://github.com/wdelmas/remote/issues"
   },
   "homepage": "https://github.com/wdelmas/remote#readme",
-  "devDependencies": {},
+  "devDependencies": {
+    "release-it": "^3.0.2"
+  },
   "dependencies": {
     "@types/chrome": "0.0.49",
     "@types/react": "^16.0.8",
