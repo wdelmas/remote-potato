@@ -12,8 +12,6 @@ import { loadRoomId } from "./store/socket/actions";
 import { removeDoubleTapZoom } from "./utils/mobileHandler";
 import { initSocket } from "./utils/socket";
 
-
-
 removeDoubleTapZoom('button');
 
 const store = createReduxStore(browserHistory)

@@ -2,6 +2,7 @@
 interface Logger {
     error(message?: any, ...optionalParams: any[]): void
     info(message?: any, ...optionalParams: any[]): void
+    debug(message?: any, ...optionalParams: any[]): void
     log(message?: any, ...optionalParams: any[]): void
     warn(message?: any, ...optionalParams: any[]): void
 }
@@ -21,6 +22,10 @@ function create() {
         logger.info.apply(logger, args)
     }
 
+    function debug(...args: any[]): void {
+        logger.debug.apply(logger, args)
+    }
+
     function warn(...args: any[]): void {
         logger.warn.apply(logger, args)
     }
@@ -33,6 +38,7 @@ function create() {
         reset,
         log,
         info,
+        debug,
         warn,
         error
     }

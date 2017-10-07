@@ -141,6 +141,8 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                 currentTimeAsPercentage: getCurrentTimeAsPercentage(wrapper.player),
                 domain: window.location.host,
                 title: document.title,
+                poster: getPosterImage(),
+                favicon: getFavicon(),
                 volume: wrapper.player.volume,
                 volumeAsPercentage: (wrapper.player.volume * 100).toFixed(0).toString() + '%'
             }
@@ -148,6 +150,30 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
     };
     return customVideoPlayer ? Object.assign({}, videoPlayer, customVideoPlayer) : videoPlayer
 }
+
+export const getPosterImage = ()  => {
+    let metas = document.getElementsByTagName('meta');
+    let images = [];
+    for (let i = 0; i < metas.length; i++) {
+        let property = metas[i].attributes.getNamedItem('property');
+        if (metas[i].attributes.length > 0 && property && property.value === 'og:image') {
+            images.push(metas[i].attributes.getNamedItem('content').value);
+        }
+    }
+    return images[0];
+};
+
+export const getFavicon = () => {
+    let metas = document.getElementsByTagName('link');
+    let favicons = [];
+    for (let i = 0; i < metas.length; i++) {
+        let rel = metas[i].attributes.getNamedItem('rel');
+        if (metas[i].attributes.length > 0 && rel && rel.value === 'logo') {
+            favicons.push(metas[i].attributes.getNamedItem('href').value);
+        }
+    }
+    return favicons[0];
+};
 
 export const defaultFullScreenBehavior = (wrapper: VideoPlayerWrapper) => {
     wrapper.feedBackAction.value.textContent = ""
