@@ -5,6 +5,7 @@ import { message } from "../../../communication/actions";
 import { loadRoomId, connectedToWsServer } from "../store/socket/actions";
 import { State } from "../store/index";
 import { Store } from "redux";
+import { loadCurrentVideoPlayerState } from "../store/videoPlayer/actions";
 
 
 const getRoomId = () => {
@@ -31,11 +32,7 @@ export const makeSocketService = (store: Store<State>): SocketService => {
     })
 
     socket.on(MESSAGE_FROM_EXTENSION, function (data: message) {
-        switch (data.type) {
-            case 'PLAYER_VOLUME_UP':
-            case 'PLAYER_VOLUME_DOWN':
-                break
-        }
+        store.dispatch(loadCurrentVideoPlayerState(data.infos))
     });
     return {
         sendMessageFromClient: (messageToSend: Partial<message>) => {
