@@ -155,7 +155,7 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
     return customVideoPlayer ? Object.assign({}, videoPlayer, customVideoPlayer) : videoPlayer
 }
 
-export const getPosterImage = ()  => {
+const getPosterImage = () => {
     let metas = document.getElementsByTagName('meta');
     let images = [];
     for (let i = 0; i < metas.length; i++) {
@@ -167,13 +167,17 @@ export const getPosterImage = ()  => {
     return images[0];
 };
 
-export const getFavicon = () => {
+const getFavicon = () => {
     let metas = document.getElementsByTagName('link');
     let favicons = [];
     for (let i = 0; i < metas.length; i++) {
         let rel = metas[i].attributes.getNamedItem('rel');
-        if (metas[i].attributes.length > 0 && rel && rel.value === 'logo') {
-            favicons.push(metas[i].attributes.getNamedItem('href').value);
+        if (metas[i].attributes.length > 0 && rel && rel.value.indexOf('icon') > -1) {
+            let favicon = metas[i].attributes.getNamedItem('href').value
+            if (favicon.indexOf('http') === -1) {
+                favicon = location.origin + favicon
+            }
+            favicons.push(favicon);
         }
     }
     return favicons[0];
