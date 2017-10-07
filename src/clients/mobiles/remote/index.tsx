@@ -18,117 +18,97 @@ import { Debugger } from "../../../communication/Debugger";
 const styles = require('./index.css')
 import * as classnames from 'classnames'
 import { connect, Dispatch } from "react-redux";
-import { State } from "../store/index";
+import { State, Dispatcher, mapDispatchToProps, StoreAsProps, mapStateToProps } from "../store/index";
 import { bindActionCreators } from "redux";
+import { SocketReducer } from "../store/socket/index";
+import { connectedToWsServer } from "../store/socket/actions";
+import { SocketService } from "../utils/socket";
+import { playBtn_Clicked } from "../store/videoPlayer/actions";
 
 export interface RemoteProps {
-    socket: SocketIOClient.Socket
+    socketService: SocketService
 }
 
-export interface RemoteState extends RemoteProps {
-    roomId: string
-}
+const getSocket = (): any => { }
+class Remote extends React.Component<RemoteProps & StoreAsProps, {}>  {
 
-const Remote = (props: RemoteState) => {
-    console.log(props.roomId)
-    const BASE_MESSAGE = {
-        extensionId: props.roomId,
-        from: 'webapp'
-    }
-    const play = () => {
-        const message = Object.assign({}, {
+    public play = () => {
+        this.props.dispatch(playBtn_Clicked(true))
+        this.props.socketService.sendMessageFromClient({
             type: PLAYER_PLAY
-        }, BASE_MESSAGE) as message
-        props.socket.emit(MESSAGE_FROM_CLIENT, message);
+        })
     }
 
-    const pause = () => {
-        const message = Object.assign({}, {
+    public pause = () => {
+        this.props.socketService.sendMessageFromClient({
             type: PLAYER_PAUSE
-        }, BASE_MESSAGE) as message
-        props.socket.emit(MESSAGE_FROM_CLIENT, message);
+        })
     }
 
-    const seekBackward = (number: number) => {
-        const message = Object.assign({}, {
+    public seekBackward = (number: number) => {
+        this.props.socketService.sendMessageFromClient({
             type: PLAYER_SEEK_BACKWARD,
             action: number.toString()
-        }, BASE_MESSAGE) as message
-        props.socket.emit(MESSAGE_FROM_CLIENT, message);
+        })
     }
 
-    const seekForward = (number: number) => {
-        const message = Object.assign({}, {
+    public seekForward = (number: number) => {
+        this.props.socketService.sendMessageFromClient({
             type: PLAYER_SEEK_FORWARD,
             action: number.toString()
-        }, BASE_MESSAGE) as message
-        props.socket.emit(MESSAGE_FROM_CLIENT, message);
+        })
     }
 
-    const volumeUp = (number: number) => {
-        const message = Object.assign({}, {
+    public volumeUp = (number: number) => {
+        this.props.socketService.sendMessageFromClient({
             type: PLAYER_VOLUME_UP,
             action: number.toString()
-        }, BASE_MESSAGE) as message
-        props.socket.emit(MESSAGE_FROM_CLIENT, message);
+        })
     }
 
-    const volumeDown = (number: number) => {
-        const message = Object.assign({}, {
+    public volumeDown = (number: number) => {
+        this.props.socketService.sendMessageFromClient({
             type: PLAYER_VOLUME_DOWN,
             action: number.toString()
-        }, BASE_MESSAGE) as message
-        props.socket.emit(MESSAGE_FROM_CLIENT, message);
+        })
     }
 
-    const enterFullScreen = () => {
-        const message = Object.assign({}, {
+    public enterFullScreen = () => {
+        this.props.socketService.sendMessageFromClient({
             type: PLAYER_ENTER_FULLSCREEN,
-        }, BASE_MESSAGE) as message
-        props.socket.emit(MESSAGE_FROM_CLIENT, message);
+        })
     }
 
-    const exitFullScreen = () => {
-        const message = Object.assign({}, {
+    public exitFullScreen = () => {
+        this.props.socketService.sendMessageFromClient({
             type: PLAYER_EXIT_FULLSCREEN,
-        }, BASE_MESSAGE) as message
-        props.socket.emit(MESSAGE_FROM_CLIENT, message);
+        })
     }
 
-    return (<div className={styles.remoteContainer}>
-        <div className={styles.row} >
-            <button onClick={() => volumeDown(0.1)} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-volume-down"></i></button>
-            <div className="empty"></div>
-            <button onClick={() => volumeUp(0.1)} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-volume-up"></i></button>
-        </div>
-        <div className={styles.row}>
-            <button className={classnames(styles.button, styles.ripple)} onClick={() => seekBackward(5)}><i className="fa fa-backward"></i></button>
-            <button className={classnames(styles.button, styles.ripple)} onClick={() => play()}><i className="fa fa-play"></i></button>
-            <button className={classnames(styles.button, styles.ripple)} onClick={() => seekForward(5)}><i className="fa fa-forward"></i></button>
-        </div>
-        <div className={styles.row} >
-            <button onClick={() => enterFullScreen()} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-expand"></i></button>
-            <button onClick={() => exitFullScreen()} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-compress"></i></button>
-            <div className="empty"></div>
-            <button onClick={() => pause()} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-pause"></i></button>
-        </div>
-    </div>)
+    public render() {
+        return (<div className={styles.remoteContainer}>
+            <div className={styles.row} >
+                <button onClick={() => this.volumeDown(0.1)} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-volume-down"></i></button>
+                <div className="empty"></div>
+                <button onClick={() => this.volumeUp(0.1)} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-volume-up"></i></button>
+            </div>
+            <div className={styles.row}>
+                <button className={classnames(styles.button, styles.ripple)} onClick={() => this.seekBackward(5)}><i className="fa fa-backward"></i></button>
+                <button className={classnames(styles.button, styles.ripple)} onClick={() => this.play()}><i className="fa fa-play"></i></button>
+                <button className={classnames(styles.button, styles.ripple)} onClick={() => this.seekForward(5)}><i className="fa fa-forward"></i></button>
+            </div>
+            <div className={styles.row} >
+                <button onClick={() => this.enterFullScreen()} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-expand"></i></button>
+                <button onClick={() => this.exitFullScreen()} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-compress"></i></button>
+                <div className="empty"></div>
+                <button onClick={() => this.pause()} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-pause"></i></button>
+            </div>
+        </div>)
+    }
 
 }
 
-
-function mapStateToProps(state: State, props: RemoteProps): RemoteState {
-    const newProps = Object.assign({}, props,
-        { roomId: state.socketReducer.roomId }
-    )
-    return newProps
-}
-
-function mapDispatchToProps(dispatch: Dispatch<any>, ) {
-    return bindActionCreators({}, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Remote)
-
-
+export default connect(
+    (state: State, props: RemoteProps) => mapStateToProps<RemoteProps>(state, props),
+    mapDispatchToProps)(Remote)
 
