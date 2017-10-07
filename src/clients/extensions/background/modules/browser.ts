@@ -10,7 +10,7 @@ const getRoomId = () => {
     if (window.localStorage['roomId'])
         return window.localStorage['roomId']
 
-    const roomId = `${extensionId}-${debug ? '958ea70e-6c71-3f49-8c63-7b5f80c7faa1' : uuid()}`
+    const roomId = `${extensionId}-${DEBUG ? '958ea70e-6c71-3f49-8c63-7b5f80c7faa1' : uuid()}`
     window.localStorage['roomId'] = roomId
     return roomId
 }
