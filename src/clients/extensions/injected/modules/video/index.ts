@@ -110,12 +110,16 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
         volumeUp: function (seconds: number) {
             if (wrapper.player.volume + seconds < 1)
                 wrapper.player.volume += seconds
+            else
+                wrapper.player.volume = 1
             wrapper.feedBackAction.value.textContent = (wrapper.player.volume * 100).toFixed(0).toString();
             return wrapper.player.volume
         },
         volumeDown: function (seconds: number) {
             if (wrapper.player.volume - seconds > 0)
                 wrapper.player.volume -= seconds
+            else
+                wrapper.player.volume = 0
             wrapper.feedBackAction.value.textContent = (wrapper.player.volume * 100).toFixed(0).toString();
             return wrapper.player.volume
         },
