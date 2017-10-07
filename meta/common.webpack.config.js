@@ -1,6 +1,9 @@
 const path = require('path')
 const webpack = require('webpack')
 var os = require('os');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ForceCaseSensitivityPlugin = require( 'force-case-sensitivity-webpack-plugin');
+const autoprefixer = require( 'autoprefixer');
 
 const prod = process.argv.indexOf('-p') !== -1;
 const heroku_host = `https://${process.env.HEROKU_APP_NAME || 'remote-potato'}.herokuapp.com/`
@@ -58,7 +61,24 @@ module.exports = (options) => {
           use: ['babel-loader', {
             loader: 'ts-loader'
           }]
-        }
+        },
+        {
+          test: /\.s?css$/,
+          use: ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: [{
+                loader: 'css-loader',
+                options: {
+                  modules: true,
+                  importLoaders: 1,
+                  localIdentName: '[name]__[local]___[hash:base64:5]'
+                }
+              },
+              'postcss-loader',
+              'sass-loader'
+            ]
+          })
+        },
       ])
     },
     node: options.node,
@@ -74,10 +94,22 @@ module.exports = (options) => {
         LOCAL_HOST: `"${getInternalIp()}"`,
         HEROKU_HOST: options.debug ? null : `"${heroku_host}"`,
         HEROKU_PORT: process.env.PORT ? `"${process.env.PORT}"` : null
+      }),
+      new ExtractTextPlugin({ filename: '[name].css' }),
+      new ForceCaseSensitivityPlugin(),
+      new webpack.LoaderOptionsPlugin({
+          minimize: true,
+          options: {
+              postcss: [
+                  autoprefixer({
+                      browsers: ['>1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9']
+                  })
+              ]
+          }
       })
     ].concat(options.pluginsAppend),
     resolve: {
-      extensions: ['.json', '.jsx', '.js', '.ts', '.tsx'],
+      extensions: [  '.json', '.jsx', '.js', '.ts', '.tsx'],
       modules: ['node_modules', 'src']
     },
     target: options.target

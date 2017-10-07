@@ -16,6 +16,9 @@ import {
 import { Debugger } from "../../../communication/Debugger";
 import { BASE_MESSAGE } from "../index";
 
+const styles = require('./index.css')
+import * as classnames from 'classnames'
+
 export interface RemoteProps {
     socket: SocketIOClient.Socket
 }
@@ -83,24 +86,23 @@ export class Remote extends React.Component<RemoteProps, {}> {
         this.props.socket.emit(MESSAGE_FROM_CLIENT, message);
     }
 
-
     render() {
-        return (<div className="remoteContainer">
-            <div className="row">
-                <button onClick={() => this.volumeDown(0.1)} className="btn--alt ripple"><i className="fa fa-volume-down"></i></button>
+        return (<div className={styles.remoteContainer}>
+            <div className={styles.row} >
+                <button onClick={() => this.volumeDown(0.1)} className={classnames(styles.button,styles['btn--alt'], styles.ripple)}><i className="fa fa-volume-down"></i></button>
                 <div className="empty"></div>
-                <button onClick={() => this.volumeUp(0.1)} className="btn--alt ripple"><i className="fa fa-volume-up"></i></button>
+                <button onClick={() => this.volumeUp(0.1)} className={classnames(styles.button,styles['btn--alt'], styles.ripple)}><i className="fa fa-volume-up"></i></button>
             </div>
-            <div className="row">
-                <button className="ripple" onClick={() => this.seekBackward(5)}><i className="fa fa-backward"></i></button>
-                <button className="ripple" onClick={() => this.play()}><i className="fa fa-play"></i></button>
-                <button className="ripple" onClick={() => this.seekForward(5)}><i className="fa fa-forward"></i></button>
+            <div className={styles.row}>
+                <button className={classnames(styles.button, styles.ripple)} onClick={() => this.seekBackward(5)}><i className="fa fa-backward"></i></button>
+                <button className={classnames(styles.button, styles.ripple)}  onClick={() => this.play()}><i className="fa fa-play"></i></button>
+                <button className={classnames(styles.button, styles.ripple)}  onClick={() => this.seekForward(5)}><i className="fa fa-forward"></i></button>
             </div>
-            <div className="row">
-                <button onClick={() => this.enterFullScreen()} className="btn--alt ripple"><i className="fa fa-expand"></i></button>
-                <button onClick={() => this.exitFullScreen()} className="btn--alt ripple"><i className="fa fa-compress"></i></button>
+            <div className={styles.row} >
+                <button onClick={() => this.enterFullScreen()} className={classnames(styles.button,styles['btn--alt'], styles.ripple)}><i className="fa fa-expand"></i></button>
+                <button onClick={() => this.exitFullScreen()} className={classnames(styles.button,styles['btn--alt'], styles.ripple)}><i className="fa fa-compress"></i></button>
                 <div className="empty"></div>
-                <button onClick={() => this.pause()} className="btn--alt ripple"><i className="fa fa-pause"></i></button>
+                <button onClick={() => this.pause()} className={classnames(styles.button,styles['btn--alt'], styles.ripple)}><i className="fa fa-pause"></i></button>
             </div>
         </div>)
 
