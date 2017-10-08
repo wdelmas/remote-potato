@@ -37,6 +37,7 @@ export interface VideoPlayerMessage {
     currentTimeAsPercentage: string
     poster?: string
     favicon?: string
+    dominantBackgroundColor?: string
     volume: number
     volumeAsPercentage: string
 }
