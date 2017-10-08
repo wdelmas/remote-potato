@@ -40,55 +40,55 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
         this.props.dispatch(playBtn_Clicked(true))
         this.props.socketService.sendMessageFromClient({
             type: PLAYER_PLAY
-        })
+        }, { feedbackVibrate: true })
     }
 
     public pause = () => {
         this.props.dispatch(playBtn_Clicked(false))
-        
+
         this.props.socketService.sendMessageFromClient({
             type: PLAYER_PAUSE
-        })
+        }, { feedbackVibrate: true })
     }
 
     public seekBackward = (number: number) => {
         this.props.socketService.sendMessageFromClient({
             type: PLAYER_SEEK_BACKWARD,
             action: number.toString()
-        })
+        }, { feedbackVibrate: true })
     }
 
     public seekForward = (number: number) => {
         this.props.socketService.sendMessageFromClient({
             type: PLAYER_SEEK_FORWARD,
             action: number.toString()
-        })
+        }, { feedbackVibrate: true })
     }
 
     public volumeUp = (number: number) => {
         this.props.socketService.sendMessageFromClient({
             type: PLAYER_VOLUME_UP,
             action: number.toString()
-        })
+        }, { feedbackVibrate: true })
     }
 
     public volumeDown = (number: number) => {
         this.props.socketService.sendMessageFromClient({
             type: PLAYER_VOLUME_DOWN,
             action: number.toString()
-        })
+        }, { feedbackVibrate: true })
     }
 
     public enterFullScreen = () => {
         this.props.socketService.sendMessageFromClient({
             type: PLAYER_ENTER_FULLSCREEN,
-        })
+        }, { feedbackVibrate: true })
     }
 
     public exitFullScreen = () => {
         this.props.socketService.sendMessageFromClient({
             type: PLAYER_EXIT_FULLSCREEN,
-        })
+        }, { feedbackVibrate: true })
     }
 
     public render() {
@@ -96,6 +96,7 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
             title: "Boku no Hero Acadomia",
             domain: "9anime.to",
             currentTime: 60,
+            duration: 300,
             currentTimeAsPercentage: '40%',
             poster: "http://2.bp.blogspot.com/-r1Ccg34ohHs/WN-GJnJ3_cI/AAAAAAAAe20/6452H0a28vw/w650-h350/boku-no-hero-academia-2nd-season.jpg",
             favicon: "https://9anime.to/favicons/favicon.png",
@@ -105,7 +106,7 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
         return (<div className={styles.container}>
             <Header favicon={current.favicon} domain={current.domain} />
             <Poster url={current.poster} />
-            <Controls 
+            <Controls
                 title={current.title}
                 controller={this.props.reduxState.videoPlayerReducer.controller}
                 play={this.play}
@@ -116,7 +117,7 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
                 seekForward={this.seekForward}
                 volumeUp={this.volumeUp}
                 volumeDown={this.volumeDown}
-             />
+            />
             {/* <div className={styles.row} >
                     <button onClick={() => this.volumeDown(0.1)} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-volume-down"></i></button>
                     <div className="empty"></div>
