@@ -20,54 +20,63 @@ let player: VideoPlayer = null
 let findPlayerTry = 0
 const MAX_PLAYER_SEARCHED = 1
 
-export const initActions = (request: message, sender: any, sendResponse: (response: any) => void) => {
-    if (!player && findPlayerTry < MAX_PLAYER_SEARCHED) {
-        const currentDomain = getCurrentDomain()
-        player = getCurrentPlayerByDomain(currentDomain)
-        findPlayerTry++
-    }
-    if (!player)
-        return
-    Debugger.log(request)
-    let result: message = {
-        from: 'extension',
-        extensionId: request.extensionId,
-        type: request.type
-    }
-    switch (request.type) {
-        case PLAYER_PLAY:
-            player.play()
-            break
-        case PLAYER_PAUSE:
-            player.pause()
-            break
-        case PLAYER_SEEK_BACKWARD:
-            player.seekBackward(parseInt(request.action))
-            break
-        case PLAYER_SEEK_FORWARD:
-            player.seekForward(parseInt(request.action))
-            break
-        case PLAYER_VOLUME_UP:
-            result.action = `${player.volumeUp(parseFloat(request.action))}`
-            break
-        case PLAYER_VOLUME_DOWN:
-            result.action = `${player.volumeDown(parseFloat(request.action))}`
-            break
-        case PLAYER_ENTER_FULLSCREEN:
-            player.enterFullScreen()
-            chrome.runtime.sendMessage(request);
-            break
-        case PLAYER_EXIT_FULLSCREEN:
-            player.exitFullScreen();
-            chrome.runtime.sendMessage(request);
-            break
-    }
+export const initActions = (request: message, sender: any): Promise<message> => {
+    return Promise.resolve()
+        .then(() => {
 
-    if (request.type! === HANDSHAKE) {
-        player.setFeedBackAction(request.type);
-    }
-    result.infos = player.getResponse()
-    sendOkResponse(sendResponse, {
-        result
-    })
+            if (!player && findPlayerTry < MAX_PLAYER_SEARCHED) {
+                const currentDomain = getCurrentDomain()
+                player = getCurrentPlayerByDomain(currentDomain)
+                findPlayerTry++
+            }
+            if (!player)
+                return
+            Debugger.log(request)
+            let result: message = {
+                from: 'extension',
+                extensionId: request.extensionId,
+                type: request.type
+            }
+            switch (request.type) {
+                case PLAYER_PLAY:
+                    player.play()
+                    break
+                case PLAYER_PAUSE:
+                    player.pause()
+                    break
+                case PLAYER_SEEK_BACKWARD:
+                    player.seekBackward(parseInt(request.action))
+                    break
+                case PLAYER_SEEK_FORWARD:
+                    player.seekForward(parseInt(request.action))
+                    break
+                case PLAYER_VOLUME_UP:
+                    result.action = `${player.volumeUp(parseFloat(request.action))}`
+                    break
+                case PLAYER_VOLUME_DOWN:
+                    result.action = `${player.volumeDown(parseFloat(request.action))}`
+                    break
+                case PLAYER_ENTER_FULLSCREEN:
+                    player.enterFullScreen()
+                    request.extensionId = null
+                    chrome.runtime.sendMessage(request);
+                    break
+                case PLAYER_EXIT_FULLSCREEN:
+                    player.exitFullScreen();
+                    request.extensionId = null
+                    chrome.runtime.sendMessage(request);
+                    break
+            }
+
+            if (request.type! === HANDSHAKE) {
+                player.setFeedBackAction(request.type);
+            }
+            return player.getResponse()
+                .then((playInfo) => {
+                    result.infos = playInfo
+
+                    return result
+                })
+        })
+
 }
