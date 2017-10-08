@@ -93,8 +93,8 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
 
     public render() {
         const current: VideoPlayerMessage = this.props.reduxState.videoPlayerReducer.current || {
-            title: "9anime.to",
-            domain: "string",
+            title: "Boku no Hero Acadomia",
+            domain: "9anime.to",
             currentTime: 60,
             currentTimeAsPercentage: '40%',
             poster: "http://2.bp.blogspot.com/-r1Ccg34ohHs/WN-GJnJ3_cI/AAAAAAAAe20/6452H0a28vw/w650-h350/boku-no-hero-academia-2nd-season.jpg",
@@ -103,12 +103,19 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
             volumeAsPercentage: '30%'
         }
         return (<div className={styles.container}>
-            <Header favicon={current.favicon} title={current.title} />
+            <Header favicon={current.favicon} domain={current.domain} />
             <Poster url={current.poster} />
             <Controls 
-            controller={this.props.reduxState.videoPlayerReducer.controller}
-             play={this.play}
-             pause={this.pause}
+                title={current.title}
+                controller={this.props.reduxState.videoPlayerReducer.controller}
+                play={this.play}
+                pause={this.pause}
+                duration={current.duration}
+                currentTime={current.currentTime}
+                seekBackward={this.seekBackward}
+                seekForward={this.seekForward}
+                volumeUp={this.volumeUp}
+                volumeDown={this.volumeDown}
              />
             {/* <div className={styles.row} >
                     <button onClick={() => this.volumeDown(0.1)} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-volume-down"></i></button>
