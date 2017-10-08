@@ -26,6 +26,7 @@ export interface ControlsPops {
     title: string
     duration: number
     currentTime: number
+    dominantBackgroundColor: string
 }
 export const Controls = (props: ControlsPops) => {
     return (
@@ -44,21 +45,29 @@ export const Controls = (props: ControlsPops) => {
             <div className={styles.controls}>
 
                 <button className={classnames(styles.button)} onClick={() => props.seekBackward(5)}>
-                    <BackwardBtnSvg />
+                    <BackwardBtnSvg style={{
+                        fill: props.dominantBackgroundColor
+                    }}/>
                 </button>
                 {
                     props.controller.isPlaying ?
                         <button className={classnames(styles.button)} onClick={() => props.pause()}>
-                            <PauseBtnSvg />
+                            <PauseBtnSvg  style={{
+                                fill: props.dominantBackgroundColor
+                            }}/>
                         </button>
                         :
                         <button className={classnames(styles.button)} onClick={() => props.play()}>
-                            <PlayBtnSvg />
+                            <PlayBtnSvg  style={{
+                                fill: props.dominantBackgroundColor
+                            }}/>
                         </button>
                 }
 
                 <button className={classnames(styles.button)} onClick={() => props.seekForward(5)}>
-                    <ForwardBtnSvg />
+                    <ForwardBtnSvg  style={{
+                        fill: props.dominantBackgroundColor
+                    }}/>
                 </button>
             </div>
             <div className={styles.volumeSlider}>
@@ -82,11 +91,15 @@ export const Controls = (props: ControlsPops) => {
                 {
                     props.controller.isFullScreen ?
                         <button className={classnames(styles.button, styles.ripple)} onClick={() => props.exitFullScreen()}>
-                            <MinimizeBtnSvg />
+                            <MinimizeBtnSvg  style={{
+                                fill: props.dominantBackgroundColor
+                            }}/>
                         </button>
                         :
                         <button className={classnames(styles.button, styles.ripple)} onClick={() => props.enterFullScreen()}>
-                            <MaximizeBtnSvg />
+                            <MaximizeBtnSvg  style={{
+                                fill: props.dominantBackgroundColor
+                            }}/>
                         </button>
                 }
             </div>

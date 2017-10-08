@@ -124,6 +124,7 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
                 volumeDown={this.volumeDown}
                 enterFullScreen={this.enterFullScreen}
                 exitFullScreen={this.exitFullScreen}
+                dominantBackgroundColor={current.dominantBackgroundColor}
              />
             {/* <div className={styles.row} >
                     <button onClick={() => this.volumeDown(0.1)} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-volume-down"></i></button>
