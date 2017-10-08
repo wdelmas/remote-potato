@@ -77,9 +77,9 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
             loadDefaultPlayer(playerWrapper)
             break
     }
-
     if (playerWrapper.player) {
-        playerWrapper.feedBackAction = appendFeedbackComponentToContainer(playerWrapper.container[0]);
+        if (playerWrapper.container[0])
+            playerWrapper.feedBackAction = appendFeedbackComponentToContainer(playerWrapper.container[0]);
         Debugger.log('Player loaded from: ' + window.location.href)
         Debugger.log(playerWrapper)
     }
@@ -131,13 +131,15 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
         },
         setFeedBackAction: function (messageType: messageType) {
             clearTimeout(feedBackTimeout)
+            if (wrapper.feedBackAction) {
+                wrapper.feedBackAction.component.className = 'visible';
+                wrapper.feedBackAction.component.className = messageType;
 
-            wrapper.feedBackAction.component.className = 'visible';
-            wrapper.feedBackAction.component.className = messageType;
+                feedBackTimeout = setTimeout(function () {
+                    wrapper.feedBackAction.component.className = 'hidden';
+                }, 1000);
+            }
 
-            feedBackTimeout = setTimeout(function () {
-                wrapper.feedBackAction.component.className = 'hidden';
-            }, 1000);
         },
         getResponse: (): VideoPlayerMessage => {
             return {

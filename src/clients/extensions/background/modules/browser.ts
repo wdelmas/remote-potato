@@ -1,12 +1,12 @@
 import { Debugger } from "../../../../communication/Debugger";
-import { PLAYER_ENTER_FULLSCREEN, PLAYER_EXIT_FULLSCREEN, message, POPUP_OPENED, WEB_APP_URL } from "../../../../communication/actions";
+import { PLAYER_ENTER_FULLSCREEN, PLAYER_EXIT_FULLSCREEN, message, POPUP_OPENED, WEB_APP_URL, PLAYER_FOUND } from "../../../../communication/actions";
 import { IO_SERVER, MESSAGE_FROM_EXTENSION } from "../../../../communication/constants";
 import { uuid } from "../../../../communication/helpers";
 import { getSocketBackground } from "./sockets";
 
 const extensionId = chrome.runtime.id;
 
-const getRoomId = () => {   
+const getRoomId = () => {
     if (window.localStorage['roomId'])
         return window.localStorage['roomId']
 
@@ -60,6 +60,9 @@ const exitFullScreenWindow = (windowId: number) => {
 export const initMessageEventListener = () => {
     chrome.runtime.onMessage.addListener((message: message) => {
         switch (message.type) {
+            case PLAYER_FOUND:
+                getSocketBackground().emit(MESSAGE_FROM_EXTENSION, message);
+                break
             case PLAYER_ENTER_FULLSCREEN:
                 enterFullScreenWindow(chrome.windows.WINDOW_ID_CURRENT);
                 break;
