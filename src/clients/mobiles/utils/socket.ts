@@ -14,7 +14,9 @@ const getRoomId = () => {
 }
 
 export interface SocketService {
-    sendMessageFromClient: (messageToSend: Partial<message>) => void
+    sendMessageFromClient: (messageToSend: Partial<message>, options?: {
+        feedbackVibrate: boolean
+    }) => void
 }
 
 export const makeSocketService = (store: Store<State>): SocketService => {
@@ -42,12 +44,20 @@ export const makeSocketService = (store: Store<State>): SocketService => {
         store.dispatch(loadCurrentVideoPlayerState(data.infos))
     });
     return {
-        sendMessageFromClient: (messageToSend: Partial<message>) => {
-            return sendMessageFromClient(socket, store.getState().socketReducer.roomId, messageToSend)
+        sendMessageFromClient: (messageToSend: Partial<message>, options?: {
+            feedbackVibrate: boolean
+        }) => {
+            sendMessageFromClient(socket, store.getState().socketReducer.roomId, messageToSend)
+            if (options.feedbackVibrate)
+                vibrate()
         }
     }
 }
 
+const vibrate = () => {
+    if (navigator.vibrate)
+        navigator.vibrate(1)
+}
 
 const sendMessageFromClient = (socket: any, roomId: string, messageToSend: Partial<message>) => {
     const message = Object.assign({}, messageToSend, {
