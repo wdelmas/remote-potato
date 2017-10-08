@@ -24,7 +24,7 @@ import { bindActionCreators } from "redux";
 import { SocketReducer } from "../store/socket/index";
 import { connectedToWsServer } from "../store/socket/actions";
 import { SocketService } from "../utils/socket";
-import { playBtn_Clicked } from "../store/videoPlayer/actions";
+import { playBtn_Clicked, fullScreenBtn_Clicked } from "../store/videoPlayer/actions";
 import { Header } from "./header/header";
 import { Poster } from "./poster/poster";
 import { Controls } from "./controls/controls";
@@ -80,12 +80,14 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
     }
 
     public enterFullScreen = () => {
+        this.props.dispatch(fullScreenBtn_Clicked(true))
         this.props.socketService.sendMessageFromClient({
             type: PLAYER_ENTER_FULLSCREEN,
         }, { feedbackVibrate: true })
     }
 
     public exitFullScreen = () => {
+        this.props.dispatch(fullScreenBtn_Clicked(false))
         this.props.socketService.sendMessageFromClient({
             type: PLAYER_EXIT_FULLSCREEN,
         }, { feedbackVibrate: true })
@@ -105,8 +107,11 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
         }
         return (<div className={styles.container}>
             <Header favicon={current.favicon} domain={current.domain} />
-            <Poster url={current.poster} />
-            <Controls
+            <Poster 
+                url={current.poster} 
+                controller={this.props.reduxState.videoPlayerReducer.controller}
+                />
+            <Controls 
                 title={current.title}
                 controller={this.props.reduxState.videoPlayerReducer.controller}
                 play={this.play}
@@ -117,7 +122,9 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
                 seekForward={this.seekForward}
                 volumeUp={this.volumeUp}
                 volumeDown={this.volumeDown}
-            />
+                enterFullScreen={this.enterFullScreen}
+                exitFullScreen={this.exitFullScreen}
+             />
             {/* <div className={styles.row} >
                     <button onClick={() => this.volumeDown(0.1)} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-volume-down"></i></button>
                     <div className="empty"></div>

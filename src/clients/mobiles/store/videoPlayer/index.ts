@@ -1,4 +1,4 @@
-import { PLAYER_PLAY, VideoPlayerMessage } from "../../../../communication/actions";
+import { PLAYER_PLAY, PLAYER_ENTER_FULLSCREEN, VideoPlayerMessage } from "../../../../communication/actions";
 import { LOAD_CURRENT_VIDEO_STATE } from "./actions";
 
 export interface VideoPlayerReducer {
@@ -8,6 +8,7 @@ export interface VideoPlayerReducer {
 
 export interface Controller {
     isPlaying: boolean
+    isFullScreen: boolean
 }
 
 export default (state = emptyVideoPlayerReducer(), action: any) => {
@@ -22,6 +23,12 @@ export default (state = emptyVideoPlayerReducer(), action: any) => {
                     isPlaying: action.isPlaying
                 }
             })
+        case PLAYER_ENTER_FULLSCREEN:
+            return Object.assign({}, state, {
+                controller: {
+                    isFullScreen: action.isFullScreen
+                }
+            })
         default:
             return state
     }
@@ -30,7 +37,8 @@ export default (state = emptyVideoPlayerReducer(), action: any) => {
 export function emptyVideoPlayerReducer(): VideoPlayerReducer {
     return {
         controller: {
-            isPlaying: false
+            isPlaying: false,
+            isFullScreen: false
         },
         current: null
     }
