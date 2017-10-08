@@ -146,6 +146,7 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                 currentTime: wrapper.player.currentTime,
                 currentTimeAsPercentage: getCurrentTimeAsPercentage(wrapper.player),
                 domain: window.location.host,
+                duration:  wrapper.player.duration,
                 title: document.title,
                 poster: getPosterImage(),
                 favicon: getFavicon(),
