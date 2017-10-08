@@ -2,7 +2,7 @@ import * as SocketIOClient from 'socket.io-client';
 import { MESSAGE_TO_EXTENSION, IO_SERVER } from "../../../../communication/constants";
 import { sendMessageToCurrentTab, roomId, webAppUrl } from "./browser";
 import { Debugger } from "../../../../communication/Debugger";
-import { message } from "../../../../communication/actions";
+import { message, HANDSHAKE } from "../../../../communication/actions";
 
 
 const socket = SocketIOClient.connect(IO_SERVER);
@@ -12,7 +12,7 @@ export const initSockets = () => {
         Debugger.log('Connected to WS Server: ' + IO_SERVER)
         Debugger.log('Room ID ' + roomId)
         Debugger.log('Web app  url:' + webAppUrl)
-        socket.emit('room', roomId);
+        socket.emit('room', roomId)
     })
 
     socket.on(MESSAGE_TO_EXTENSION, function (data: message) {

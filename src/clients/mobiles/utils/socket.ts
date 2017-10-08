@@ -1,7 +1,7 @@
 import { MESSAGE_FROM_EXTENSION, IO_SERVER, MESSAGE_FROM_CLIENT } from "../../../communication/constants";
 import * as SocketIOClient from 'socket.io-client';
 import { Debugger } from "../../../communication/Debugger";
-import { message } from "../../../communication/actions";
+import { message, HANDSHAKE } from "../../../communication/actions";
 import { loadRoomId, connectedToWsServer } from "../store/socket/actions";
 import { State } from "../store/index";
 import { Store } from "redux";
@@ -29,6 +29,13 @@ export const makeSocketService = (store: Store<State>): SocketService => {
         Debugger.log('Connected to WS Server: ' + IO_SERVER)
         socket.emit('room', ROOM_ID);
         store.dispatch(connectedToWsServer(true))
+        const sendHandshake = () =>
+            sendMessageFromClient(socket, store.getState().socketReducer.roomId, {
+                extensionId: ROOM_ID,
+                from: 'webapp',
+                type: HANDSHAKE
+            })
+        sendHandshake()
     })
 
     socket.on(MESSAGE_FROM_EXTENSION, function (data: message) {

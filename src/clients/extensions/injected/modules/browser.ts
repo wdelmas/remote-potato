@@ -1,6 +1,6 @@
-import { message, PLAYER_EXIT_FULLSCREEN } from "../../../../communication/actions";
+import { message, PLAYER_EXIT_FULLSCREEN, HANDSHAKE } from "../../../../communication/actions";
 import { initActions } from "./events";
-const noop = () => {}
+const noop = () => { }
 
 export const addMessageListener = (callback: Function) => {
     chrome.runtime.onMessage.addListener(function (request: message, sender: any, sendResponse: (response: any) => void) {
@@ -17,11 +17,11 @@ export const getCurrentDomain = (): string => {
 
 export const addKeyboardListeners = () => {
     const ESC_KEY = 27;
-    document.onkeydown = function(evt) {
+    document.onkeydown = function (evt) {
         switch (evt.keyCode) {
             case ESC_KEY:
                 initActions({
-                    from:'webapp',
+                    from: 'webapp',
                     type: PLAYER_EXIT_FULLSCREEN
                 }, null, noop);
                 break;

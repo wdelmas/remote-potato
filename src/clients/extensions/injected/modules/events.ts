@@ -9,7 +9,9 @@ import {
     PLAYER_VOLUME_UP,
     PLAYER_VOLUME_DOWN,
     PLAYER_ENTER_FULLSCREEN,
-    PLAYER_EXIT_FULLSCREEN
+    PLAYER_EXIT_FULLSCREEN,
+    PLAYER_FOUND,
+    HANDSHAKE
 } from "../../../../communication/actions";
 import { getCurrentDomain } from "./browser";
 import { Debugger } from "../../../../communication/Debugger";
@@ -60,7 +62,10 @@ export const initActions = (request: message, sender: any, sendResponse: (respon
             chrome.runtime.sendMessage(request);
             break
     }
-    player.setFeedBackAction(request.type);
+
+    if (request.type! === HANDSHAKE) {
+        player.setFeedBackAction(request.type);
+    }
     result.infos = player.getResponse()
     sendOkResponse(sendResponse, {
         result
