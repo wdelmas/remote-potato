@@ -59,10 +59,11 @@ const exitFullScreenWindow = (windowId: number) => {
 
 export const initMessageEventListener = () => {
     chrome.runtime.onMessage.addListener((message: message) => {
+
+        if (message && message.extensionId) {
+            return getSocketBackground().emit(MESSAGE_FROM_EXTENSION, message);
+        }
         switch (message.type) {
-            case PLAYER_FOUND:
-                getSocketBackground().emit(MESSAGE_FROM_EXTENSION, message);
-                break
             case PLAYER_ENTER_FULLSCREEN:
                 enterFullScreenWindow(chrome.windows.WINDOW_ID_CURRENT);
                 break;

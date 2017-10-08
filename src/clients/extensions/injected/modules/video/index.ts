@@ -1,11 +1,12 @@
 import { eventFire } from "../dom";
 import { Debugger } from "../../../../../communication/Debugger";
-import { messageType, VideoPlayerMessage } from "../../../../../communication/actions";
+import { messageType, VideoPlayerMessage, message } from "../../../../../communication/actions";
 import { FeedbackComponent, appendFeedbackComponentToContainer } from "./feedbackAction";
 import { loadYoutubePlayer } from "./players/youtube";
 import { loadAmazonPlayer } from "./players/amazon";
 import { loadVimeoPlayer } from "./players/vimeo";
 import { loadDefaultPlayer } from "./players/default";
+import { RGBaster } from "../../../../mobiles/utils/rgBaster";
 
 const FMOVIES = 'fmovies'
 const NINE_ANIME = '9anime'
@@ -27,7 +28,7 @@ export interface VideoPlayer {
     enterFullScreen: () => void,
     exitFullScreen: () => void,
     setFeedBackAction: (messageType: messageType) => void
-    getResponse: () => VideoPlayerMessage
+    getResponse: () => Promise<VideoPlayerMessage>
 }
 
 export interface VideoPlayerWrapper {
@@ -141,18 +142,36 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
             }
 
         },
-        getResponse: (): VideoPlayerMessage => {
-            return {
-                currentTime: wrapper.player.currentTime,
-                currentTimeAsPercentage: getCurrentTimeAsPercentage(wrapper.player),
-                domain: window.location.host,
-                duration:  wrapper.player.duration,
-                title: document.title,
-                poster: getPosterImage(),
-                favicon: getFavicon(),
-                volume: wrapper.player.volume,
-                volumeAsPercentage: (wrapper.player.volume * 100).toFixed(0).toString() + '%'
-            }
+        getResponse: (): Promise<VideoPlayerMessage> => {
+            return new Promise((resolve) => {
+                const getVideoPlayerMessage = (videoPlayerMessage: Partial<VideoPlayerMessage>) => Object.assign({}, {
+                    currentTime: wrapper.player.currentTime,
+                    currentTimeAsPercentage: getCurrentTimeAsPercentage(wrapper.player),
+                    domain: window.location.host,
+                    duration: wrapper.player.duration,
+                    title: document.title,
+                    poster: getPosterImage(),
+                    volume: wrapper.player.volume,
+                    volumeAsPercentage: (wrapper.player.volume * 100).toFixed(0).toString() + '%'
+                }, videoPlayerMessage)
+
+                const favicon = getFavicon()
+                try {
+                    if (favicon)
+                        RGBaster().colors(favicon, {
+                            success: function (payload: any) {
+                                resolve(getVideoPlayerMessage({
+                                    favicon,
+                                    dominantBackgroundColor: payload.dominant
+                                }))
+                            }
+                        });
+                } catch {
+                    resolve(getVideoPlayerMessage({
+                        favicon
+                    }))
+                }
+            })
         }
     };
     return customVideoPlayer ? Object.assign({}, videoPlayer, customVideoPlayer) : videoPlayer

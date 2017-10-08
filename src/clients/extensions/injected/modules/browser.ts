@@ -1,10 +1,15 @@
 import { message, PLAYER_EXIT_FULLSCREEN, HANDSHAKE } from "../../../../communication/actions";
 import { initActions } from "./events";
+import { sendOkResponse } from "./messaging";
 const noop = () => { }
 
-export const addMessageListener = (callback: Function) => {
+export const addMessageListener = (callback: any) => {
     chrome.runtime.onMessage.addListener(function (request: message, sender: any, sendResponse: (response: any) => void) {
-        callback(request, sender, sendResponse)
+        callback(request, sender)
+            .then((result: message) => {
+                chrome.runtime.sendMessage(result);
+            })
+        return true
     })
 }
 
@@ -23,7 +28,7 @@ export const addKeyboardListeners = () => {
                 initActions({
                     from: 'webapp',
                     type: PLAYER_EXIT_FULLSCREEN
-                }, null, noop);
+                }, null);
                 break;
         }
     };
