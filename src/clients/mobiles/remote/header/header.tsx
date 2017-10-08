@@ -8,7 +8,7 @@ export interface HeaderProps {
 export const Header = (props: HeaderProps) => {
     return (
         <div className={styles.siteInfos}>
-            <div className="favicon"><img src={props.favicon} alt="" /></div>
-            <div className="website-domain">{props.domain}</div>
+            <div className={styles.favicon}><img src={props.favicon} alt="" /></div>
+            <div className={styles.websiteDomain}>{props.domain}</div>
         </div>)
 }

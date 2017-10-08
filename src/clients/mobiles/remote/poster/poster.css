@@ -1,6 +1,16 @@
 .poster {
-    background-size: cover;
+    background-size: cover !important;
     display: block;
     width: 100vw;
-    height: 42%;
+    height: 32%;
+    border: 1px solid #e0e0e0;
+    border-left: 0;
+    border-right: 0;
+  }
+
+  .noPoster {
+    font-family: Lato,sans-serif;
+    font-weight: 100;
+    text-align: center;
+    text-shadow: 0 0 1px white;
   }

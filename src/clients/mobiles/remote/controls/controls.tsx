@@ -1,9 +1,15 @@
 import * as React from "react";
 import * as classnames from 'classnames'
 import { Controller } from "../../store/videoPlayer/index";
-const Image1 = require('!babel-loader!svg-react-loader!image-webpack-loader?bypassOnDebug!./svg/play-button.svg')
-
-{/* <Image1 /> */}
+import {secondstoHHMMSS} from "../../utils/date";
+const PlayBtnSvg = require('!babel-loader!svg-react-loader!image-webpack-loader?bypassOnDebug!./svg/play.svg')
+const BackwardBtnSvg = require('!babel-loader!svg-react-loader!image-webpack-loader?bypassOnDebug!./svg/backward.svg')
+const PauseBtnSvg = require('!babel-loader!svg-react-loader!image-webpack-loader?bypassOnDebug!./svg/pause.svg')
+const ForwardBtnSvg = require('!babel-loader!svg-react-loader!image-webpack-loader?bypassOnDebug!./svg/forward.svg')
+const MaximizeBtnSvg = require('!babel-loader!svg-react-loader!image-webpack-loader?bypassOnDebug!./svg/maximize.svg')
+const MinimizeBtnSvg = require('!babel-loader!svg-react-loader!image-webpack-loader?bypassOnDebug!./svg/minimize.svg')
+const StarBtnSvg = require('!babel-loader!svg-react-loader!image-webpack-loader?bypassOnDebug!./svg/star.svg')
+const StarFilledBtnSvg = require('!babel-loader!svg-react-loader!image-webpack-loader?bypassOnDebug!./svg/star-filled.svg')
 
 const styles = require('./controls.css')
 
@@ -15,6 +21,8 @@ export interface ControlsPops {
     seekForward: (number: number) => void
     volumeUp: (number: number) => void
     volumeDown: (number: number) => void
+    enterFullScreen: () => void
+    exitFullScreen: () => void
     title: string
     duration: number
     currentTime: number
@@ -25,8 +33,8 @@ export const Controls = (props: ControlsPops) => {
             <div className={styles.timeSlider}>
                 <input type="range" min="1" max="100" defaultValue="20" className={styles.slider} />
                 <div className={styles.sliderInfos}>
-                    <span>{props.currentTime}</span>
-                    <span>{props.currentTime - props.duration}</span>
+                    <span>{secondstoHHMMSS(props.currentTime)}</span>
+                    <span>{secondstoHHMMSS(props.duration)}</span>
                 </div>
             </div>
             <div className={styles.title}>
@@ -34,15 +42,24 @@ export const Controls = (props: ControlsPops) => {
             </div>
             
             <div className={styles.controls}>
-                <button className={classnames(styles.button)} onClick={() => props.seekBackward(5)}><i className="fa fa-backward"></i></button>
+
+                <button className={classnames(styles.button)} onClick={() => props.seekBackward(5)}>
+                    <BackwardBtnSvg />
+                </button>
                 {
                     props.controller.isPlaying ?
-                        <button className={classnames(styles.button)} onClick={() => props.pause()}><i className="fa fa-pause"></i></button>
+                        <button className={classnames(styles.button)} onClick={() => props.pause()}>
+                            <PauseBtnSvg />
+                        </button>
                         :
-                        <button className={classnames(styles.button)} onClick={() => props.play()}><i className="fa fa-play"></i></button>
+                        <button className={classnames(styles.button)} onClick={() => props.play()}>
+                            <PlayBtnSvg />
+                        </button>
                 }
 
-                <button className={classnames(styles.button)} onClick={() => props.seekForward(5)}><i className="fa fa-forward"></i></button>
+                <button className={classnames(styles.button)} onClick={() => props.seekForward(5)}>
+                    <ForwardBtnSvg />
+                </button>
             </div>
             <div className={styles.volumeSlider}>
                 <div className={styles.mute}></div>
@@ -50,6 +67,28 @@ export const Controls = (props: ControlsPops) => {
                     <input type="range" min="1" max="100" defaultValue="20" className={styles.slider} />
                 </div>
                 <div className={styles.volumeUp}></div>
+            </div>
+            <div className={styles.bottomControls}>
+                {
+                    /*props.controller.isFullScreen ?
+                        <button className={classnames(styles.button, styles.ripple)} onClick={() => props.exitFullScreen()}>
+                            <StarBtnSvg className={styles.starsSvgs}/>
+                        </button>
+                        :
+                        <button className={classnames(styles.button, styles.ripple)} onClick={() => props.enterFullScreen()}>
+                            <StarFilledBtnSvg className={styles.starsSvgs}/>
+                        </button>*/
+                }
+                {
+                    props.controller.isFullScreen ?
+                        <button className={classnames(styles.button, styles.ripple)} onClick={() => props.exitFullScreen()}>
+                            <MinimizeBtnSvg />
+                        </button>
+                        :
+                        <button className={classnames(styles.button, styles.ripple)} onClick={() => props.enterFullScreen()}>
+                            <MaximizeBtnSvg />
+                        </button>
+                }
             </div>
         </div>
     )

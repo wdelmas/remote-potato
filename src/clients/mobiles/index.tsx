@@ -14,6 +14,7 @@ import { removeDoubleTapZoom } from "./utils/mobileHandler";
 import { makeSocketService, SocketService } from "./utils/socket";
 
 removeDoubleTapZoom('button');
+removeDoubleTapZoom('div');
 
 const store = createReduxStore(browserHistory)
 
