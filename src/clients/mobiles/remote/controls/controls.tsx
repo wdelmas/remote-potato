@@ -1,6 +1,10 @@
 import * as React from "react";
 import * as classnames from 'classnames'
 import { Controller } from "../../store/videoPlayer/index";
+const Image1 = require('!babel-loader!svg-react-loader!image-webpack-loader?bypassOnDebug!./svg/play-button.svg')
+
+{/* <Image1 /> */}
+
 const styles = require('./controls.css')
 
 export interface ControlsPops {
@@ -28,6 +32,7 @@ export const Controls = (props: ControlsPops) => {
             <div className={styles.title}>
                 <span>{props.title}</span>
             </div>
+            
             <div className={styles.controls}>
                 <button className={classnames(styles.button)} onClick={() => props.seekBackward(5)}><i className="fa fa-backward"></i></button>
                 {
