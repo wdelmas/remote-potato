@@ -29,15 +29,15 @@ export const Controls = (props: ControlsPops) => {
                 <span>{props.title}</span>
             </div>
             <div className={styles.controls}>
-                <button className={classnames(styles.button, styles.ripple)} onClick={() => props.seekBackward(5)}><i className="fa fa-backward"></i></button>
+                <button className={classnames(styles.button)} onClick={() => props.seekBackward(5)}><i className="fa fa-backward"></i></button>
                 {
                     props.controller.isPlaying ?
-                        <button className={classnames(styles.button, styles.ripple)} onClick={() => props.pause()}><i className="fa fa-pause"></i></button>
+                        <button className={classnames(styles.button)} onClick={() => props.pause()}><i className="fa fa-pause"></i></button>
                         :
-                        <button className={classnames(styles.button, styles.ripple)} onClick={() => props.play()}><i className="fa fa-play"></i></button>
+                        <button className={classnames(styles.button)} onClick={() => props.play()}><i className="fa fa-play"></i></button>
                 }
 
-                <button className={classnames(styles.button, styles.ripple)} onClick={() => props.seekForward(5)}><i className="fa fa-forward"></i></button>
+                <button className={classnames(styles.button)} onClick={() => props.seekForward(5)}><i className="fa fa-forward"></i></button>
             </div>
             <div className={styles.volumeSlider}>
                 <div className={styles.mute}></div>
