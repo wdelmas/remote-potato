@@ -2,10 +2,12 @@ import { PLAYER_PLAY, VideoPlayerMessage } from "../../../../communication/actio
 import { LOAD_CURRENT_VIDEO_STATE } from "./actions";
 
 export interface VideoPlayerReducer {
-    controller: {
-        isPlaying: boolean
-    },
+    controller: Controller,
     current: VideoPlayerMessage
+}
+
+export interface Controller {
+    isPlaying: boolean
 }
 
 export default (state = emptyVideoPlayerReducer(), action: any) => {
