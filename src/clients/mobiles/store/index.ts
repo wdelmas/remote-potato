@@ -46,6 +46,8 @@ export function mapDispatchToProps(dispatch: Dispatch<State>): Dispatcher {
     }
 }
 
-export const mapStateToProps = <T>(reduxState: ReduxState, props: T): ReduxState & T => {
-    return Object.assign<{}, T, ReduxState>({}, props, reduxState)
+export const mapStateToProps = <T>(state: State, props: T): ReduxState & T => {
+    return Object.assign<{}, T, ReduxState>({}, props, {
+        reduxState: state
+    })
 }

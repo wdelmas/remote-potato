@@ -13,5 +13,5 @@ const App = (props: AppProps) => {
 }
 
 export default connect(
-    (state: ReduxState, props: AppProps) => mapStateToProps<AppProps>(state, props),
+    (state: State, props: AppProps) => mapStateToProps<AppProps>(state, props),
     null)(App)

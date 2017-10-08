@@ -1,0 +1,13 @@
+.siteInfos {
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 22px;
+    height: 8%;
+}
+
+.siteInfos img {
+    height: 20px;
+    margin-right: 5px;
+}
