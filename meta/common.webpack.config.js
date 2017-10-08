@@ -79,6 +79,13 @@ module.exports = (options) => {
             ]
           })
         },
+        {
+          test: /\.(png|svg|gif)$/,
+          use: [
+            'url-loader',
+            'image-webpack-loader'
+          ]
+        }
       ])
     },
     node: options.node,
