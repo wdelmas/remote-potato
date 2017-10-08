@@ -26,13 +26,15 @@ export interface ControlsPops {
     title: string
     duration: number
     currentTime: number
+    currentTimeAsPercentage: string
     dominantBackgroundColor: string
+    volume: number
 }
 export const Controls = (props: ControlsPops) => {
     return (
         <div className={classnames(styles.container, styles.white)}>
             <div className={styles.timeSlider}>
-                <input type="range" min="1" max="100" defaultValue="20" className={styles.slider} />
+                <input type="range" min="1" max="100" defaultValue={parseInt(props.currentTimeAsPercentage).toString()} className={styles.slider} />
                 <div className={styles.sliderInfos}>
                     <span>{secondstoHHMMSS(props.currentTime)}</span>
                     <span>{secondstoHHMMSS(props.duration)}</span>
@@ -73,7 +75,7 @@ export const Controls = (props: ControlsPops) => {
             <div className={styles.volumeSlider}>
                 <div className={styles.mute}></div>
                 <div className={styles.sliderContainer}>
-                    <input type="range" min="1" max="100" defaultValue="20" className={styles.slider} />
+                    <input type="range" min="1" max="100" defaultValue={props.volume.toString()} className={styles.slider} />
                 </div>
                 <div className={styles.volumeUp}></div>
             </div>

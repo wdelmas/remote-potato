@@ -1,10 +1,10 @@
-import { eventFire } from "../dom";
 import { Debugger } from "../../../../../communication/Debugger";
 import { messageType, VideoPlayerMessage, message } from "../../../../../communication/actions";
 import { FeedbackComponent, appendFeedbackComponentToContainer } from "./feedbackAction";
 import { loadYoutubePlayer } from "./players/youtube";
 import { loadAmazonPlayer } from "./players/amazon";
 import { loadVimeoPlayer } from "./players/vimeo";
+import { load9animePlayer } from "./players/9anime";
 import { loadDefaultPlayer } from "./players/default";
 import { RGBaster } from "../../../../mobiles/utils/rgBaster";
 
@@ -29,6 +29,7 @@ export interface VideoPlayer {
     exitFullScreen: () => void,
     setFeedBackAction: (messageType: messageType) => void
     getResponse: () => Promise<VideoPlayerMessage>
+    getTitle: () => string
 }
 
 export interface VideoPlayerWrapper {
@@ -58,12 +59,7 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
     switch (domain) {
         case FMOVIES:
         case NINE_ANIME:
-            const cover = document.getElementsByClassName('cover')[0]
-            if (cover)
-                eventFire(cover, 'click');
-            playerWrapper.player = document.getElementsByClassName('jw-video jw-reset')[0] as HTMLVideoElement
-            playerWrapper.container = [document.getElementById('player')]
-
+            load9animePlayer(playerWrapper)
             break
         case VIMEO:
             loadVimeoPlayer(playerWrapper)
@@ -142,6 +138,9 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
             }
 
         },
+        getTitle: () => {
+            return document.title;
+        },
         getResponse: (): Promise<VideoPlayerMessage> => {
             return new Promise((resolve) => {
                 const getVideoPlayerMessage = (videoPlayerMessage: Partial<VideoPlayerMessage>) => Object.assign({}, {
@@ -166,7 +165,7 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                                 }))
                             }
                         });
-                } catch {
+                } catch (err){
                     resolve(getVideoPlayerMessage({
                         favicon
                     }))
