@@ -180,8 +180,7 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                         });
                 } catch (err){
                     resolve(getVideoPlayerMessage({
-                        favicon,
-                        poster
+                        favicon
                     }))
                 }
             })
