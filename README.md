@@ -62,6 +62,10 @@ Enter and exit fullscreen for:
 - [AmazonPrime](https://www.primevideo.com/)
 - [Canal+](https://www.mycanal.fr/)
 
+## Webapp
+- Production: https://remote-potato.herokuapp.com/
+- Staging - new design: https://remote-potato-new-design.herokuapp.com/
+
 ## Contributing
 Changes and improvements are more than welcome!
 
