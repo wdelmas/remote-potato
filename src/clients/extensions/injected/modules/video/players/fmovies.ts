@@ -11,7 +11,8 @@ export const loadFmoviesPlayer = (playerWrapper: VideoPlayerWrapper) => {
     playerWrapper.customBehavior = {
         getTitle: function () {
             let title = document.title;
-            return new RegExp(/Watch\s(.*)\sin HD on Fmovies\.to/g).exec(title)[1];
+            let regexMatch = new RegExp(/Watch\s(.*)\sOnline | Free Movies/g).exec(title);
+            return (regexMatch && regexMatch[1]) || title;
         }
     }
 }
