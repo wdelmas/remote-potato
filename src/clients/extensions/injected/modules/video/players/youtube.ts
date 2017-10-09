@@ -5,6 +5,15 @@ export const loadYoutubePlayer = (playerWrapper: VideoPlayerWrapper) => {
     playerWrapper.container = [document.getElementById("player-container") as any]
 
     playerWrapper.customBehavior = {
+        getPoster: function() {
+            var searchParams = new URLSearchParams(window.location.search);
+            let videoId = searchParams.get("v");
+            return `https://img.youtube.com/vi/${videoId}/sddefault.jpg`;
+        },
+        getTitle: function () {
+            let title = document.title;
+            return new RegExp(/(.*)\s- YouTube/g).exec(title)[1];
+        },
         enterFullScreen: function () {
             defaultFullScreenBehavior(playerWrapper)
             playerWrapper.player.style.minWidth = '100vw';

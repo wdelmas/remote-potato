@@ -1,12 +1,13 @@
-import { eventFire } from "../dom";
 import { Debugger } from "../../../../../communication/Debugger";
 import { messageType, VideoPlayerMessage, message } from "../../../../../communication/actions";
 import { FeedbackComponent, appendFeedbackComponentToContainer } from "./feedbackAction";
 import { loadYoutubePlayer } from "./players/youtube";
 import { loadAmazonPlayer } from "./players/amazon";
 import { loadVimeoPlayer } from "./players/vimeo";
+import { load9animePlayer } from "./players/9anime";
 import { loadDefaultPlayer } from "./players/default";
 import { RGBaster } from "../../../../mobiles/utils/rgBaster";
+import { getCurrentDomain } from "../browser";
 
 const FMOVIES = 'fmovies'
 const NINE_ANIME = '9anime'
@@ -29,6 +30,8 @@ export interface VideoPlayer {
     exitFullScreen: () => void,
     setFeedBackAction: (messageType: messageType) => void
     getResponse: () => Promise<VideoPlayerMessage>
+    getTitle: () => string
+    getPoster: () => string
 }
 
 export interface VideoPlayerWrapper {
@@ -58,12 +61,7 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
     switch (domain) {
         case FMOVIES:
         case NINE_ANIME:
-            const cover = document.getElementsByClassName('cover')[0]
-            if (cover)
-                eventFire(cover, 'click');
-            playerWrapper.player = document.getElementsByClassName('jw-video jw-reset')[0] as HTMLVideoElement
-            playerWrapper.container = [document.getElementById('player')]
-
+            load9animePlayer(playerWrapper)
             break
         case VIMEO:
             loadVimeoPlayer(playerWrapper)
@@ -142,15 +140,29 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
             }
 
         },
-        getResponse: (): Promise<VideoPlayerMessage> => {
+        getTitle: () => {
+            return document.title;
+        },
+        getPoster: () => {
+            let metas = document.getElementsByTagName('meta');
+            let images = [];
+            for (let i = 0; i < metas.length; i++) {
+                let property = metas[i].attributes.getNamedItem('property');
+                if (metas[i].attributes.length > 0 && property && property.value === 'og:image') {
+                    images.push(metas[i].attributes.getNamedItem('content').value);
+                }
+            }
+            return images[0];
+        },
+        getResponse: function():Promise<VideoPlayerMessage> {
             return new Promise((resolve) => {
                 const getVideoPlayerMessage = (videoPlayerMessage: Partial<VideoPlayerMessage>) => Object.assign({}, {
                     currentTime: wrapper.player.currentTime,
                     currentTimeAsPercentage: getCurrentTimeAsPercentage(wrapper.player),
-                    domain: window.location.host,
+                    domain: getCurrentDomain(),
                     duration: wrapper.player.duration,
-                    title: document.title,
-                    poster: getPosterImage(),
+                    title: this.getTitle(),
+                    poster: this.getPoster(),
                     volume: wrapper.player.volume,
                     volumeAsPercentage: (wrapper.player.volume * 100).toFixed(0).toString() + '%'
                 }, videoPlayerMessage)
@@ -166,9 +178,10 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                                 }))
                             }
                         });
-                } catch {
+                } catch (err){
                     resolve(getVideoPlayerMessage({
-                        favicon
+                        favicon,
+                        poster
                     }))
                 }
             })
@@ -176,18 +189,6 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
     };
     return customVideoPlayer ? Object.assign({}, videoPlayer, customVideoPlayer) : videoPlayer
 }
-
-const getPosterImage = () => {
-    let metas = document.getElementsByTagName('meta');
-    let images = [];
-    for (let i = 0; i < metas.length; i++) {
-        let property = metas[i].attributes.getNamedItem('property');
-        if (metas[i].attributes.length > 0 && property && property.value === 'og:image') {
-            images.push(metas[i].attributes.getNamedItem('content').value);
-        }
-    }
-    return images[0];
-};
 
 const getFavicon = () => {
     let metas = document.getElementsByTagName('link');
