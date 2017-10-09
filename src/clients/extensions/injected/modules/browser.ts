@@ -5,10 +5,12 @@ const noop = () => { }
 
 export const addMessageListener = (callback: any) => {
     chrome.runtime.onMessage.addListener(function (request: message, sender: any, sendResponse: (response: any) => void) {
-        callback(request, sender)
-            .then((result: message) => {
-                chrome.runtime.sendMessage(result);
-            })
+        if (request.extensionId)
+            callback(request, sender)
+                .then((result: message) => {
+                    if (result)
+                        chrome.runtime.sendMessage(request.extensionId, result, { includeTlsChannelId: false });
+                })
         return true
     })
 }
