@@ -11,6 +11,6 @@
   .noPoster {
     font-family: Lato,sans-serif;
     font-weight: 100;
-    text-align: center;
+    /*text-align: center;*/
     text-shadow: 0 0 1px white;
   }

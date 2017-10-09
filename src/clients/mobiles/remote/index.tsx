@@ -95,12 +95,11 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
 
     public render() {
         const current: VideoPlayerMessage = this.props.reduxState.videoPlayerReducer.current || {
-            title: "Boku no Hero Acadomia",
-            domain: "9anime.to",
+            title: "Nothing playing",
+            domain: "remote-potatoe",
             currentTime: 60,
             duration: 300,
             currentTimeAsPercentage: '40%',
-            poster: "http://2.bp.blogspot.com/-r1Ccg34ohHs/WN-GJnJ3_cI/AAAAAAAAe20/6452H0a28vw/w650-h350/boku-no-hero-academia-2nd-season.jpg",
             favicon: "https://9anime.to/favicons/favicon.png",
             volume: 30,
             volumeAsPercentage: '30%'

@@ -7,6 +7,7 @@ import { loadVimeoPlayer } from "./players/vimeo";
 import { load9animePlayer } from "./players/9anime";
 import { loadDefaultPlayer } from "./players/default";
 import { RGBaster } from "../../../../mobiles/utils/rgBaster";
+import { getCurrentDomain } from "../browser";
 
 const FMOVIES = 'fmovies'
 const NINE_ANIME = '9anime'
@@ -30,6 +31,7 @@ export interface VideoPlayer {
     setFeedBackAction: (messageType: messageType) => void
     getResponse: () => Promise<VideoPlayerMessage>
     getTitle: () => string
+    getPoster: () => string
 }
 
 export interface VideoPlayerWrapper {
@@ -141,15 +143,26 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
         getTitle: () => {
             return document.title;
         },
-        getResponse: (): Promise<VideoPlayerMessage> => {
+        getPoster: () => {
+            let metas = document.getElementsByTagName('meta');
+            let images = [];
+            for (let i = 0; i < metas.length; i++) {
+                let property = metas[i].attributes.getNamedItem('property');
+                if (metas[i].attributes.length > 0 && property && property.value === 'og:image') {
+                    images.push(metas[i].attributes.getNamedItem('content').value);
+                }
+            }
+            return images[0];
+        },
+        getResponse: function():Promise<VideoPlayerMessage> {
             return new Promise((resolve) => {
                 const getVideoPlayerMessage = (videoPlayerMessage: Partial<VideoPlayerMessage>) => Object.assign({}, {
                     currentTime: wrapper.player.currentTime,
                     currentTimeAsPercentage: getCurrentTimeAsPercentage(wrapper.player),
-                    domain: window.location.host,
+                    domain: getCurrentDomain(),
                     duration: wrapper.player.duration,
-                    title: document.title,
-                    poster: getPosterImage(),
+                    title: this.getTitle(),
+                    poster: this.getPoster(),
                     volume: wrapper.player.volume,
                     volumeAsPercentage: (wrapper.player.volume * 100).toFixed(0).toString() + '%'
                 }, videoPlayerMessage)
@@ -167,7 +180,8 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                         });
                 } catch (err){
                     resolve(getVideoPlayerMessage({
-                        favicon
+                        favicon,
+                        poster
                     }))
                 }
             })
@@ -175,18 +189,6 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
     };
     return customVideoPlayer ? Object.assign({}, videoPlayer, customVideoPlayer) : videoPlayer
 }
-
-const getPosterImage = () => {
-    let metas = document.getElementsByTagName('meta');
-    let images = [];
-    for (let i = 0; i < metas.length; i++) {
-        let property = metas[i].attributes.getNamedItem('property');
-        if (metas[i].attributes.length > 0 && property && property.value === 'og:image') {
-            images.push(metas[i].attributes.getNamedItem('content').value);
-        }
-    }
-    return images[0];
-};
 
 const getFavicon = () => {
     let metas = document.getElementsByTagName('link');

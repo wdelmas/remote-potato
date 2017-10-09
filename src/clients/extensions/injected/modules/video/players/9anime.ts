@@ -11,7 +11,7 @@ export const load9animePlayer = (playerWrapper: VideoPlayerWrapper) => {
     playerWrapper.customBehavior = {
         getTitle: function () {
             let title = document.title;
-            return title.replace('Watch ', '');
+            return new RegExp(/Watch\s(.*)\sin HD on 9anime\.to/g).exec(title)[1];
         }
     }
 }
