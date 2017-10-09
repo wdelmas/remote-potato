@@ -17,7 +17,7 @@ export const Poster = (props: PosterProps) => {
     >
     {
         !props.url ?
-        <div className={styles.noPoster}>We couldn't find an image. Here's an ananas :)</div>
+        <div className={styles.noPoster}>We couldn't find an image<br/> Here's an ananas 🤗</div>
         : ''
     }
     </div >)
