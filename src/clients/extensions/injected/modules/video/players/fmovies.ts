@@ -1,7 +1,7 @@
 import { VideoPlayerWrapper, defaultFullScreenBehavior, defaultExitFullScreenBehavior } from "../index"
 import { eventFire } from "../../dom";
 
-export const load9animePlayer = (playerWrapper: VideoPlayerWrapper) => {
+export const loadFmoviesPlayer = (playerWrapper: VideoPlayerWrapper) => {
     const cover = document.getElementsByClassName('cover')[0]
     if (cover)
         eventFire(cover, 'click');
@@ -11,7 +11,7 @@ export const load9animePlayer = (playerWrapper: VideoPlayerWrapper) => {
     playerWrapper.customBehavior = {
         getTitle: function () {
             let title = document.title;
-            return new RegExp(/Watch\s(.*)\sOnline | Free Movies/g).exec(title)[1];
+            return new RegExp(/Watch\s(.*)\sin HD on Fmovies\.to/g).exec(title)[1];
         }
     }
 }

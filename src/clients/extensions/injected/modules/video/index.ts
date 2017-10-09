@@ -6,6 +6,7 @@ import { loadAmazonPlayer } from "./players/amazon";
 import { loadVimeoPlayer } from "./players/vimeo";
 import { load9animePlayer } from "./players/9anime";
 import { loadDefaultPlayer } from "./players/default";
+import { loadFmoviesPlayer } from "./players/fmovies";
 import { RGBaster } from "../../../../mobiles/utils/rgBaster";
 import { getCurrentDomain } from "../browser";
 
@@ -60,6 +61,8 @@ export const getVideoPlayer = (domain: string): VideoPlayerWrapper => {
     }
     switch (domain) {
         case FMOVIES:
+            loadFmoviesPlayer(playerWrapper);
+            break;
         case NINE_ANIME:
             load9animePlayer(playerWrapper)
             break
