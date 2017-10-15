@@ -34,16 +34,15 @@ export const openNewTab = (url: string, cb: Function) => {
     }, cb())
 }
 
-export const removeCurrentTab = (url: string, cb: Function) => {
+export const removeCurrentTab = (cb: Function) => {
     getCurrentTab().then((tab) => {
         chrome.tabs.remove(tab.id, cb())
     })
 }
-export const refreshCurrentTab = (url: string, cb: Function) => {
+export const refreshCurrentTab = (cb: Function) => {
     getCurrentTab().then((tab) => {
-        chrome.tabs.update(tab.id,{
-            url :tab.url
-        }, cb())
+        var code = 'window.location.reload();';
+        chrome.tabs.executeScript(tab.id, { code: code });
     })
 }
 export const onUpdateTabsListener = (callback: Function) => {
@@ -90,7 +89,7 @@ export const initMessageEventListener = () => {
                 break;
             case POPUP_OPENED:
                 chrome.runtime.sendMessage({
-                    type : COMMONS_MESSAGE_TYPE,
+                    type: COMMONS_MESSAGE_TYPE,
                     actionType: WEB_APP_URL,
                     action: webAppUrl
                 } as message);

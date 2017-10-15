@@ -50,7 +50,6 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
     }
 
     public pause = () => {
-
         this.props.socketService.sendPlayerActionsMessageFromClient({
             actionType: PLAYER_PAUSE
         }, { feedbackVibrate: true })

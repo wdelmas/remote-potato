@@ -3,6 +3,7 @@ import { MESSAGE_TO_EXTENSION, IO_SERVER } from "../../../../communication/const
 import { sendMessageToCurrentTab, roomId, webAppUrl } from "./browser";
 import { Debugger } from "../../../../communication/Debugger";
 import { message, HANDSHAKE } from "../../../../communication/actions";
+import { initTabsActions } from './events';
 
 
 const socket = SocketIOClient.connect(IO_SERVER);
@@ -17,7 +18,10 @@ export const initSockets = () => {
 
     socket.on(MESSAGE_TO_EXTENSION, function (data: message) {
         Debugger.log(data)
-        return sendMessageToCurrentTab(data)
+         sendMessageToCurrentTab(data)
+         initTabsActions(data, () =>{
+             
+         })
     });
 }
 

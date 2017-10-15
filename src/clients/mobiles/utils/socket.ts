@@ -1,7 +1,7 @@
 import { MESSAGE_FROM_EXTENSION, IO_SERVER, MESSAGE_FROM_CLIENT } from "../../../communication/constants";
 import * as SocketIOClient from 'socket.io-client';
 import { Debugger } from "../../../communication/Debugger";
-import { message, HANDSHAKE, COMMONS_MESSAGE_TYPE, actionType, messageType,PLAYER_ACTIONS_MESSAGE_TYPE } from "../../../communication/actions";
+import { message, HANDSHAKE, COMMONS_MESSAGE_TYPE, actionType, messageType,PLAYER_ACTIONS_MESSAGE_TYPE, TABS_MESSAGE_TYPE } from "../../../communication/actions";
 import { loadRoomId, connectedToWsServer } from "../store/socket/actions";
 import { State } from "../store/index";
 import { Store } from "redux";
@@ -15,6 +15,9 @@ const getRoomId = () => {
 
 export interface SocketService {
     sendPlayerActionsMessageFromClient: (messageToSend: Partial<message>, options?: {
+        feedbackVibrate: boolean
+    }) => void
+    sendTabsActionsMessageFromClient: (messageToSend: Partial<message>, options?: {
         feedbackVibrate: boolean
     }) => void
 }
@@ -48,6 +51,13 @@ export const makeSocketService = (store: Store<State>): SocketService => {
             feedbackVibrate: boolean
         }) => {
             sendMessageFromClient(socket, store.getState().socketReducer.roomId, PLAYER_ACTIONS_MESSAGE_TYPE, messageToSend)
+            if (options.feedbackVibrate)
+                vibrate()
+        },
+        sendTabsActionsMessageFromClient: (messageToSend: Partial<message>, options?: {
+            feedbackVibrate: boolean
+        }) => {
+            sendMessageFromClient(socket, store.getState().socketReducer.roomId, TABS_MESSAGE_TYPE, messageToSend)
             if (options.feedbackVibrate)
                 vibrate()
         }
