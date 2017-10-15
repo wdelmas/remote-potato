@@ -45,7 +45,7 @@ export const initActions = (request: message, sender: any): Promise<message> => 
                     player.pause()
                     break
                 case GO_TO_TIME:
-                    player.goToTime(request.action)
+                    player.goToTime(parseInt(request.action))
                     break
                 case PLAYER_SEEK_BACKWARD:
                     player.seekBackward(parseInt(request.action))

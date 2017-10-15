@@ -34,6 +34,7 @@ import { Controls } from "./controls/controls";
 import { Volume } from "./volume/volume";
 import { BottomControls } from "./bottom-controls/bottom-controls";
 import { Title } from "./title/title";
+import { debounce } from "../utils/debounce";
 
 export interface RemoteProps {
     socketService: SocketService
@@ -57,10 +58,14 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
         }, { feedbackVibrate: true })
     }
     public onTimeChanged = (number: number) => {
-        this.props.socketService.sendMessageFromClient({
-            type: GO_TO_TIME,
-            action: number.toString()
-        }, { feedbackVibrate: false })
+        const props = this.props
+        debounce(function () {
+            props.socketService.sendMessageFromClient({
+                type: GO_TO_TIME,
+                action: number.toString()
+            }, { feedbackVibrate: false })
+        }, 250)()
+
     }
     public seekBackward = (number: number) => {
         this.props.socketService.sendMessageFromClient({
@@ -77,10 +82,13 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
     }
 
     public onVolumeChanged = (number: number) => {
-        this.props.socketService.sendMessageFromClient({
-            type: CHANGE_VOLUME,
-            action: number.toString()
-        }, { feedbackVibrate: false })
+        const props = this.props
+        debounce(function () {
+            props.socketService.sendMessageFromClient({
+                type: CHANGE_VOLUME,
+                action: number.toString()
+            }, { feedbackVibrate: false })
+        }, 250)()
     }
 
     public enterFullScreen = () => {
@@ -115,7 +123,7 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
                 controller={this.props.reduxState.videoPlayerReducer.controller}
             />
             <Playback
-            onTimeChange={this.onTimeChanged}
+                onTimeChange={this.onTimeChanged}
                 seekBackward={this.seekBackward}
                 seekForward={this.seekForward}
                 duration={current.duration}

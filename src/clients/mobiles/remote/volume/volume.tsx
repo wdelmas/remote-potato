@@ -12,21 +12,44 @@ export interface VolumePops {
     volume: number
     dominantBackgroundColor: string
 }
-// export const Volume = (props: VolumePops) => {
-export class Volume extends React.Component<VolumePops, {}>  {
+
+export interface State {
+    volume: number
+}
+
+export class Volume extends React.Component<VolumePops, State>  {
     public refs: {
         volume: HTMLInputElement
         [k: string]: React.ReactInstance
     }
 
+    public constructor(props: VolumePops) {
+        super(props)
+        this.state = {
+            volume: null
+        }
+    }
+
+    public componentWillReceiveProps(props: VolumePops) {
+        if (this.state.volume! = props.volume) {
+            this.setState({
+                volume: props.volume
+            })
+        }
+    }
+
     public _onVolumeChanged = () => {
-        const value = parseInt(this.refs.volume.value)/100
+        const value = parseInt(this.refs.volume.value) / 100
+        this.setState({
+            volume: value
+        })
         if (this.props.onVolumeChange)
             this.props.onVolumeChange(value)
+
     }
 
     public render() {
-        const volume = this.props.volume * 100
+        const volume = this.state.volume * 100
         return (<div className={styles.volumeSlider}>
             <MuteBtnSvg className={styles.volumeSvgs} style={{
                 fill: this.props.dominantBackgroundColor
