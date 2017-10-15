@@ -16,6 +16,7 @@ export const initSockets = () => {
     })
 
     socket.on(MESSAGE_TO_EXTENSION, function (data: message) {
+        Debugger.log(data)
         return sendMessageToCurrentTab(data)
     });
 }

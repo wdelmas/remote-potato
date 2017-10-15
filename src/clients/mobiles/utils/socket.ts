@@ -1,7 +1,7 @@
 import { MESSAGE_FROM_EXTENSION, IO_SERVER, MESSAGE_FROM_CLIENT } from "../../../communication/constants";
 import * as SocketIOClient from 'socket.io-client';
 import { Debugger } from "../../../communication/Debugger";
-import { message, HANDSHAKE } from "../../../communication/actions";
+import { message, HANDSHAKE, COMMONS_MESSAGE_TYPE, actionType, messageType,PLAYER_ACTIONS_MESSAGE_TYPE } from "../../../communication/actions";
 import { loadRoomId, connectedToWsServer } from "../store/socket/actions";
 import { State } from "../store/index";
 import { Store } from "redux";
@@ -14,7 +14,7 @@ const getRoomId = () => {
 }
 
 export interface SocketService {
-    sendMessageFromClient: (messageToSend: Partial<message>, options?: {
+    sendPlayerActionsMessageFromClient: (messageToSend: Partial<message>, options?: {
         feedbackVibrate: boolean
     }) => void
 }
@@ -24,7 +24,6 @@ export const makeSocketService = (store: Store<State>): SocketService => {
     const socket = SocketIOClient.connect(IO_SERVER);
 
     const ROOM_ID = getRoomId()
-
     store.dispatch(loadRoomId(ROOM_ID))
 
     socket.on('connect', () => {
@@ -32,10 +31,11 @@ export const makeSocketService = (store: Store<State>): SocketService => {
         socket.emit('room', ROOM_ID);
         store.dispatch(connectedToWsServer(true))
         const sendHandshake = () =>
-            sendMessageFromClient(socket, store.getState().socketReducer.roomId, {
-                extensionId: ROOM_ID,
+            sendMessageFromClient(socket, store.getState().socketReducer.roomId, COMMONS_MESSAGE_TYPE, {
+                roomId: ROOM_ID,
                 from: 'webapp',
-                type: HANDSHAKE
+                type: COMMONS_MESSAGE_TYPE,
+                actionType: HANDSHAKE
             })
         sendHandshake()
     })
@@ -44,10 +44,10 @@ export const makeSocketService = (store: Store<State>): SocketService => {
         store.dispatch(loadCurrentVideoPlayerState(data.infos))
     });
     return {
-        sendMessageFromClient: (messageToSend: Partial<message>, options?: {
+        sendPlayerActionsMessageFromClient: (messageToSend: Partial<message>, options?: {
             feedbackVibrate: boolean
         }) => {
-            sendMessageFromClient(socket, store.getState().socketReducer.roomId, messageToSend)
+            sendMessageFromClient(socket, store.getState().socketReducer.roomId, PLAYER_ACTIONS_MESSAGE_TYPE, messageToSend)
             if (options.feedbackVibrate)
                 vibrate()
         }
@@ -59,9 +59,10 @@ const vibrate = () => {
         navigator.vibrate(1)
 }
 
-const sendMessageFromClient = (socket: any, roomId: string, messageToSend: Partial<message>) => {
+const sendMessageFromClient = (socket: any, roomId: string, messageType: messageType, messageToSend: Partial<message>) => {
     const message = Object.assign({}, messageToSend, {
-        extensionId: roomId,
+        roomId: roomId,
+        type: messageType,
         from: 'webapp'
     }) as message
     socket.emit(MESSAGE_FROM_CLIENT, message)

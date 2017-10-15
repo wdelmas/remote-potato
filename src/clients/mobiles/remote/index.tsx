@@ -44,37 +44,37 @@ const getSocket = (): any => { }
 class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
 
     public play = () => {
-        this.props.socketService.sendMessageFromClient({
-            type: PLAYER_PLAY
+        this.props.socketService.sendPlayerActionsMessageFromClient({
+            actionType: PLAYER_PLAY
         }, { feedbackVibrate: true })
     }
 
     public pause = () => {
 
-        this.props.socketService.sendMessageFromClient({
-            type: PLAYER_PAUSE
+        this.props.socketService.sendPlayerActionsMessageFromClient({
+            actionType: PLAYER_PAUSE
         }, { feedbackVibrate: true })
     }
     public onTimeChanged = (number: number) => {
         const props = this.props
         debounce(function () {
-            props.socketService.sendMessageFromClient({
-                type: GO_TO_TIME,
+            props.socketService.sendPlayerActionsMessageFromClient({
+                actionType: GO_TO_TIME,
                 action: number.toString()
             }, { feedbackVibrate: false })
         }, 250)()
 
     }
     public seekBackward = (number: number) => {
-        this.props.socketService.sendMessageFromClient({
-            type: PLAYER_SEEK_BACKWARD,
+        this.props.socketService.sendPlayerActionsMessageFromClient({
+            actionType: PLAYER_SEEK_BACKWARD,
             action: number.toString()
         }, { feedbackVibrate: true })
     }
 
     public seekForward = (number: number) => {
-        this.props.socketService.sendMessageFromClient({
-            type: PLAYER_SEEK_FORWARD,
+        this.props.socketService.sendPlayerActionsMessageFromClient({
+            actionType: PLAYER_SEEK_FORWARD,
             action: number.toString()
         }, { feedbackVibrate: true })
     }
@@ -82,8 +82,8 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
     public onVolumeChanged = (number: number) => {
         const props = this.props
         debounce(function () {
-            props.socketService.sendMessageFromClient({
-                type: CHANGE_VOLUME,
+            props.socketService.sendPlayerActionsMessageFromClient({
+                actionType: CHANGE_VOLUME,
                 action: number.toString()
             }, { feedbackVibrate: false })
         }, 250)()
@@ -91,15 +91,15 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
 
     public enterFullScreen = () => {
         this.props.dispatch(fullScreenBtn_Clicked(true))
-        this.props.socketService.sendMessageFromClient({
-            type: PLAYER_ENTER_FULLSCREEN,
+        this.props.socketService.sendPlayerActionsMessageFromClient({
+            actionType: PLAYER_ENTER_FULLSCREEN,
         }, { feedbackVibrate: true })
     }
 
     public exitFullScreen = () => {
         this.props.dispatch(fullScreenBtn_Clicked(false))
-        this.props.socketService.sendMessageFromClient({
-            type: PLAYER_EXIT_FULLSCREEN,
+        this.props.socketService.sendPlayerActionsMessageFromClient({
+            actionType: PLAYER_EXIT_FULLSCREEN,
         }, { feedbackVibrate: true })
     }
 

@@ -1,5 +1,5 @@
 import { Debugger } from "../../../../../communication/Debugger";
-import { messageType, VideoPlayerMessage, message } from "../../../../../communication/actions";
+import { messageType, VideoPlayerMessage, message, actionType } from "../../../../../communication/actions";
 import { FeedbackComponent, appendFeedbackComponentToContainer } from "./feedbackAction";
 import { loadYoutubePlayer } from "./players/youtube";
 import { loadAmazonPlayer } from "./players/amazon";
@@ -29,7 +29,7 @@ export interface VideoPlayer {
     changeVolume: (seconds: number) => number,
     enterFullScreen: () => void,
     exitFullScreen: () => void,
-    setFeedBackAction: (messageType: messageType) => void
+    setFeedBackAction: (actionType: actionType) => void
     getResponse: () => Promise<VideoPlayerMessage>
     getTitle: () => string
     getPoster: () => string
@@ -126,11 +126,11 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
         exitFullScreen: function () {
             defaultExitFullScreenBehavior(wrapper)
         },
-        setFeedBackAction: function (messageType: messageType) {
+        setFeedBackAction: function (actionType: actionType) {
             clearTimeout(feedBackTimeout)
             if (wrapper.feedBackAction) {
                 wrapper.feedBackAction.component.className = 'visible';
-                wrapper.feedBackAction.component.className = messageType;
+                wrapper.feedBackAction.component.className = actionType;
 
                 feedBackTimeout = setTimeout(function () {
                     wrapper.feedBackAction.component.className = 'hidden';

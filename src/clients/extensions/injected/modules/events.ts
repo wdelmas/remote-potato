@@ -34,10 +34,11 @@ export const initActions = (request: message, sender: any): Promise<message> => 
             Debugger.log(request)
             let result: message = {
                 from: 'extension',
-                extensionId: request.extensionId,
-                type: request.type
+                roomId: request.roomId,
+                type: request.type,
+                actionType: request.actionType
             }
-            switch (request.type) {
+            switch (request.actionType) {
                 case PLAYER_PLAY:
                     player.play()
                     break
@@ -58,18 +59,16 @@ export const initActions = (request: message, sender: any): Promise<message> => 
                     break
                 case PLAYER_ENTER_FULLSCREEN:
                     player.enterFullScreen()
-                    request.extensionId = null
                     chrome.runtime.sendMessage(request);
                     break
                 case PLAYER_EXIT_FULLSCREEN:
                     player.exitFullScreen();
-                    request.extensionId = null
                     chrome.runtime.sendMessage(request);
                     break
             }
 
-            if (request.type! === HANDSHAKE) {
-                player.setFeedBackAction(request.type);
+            if (request.actionType! === HANDSHAKE) {
+                player.setFeedBackAction(request.actionType);
             }
             return player.getResponse()
                 .then((playInfo) => {

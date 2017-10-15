@@ -1,19 +1,21 @@
 import { Debugger } from "../../communication/Debugger";
 import { IO_SERVER } from "../../communication/constants";
-import { POPUP_OPENED, message, WEB_APP_URL } from "../../communication/actions";
+import { POPUP_OPENED, message, WEB_APP_URL, COMMONS_MESSAGE_TYPE } from "../../communication/actions";
 const QRious = require('qrious');
 
 const sendEventPopUpOpened = () => {
     console.log('POPUP_OPENED')
     const message = {
-        type: POPUP_OPENED
+        from: 'extension',
+        type: COMMONS_MESSAGE_TYPE,
+        actionType: POPUP_OPENED
     } as message
     chrome.runtime.sendMessage(message);
 }
 
 const initMessageEventListener = () => {
     chrome.runtime.onMessage.addListener((message: message) => {
-        switch (message.type) {
+        switch (message.actionType) {
             case WEB_APP_URL:
                 const qr = new QRious({
                     value: message.action,
