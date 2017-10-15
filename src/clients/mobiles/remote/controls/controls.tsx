@@ -11,7 +11,7 @@ const ForwardBtnSvg = require('!babel-loader!svg-react-loader!image-webpack-load
 const styles = require('./controls.css')
 
 export interface ControlsPops {
-    controller: Controller
+    isPlaying: boolean
     play: () => void
     pause: () => void
     seekBackward: (number: number) => void
@@ -31,7 +31,7 @@ export const Controls = (props: ControlsPops) => {
                 }}/>
             </button>
             {
-                props.controller.isPlaying ?
+                props.isPlaying ?
                     <button className={classnames(styles.button)} onClick={() => props.pause()}>
                         <PauseBtnSvg  style={{
                             fill: props.dominantBackgroundColor

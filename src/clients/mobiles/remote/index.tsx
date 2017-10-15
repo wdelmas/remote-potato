@@ -24,7 +24,7 @@ import { bindActionCreators } from "redux";
 import { SocketReducer } from "../store/socket/index";
 import { connectedToWsServer } from "../store/socket/actions";
 import { SocketService } from "../utils/socket";
-import { playBtn_Clicked, fullScreenBtn_Clicked } from "../store/videoPlayer/actions";
+import { fullScreenBtn_Clicked } from "../store/videoPlayer/actions";
 import { rgbToObject, isRGBForWhite } from "../utils/colors";
 
 import { Header } from "./header/header";
@@ -44,14 +44,12 @@ const getSocket = (): any => { }
 class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
 
     public play = () => {
-        this.props.dispatch(playBtn_Clicked(true))
         this.props.socketService.sendMessageFromClient({
             type: PLAYER_PLAY
         }, { feedbackVibrate: true })
     }
 
     public pause = () => {
-        this.props.dispatch(playBtn_Clicked(false))
 
         this.props.socketService.sendMessageFromClient({
             type: PLAYER_PAUSE
@@ -109,18 +107,21 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
         const current: VideoPlayerMessage = this.props.reduxState.videoPlayerReducer.current || {
             title: "Nothing playing",
             domain: "remote-potatoe",
+            isPlaying: false,
             currentTime: 60,
             duration: 300,
             currentTimeAsPercentage: 40,
             favicon: "https://9anime.to/favicons/favicon.png",
             volume: 0.4
         }
-        return (<div className={classnames(styles.container,
-            (isRGBForWhite.apply(null, rgbToObject(current.dominantBackgroundColor)) ? styles.dark : styles.white))}>
+        const rgbColors = rgbToObject(current.dominantBackgroundColor)
+        const theme = isRGBForWhite(rgbColors) ? styles.dark : styles.white
+        return (<div className={classnames(
+            styles.container,
+            theme)}>
             <Header favicon={current.favicon} domain={current.domain} />
             <Poster
                 url={current.poster}
-                controller={this.props.reduxState.videoPlayerReducer.controller}
             />
             <Playback
                 onTimeChange={this.onTimeChanged}
@@ -132,12 +133,11 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
                 dominantBackgroundColor={current.dominantBackgroundColor}
             />
             <Title
-                controller={this.props.reduxState.videoPlayerReducer.controller}
                 title={current.title}
                 dominantBackgroundColor={current.dominantBackgroundColor}
             />
             <Controls
-                controller={this.props.reduxState.videoPlayerReducer.controller}
+                isPlaying={current.isPlaying}
                 play={this.play}
                 pause={this.pause}
                 seekBackward={this.seekBackward}

@@ -5,7 +5,6 @@ import { Controller } from "../../store/videoPlayer/index";
 const styles = require('./title.css')
 
 export interface TitlePops {
-    controller: Controller
     title: string
     dominantBackgroundColor: string
 }

@@ -160,10 +160,10 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                     domain: getCurrentDomain(),
                     duration: wrapper.player.duration,
                     title: this.getTitle(),
+                    isPlaying: !wrapper.player.paused,
                     poster: this.getPoster(),
                     volume: wrapper.player.volume,
                 }, videoPlayerMessage)
-
                 const favicon = getFavicon()
                 try {
                     if (favicon)

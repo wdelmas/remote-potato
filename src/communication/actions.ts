@@ -34,6 +34,7 @@ export interface VideoPlayerMessage {
     domain: string
     currentTime: number
     duration: number
+    isPlaying: boolean
     currentTimeAsPercentage: number
     poster?: string
     favicon?: string
