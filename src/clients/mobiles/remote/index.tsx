@@ -11,7 +11,8 @@ import {
     CHANGE_VOLUME,
     PLAYER_ENTER_FULLSCREEN,
     PLAYER_EXIT_FULLSCREEN,
-    VideoPlayerMessage
+    VideoPlayerMessage,
+    GO_TO_TIME
 } from "../../../communication/actions";
 import { Debugger } from "../../../communication/Debugger";
 
@@ -55,7 +56,12 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
             type: PLAYER_PAUSE
         }, { feedbackVibrate: true })
     }
-
+    public onTimeChanged = (number: number) => {
+        this.props.socketService.sendMessageFromClient({
+            type: GO_TO_TIME,
+            action: number.toString()
+        }, { feedbackVibrate: false })
+    }
     public seekBackward = (number: number) => {
         this.props.socketService.sendMessageFromClient({
             type: PLAYER_SEEK_BACKWARD,
@@ -74,7 +80,7 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
         this.props.socketService.sendMessageFromClient({
             type: CHANGE_VOLUME,
             action: number.toString()
-        }, { feedbackVibrate: true })
+        }, { feedbackVibrate: false })
     }
 
     public enterFullScreen = () => {
@@ -97,10 +103,9 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
             domain: "remote-potatoe",
             currentTime: 60,
             duration: 300,
-            currentTimeAsPercentage: '40%',
+            currentTimeAsPercentage: 40,
             favicon: "https://9anime.to/favicons/favicon.png",
-            volume: 0.4,
-            volumeAsPercentage: '30%'
+            volume: 0.4
         }
         return (<div className={classnames(styles.container,
             (isRGBForWhite.apply(null, rgbToObject(current.dominantBackgroundColor)) ? styles.dark : styles.white))}>
@@ -110,7 +115,7 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
                 controller={this.props.reduxState.videoPlayerReducer.controller}
             />
             <Playback
-                controller={this.props.reduxState.videoPlayerReducer.controller}
+            onTimeChange={this.onTimeChanged}
                 seekBackward={this.seekBackward}
                 seekForward={this.seekForward}
                 duration={current.duration}

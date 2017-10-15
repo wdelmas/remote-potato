@@ -21,7 +21,6 @@ export class Volume extends React.Component<VolumePops, {}>  {
 
     public _onVolumeChanged = () => {
         const value = parseInt(this.refs.volume.value)/100
-        console.log(value)
         if (this.props.onVolumeChange)
             this.props.onVolumeChange(value)
     }

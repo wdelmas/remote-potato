@@ -10,7 +10,8 @@ import {
     PLAYER_ENTER_FULLSCREEN,
     PLAYER_EXIT_FULLSCREEN,
     PLAYER_FOUND,
-    HANDSHAKE
+    HANDSHAKE,
+    GO_TO_TIME
 } from "../../../../communication/actions";
 import { getCurrentDomain } from "./browser";
 import { Debugger } from "../../../../communication/Debugger";
@@ -42,6 +43,9 @@ export const initActions = (request: message, sender: any): Promise<message> => 
                     break
                 case PLAYER_PAUSE:
                     player.pause()
+                    break
+                case GO_TO_TIME:
+                    player.goToTime(request.action)
                     break
                 case PLAYER_SEEK_BACKWARD:
                     player.seekBackward(parseInt(request.action))
