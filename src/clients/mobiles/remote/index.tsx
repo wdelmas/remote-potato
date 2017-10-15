@@ -25,9 +25,15 @@ import { SocketReducer } from "../store/socket/index";
 import { connectedToWsServer } from "../store/socket/actions";
 import { SocketService } from "../utils/socket";
 import { playBtn_Clicked, fullScreenBtn_Clicked } from "../store/videoPlayer/actions";
+import { rgbToObject, isRGBForWhite } from "../utils/colors";
+
 import { Header } from "./header/header";
 import { Poster } from "./poster/poster";
+import { Playback } from "./playback/playback";
 import { Controls } from "./controls/controls";
+import { Volume } from "./volume/volume";
+import { BottomControls } from "./bottom-controls/bottom-controls";
+import { Title } from "./title/title";
 
 export interface RemoteProps {
     socketService: SocketService
@@ -104,45 +110,48 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
             volume: 30,
             volumeAsPercentage: '30%'
         }
-        return (<div className={styles.container}>
+        return (<div className={classnames(styles.container, 
+                (isRGBForWhite.apply(null, rgbToObject(current.dominantBackgroundColor)) ? styles.dark : styles.white))}>
             <Header favicon={current.favicon} domain={current.domain} />
             <Poster 
                 url={current.poster} 
                 controller={this.props.reduxState.videoPlayerReducer.controller}
-                />
-            <Controls 
+            />
+            <Playback 
+                controller={this.props.reduxState.videoPlayerReducer.controller}
+                seekBackward={this.seekBackward}
+                seekForward={this.seekForward}
+                duration={current.duration}
+                currentTime={current.currentTime}     
+                currentTimeAsPercentage={current.currentTimeAsPercentage}  
+                dominantBackgroundColor={current.dominantBackgroundColor}
+             />
+             <Title 
+                controller={this.props.reduxState.videoPlayerReducer.controller}
                 title={current.title}
+                dominantBackgroundColor={current.dominantBackgroundColor}
+            />
+            <Controls 
                 controller={this.props.reduxState.videoPlayerReducer.controller}
                 play={this.play}
                 pause={this.pause}
-                duration={current.duration}
-                currentTime={current.currentTime}
                 seekBackward={this.seekBackward}
                 seekForward={this.seekForward}
+                dominantBackgroundColor={current.dominantBackgroundColor}
+             />
+            <Volume 
+                controller={this.props.reduxState.videoPlayerReducer.controller}
                 volumeUp={this.volumeUp}
                 volumeDown={this.volumeDown}
+                volume={current.volume}                
+                dominantBackgroundColor={current.dominantBackgroundColor}
+             />
+            <BottomControls 
+                controller={this.props.reduxState.videoPlayerReducer.controller}
                 enterFullScreen={this.enterFullScreen}
                 exitFullScreen={this.exitFullScreen}
                 dominantBackgroundColor={current.dominantBackgroundColor}
-                volume={current.volume}
-                currentTimeAsPercentage={current.currentTimeAsPercentage}
              />
-            {/* <div className={styles.row} >
-                    <button onClick={() => this.volumeDown(0.1)} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-volume-down"></i></button>
-                    <div className="empty"></div>
-                    <button onClick={() => this.volumeUp(0.1)} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-volume-up"></i></button>
-                </div>
-                <div className={styles.row}>
-                    <button className={classnames(styles.button, styles.ripple)} onClick={() => this.seekBackward(5)}><i className="fa fa-backward"></i></button>
-                    <button className={classnames(styles.button, styles.ripple)} onClick={() => this.play()}><i className="fa fa-play"></i></button>
-                    <button className={classnames(styles.button, styles.ripple)} onClick={() => this.seekForward(5)}><i className="fa fa-forward"></i></button>
-                </div>
-                <div className={styles.row} >
-                    <button onClick={() => this.enterFullScreen()} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-expand"></i></button>
-                    <button onClick={() => this.exitFullScreen()} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-compress"></i></button>
-                    <div className="empty"></div>
-                    <button onClick={() => this.pause()} className={classnames(styles.button, styles['btn--alt'], styles.ripple)}><i className="fa fa-pause"></i></button>
-                </div> */}
         </div>)
     }
 
