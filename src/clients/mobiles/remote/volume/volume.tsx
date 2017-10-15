@@ -8,26 +8,39 @@ const VolumeUpBtnSvg = require('!babel-loader!svg-react-loader!image-webpack-loa
 const styles = require('./volume.css')
 
 export interface VolumePops {
-    controller: Controller
-    volumeUp: (number: number) => void
-    volumeDown: (number: number) => void
+    onVolumeChange: (number: number) => void
     volume: number
     dominantBackgroundColor: string
 }
-export const Volume = (props: VolumePops) => {
-    return (
-        <div className={styles.volumeSlider}>
+// export const Volume = (props: VolumePops) => {
+export class Volume extends React.Component<VolumePops, {}>  {
+    public refs: {
+        volume: HTMLInputElement
+        [k: string]: React.ReactInstance
+    }
+
+    public _onVolumeChanged = () => {
+        const value = parseInt(this.refs.volume.value)/100
+        console.log(value)
+        if (this.props.onVolumeChange)
+            this.props.onVolumeChange(value)
+    }
+
+    public render() {
+        const volume = this.props.volume * 100
+        return (<div className={styles.volumeSlider}>
             <MuteBtnSvg className={styles.volumeSvgs} style={{
-                fill: props.dominantBackgroundColor
-            }}/>
+                fill: this.props.dominantBackgroundColor
+            }} />
             <div className={styles.sliderContainer}>
-                <input type="range" min="1" max="100" defaultValue="22" style={{
-                    background: props.dominantBackgroundColor
-                }}className={styles.slider} />
+                <input ref="volume" type="range" min="1" max="100" value={volume} onChange={() => this._onVolumeChanged()} style={{
+                    background: this.props.dominantBackgroundColor
+                }} className={styles.slider} />
             </div>
             <VolumeUpBtnSvg className={styles.volumeSvgs} style={{
-                fill: props.dominantBackgroundColor
-            }}/>
+                fill: this.props.dominantBackgroundColor
+            }} />
         </div>
-    )
+        )
+    }
 }

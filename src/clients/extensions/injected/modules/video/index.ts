@@ -25,8 +25,7 @@ export interface VideoPlayer {
     pause: () => void,
     seekForward: (seconds: number) => void,
     seekBackward: (seconds: number) => void,
-    volumeUp: (seconds: number) => number,
-    volumeDown: (seconds: number) => number,
+    changeVolume: (seconds: number) => number,
     enterFullScreen: () => void,
     exitFullScreen: () => void,
     setFeedBackAction: (messageType: messageType) => void
@@ -109,19 +108,10 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
             wrapper.player.currentTime += seconds
             wrapper.feedBackAction.value.textContent = getCurrentTimeAsPercentage(wrapper.player);
         },
-        volumeUp: function (seconds: number) {
-            if (wrapper.player.volume + seconds < 1)
-                wrapper.player.volume += seconds
-            else
-                wrapper.player.volume = 1
-            wrapper.feedBackAction.value.textContent = (wrapper.player.volume * 100).toFixed(0).toString();
-            return wrapper.player.volume
-        },
-        volumeDown: function (seconds: number) {
-            if (wrapper.player.volume - seconds > 0)
-                wrapper.player.volume -= seconds
-            else
-                wrapper.player.volume = 0
+        changeVolume: function (value: number) {
+            if (value >= 0 && value <= 1)
+                wrapper.player.volume = value
+
             wrapper.feedBackAction.value.textContent = (wrapper.player.volume * 100).toFixed(0).toString();
             return wrapper.player.volume
         },
@@ -157,7 +147,7 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
             }
             return images[0];
         },
-        getResponse: function():Promise<VideoPlayerMessage> {
+        getResponse: function (): Promise<VideoPlayerMessage> {
             return new Promise((resolve) => {
                 const getVideoPlayerMessage = (videoPlayerMessage: Partial<VideoPlayerMessage>) => Object.assign({}, {
                     currentTime: wrapper.player.currentTime,
@@ -181,7 +171,7 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                                 }))
                             }
                         });
-                } catch (err){
+                } catch (err) {
                     resolve(getVideoPlayerMessage({
                         favicon
                     }))

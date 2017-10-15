@@ -8,8 +8,7 @@ import {
     PLAYER_PAUSE,
     PLAYER_SEEK_BACKWARD,
     PLAYER_SEEK_FORWARD,
-    PLAYER_VOLUME_UP,
-    PLAYER_VOLUME_DOWN,
+    CHANGE_VOLUME,
     PLAYER_ENTER_FULLSCREEN,
     PLAYER_EXIT_FULLSCREEN,
     VideoPlayerMessage
@@ -71,16 +70,9 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
         }, { feedbackVibrate: true })
     }
 
-    public volumeUp = (number: number) => {
+    public onVolumeChanged = (number: number) => {
         this.props.socketService.sendMessageFromClient({
-            type: PLAYER_VOLUME_UP,
-            action: number.toString()
-        }, { feedbackVibrate: true })
-    }
-
-    public volumeDown = (number: number) => {
-        this.props.socketService.sendMessageFromClient({
-            type: PLAYER_VOLUME_DOWN,
+            type: CHANGE_VOLUME,
             action: number.toString()
         }, { feedbackVibrate: true })
     }
@@ -107,51 +99,49 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
             duration: 300,
             currentTimeAsPercentage: '40%',
             favicon: "https://9anime.to/favicons/favicon.png",
-            volume: 30,
+            volume: 0.4,
             volumeAsPercentage: '30%'
         }
-        return (<div className={classnames(styles.container, 
-                (isRGBForWhite.apply(null, rgbToObject(current.dominantBackgroundColor)) ? styles.dark : styles.white))}>
+        return (<div className={classnames(styles.container,
+            (isRGBForWhite.apply(null, rgbToObject(current.dominantBackgroundColor)) ? styles.dark : styles.white))}>
             <Header favicon={current.favicon} domain={current.domain} />
-            <Poster 
-                url={current.poster} 
+            <Poster
+                url={current.poster}
                 controller={this.props.reduxState.videoPlayerReducer.controller}
             />
-            <Playback 
+            <Playback
                 controller={this.props.reduxState.videoPlayerReducer.controller}
                 seekBackward={this.seekBackward}
                 seekForward={this.seekForward}
                 duration={current.duration}
-                currentTime={current.currentTime}     
-                currentTimeAsPercentage={current.currentTimeAsPercentage}  
+                currentTime={current.currentTime}
+                currentTimeAsPercentage={current.currentTimeAsPercentage}
                 dominantBackgroundColor={current.dominantBackgroundColor}
-             />
-             <Title 
+            />
+            <Title
                 controller={this.props.reduxState.videoPlayerReducer.controller}
                 title={current.title}
                 dominantBackgroundColor={current.dominantBackgroundColor}
             />
-            <Controls 
+            <Controls
                 controller={this.props.reduxState.videoPlayerReducer.controller}
                 play={this.play}
                 pause={this.pause}
                 seekBackward={this.seekBackward}
                 seekForward={this.seekForward}
                 dominantBackgroundColor={current.dominantBackgroundColor}
-             />
-            <Volume 
-                controller={this.props.reduxState.videoPlayerReducer.controller}
-                volumeUp={this.volumeUp}
-                volumeDown={this.volumeDown}
-                volume={current.volume}                
+            />
+            <Volume
+                onVolumeChange={this.onVolumeChanged}
+                volume={current.volume}
                 dominantBackgroundColor={current.dominantBackgroundColor}
-             />
-            <BottomControls 
+            />
+            <BottomControls
                 controller={this.props.reduxState.videoPlayerReducer.controller}
                 enterFullScreen={this.enterFullScreen}
                 exitFullScreen={this.exitFullScreen}
                 dominantBackgroundColor={current.dominantBackgroundColor}
-             />
+            />
         </div>)
     }
 

@@ -6,8 +6,7 @@ import {
     message,
     PLAYER_SEEK_BACKWARD,
     PLAYER_SEEK_FORWARD,
-    PLAYER_VOLUME_UP,
-    PLAYER_VOLUME_DOWN,
+    CHANGE_VOLUME,
     PLAYER_ENTER_FULLSCREEN,
     PLAYER_EXIT_FULLSCREEN,
     PLAYER_FOUND,
@@ -50,11 +49,8 @@ export const initActions = (request: message, sender: any): Promise<message> => 
                 case PLAYER_SEEK_FORWARD:
                     player.seekForward(parseInt(request.action))
                     break
-                case PLAYER_VOLUME_UP:
-                    result.action = `${player.volumeUp(parseFloat(request.action))}`
-                    break
-                case PLAYER_VOLUME_DOWN:
-                    result.action = `${player.volumeDown(parseFloat(request.action))}`
+                case CHANGE_VOLUME:
+                    result.action = `${player.changeVolume(parseFloat(request.action))}`
                     break
                 case PLAYER_ENTER_FULLSCREEN:
                     player.enterFullScreen()
