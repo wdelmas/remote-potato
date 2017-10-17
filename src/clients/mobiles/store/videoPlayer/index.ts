@@ -7,7 +7,6 @@ export interface VideoPlayerReducer {
 }
 
 export interface Controller {
-    isPlaying: boolean
     isFullScreen: boolean
 }
 
@@ -16,12 +15,6 @@ export default (state = emptyVideoPlayerReducer(), action: any) => {
         case LOAD_CURRENT_VIDEO_STATE:
             return Object.assign({}, state, {
                 current: action.current
-            })
-        case PLAYER_PLAY:
-            return Object.assign({}, state, {
-                controller: {
-                    isPlaying: action.isPlaying
-                }
             })
         case PLAYER_ENTER_FULLSCREEN:
             return Object.assign({}, state, {
@@ -37,7 +30,6 @@ export default (state = emptyVideoPlayerReducer(), action: any) => {
 export function emptyVideoPlayerReducer(): VideoPlayerReducer {
     return {
         controller: {
-            isPlaying: false,
             isFullScreen: false
         },
         current: null

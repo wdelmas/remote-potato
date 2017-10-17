@@ -9,13 +9,6 @@ export const loadCurrentVideoPlayerState = (current: VideoPlayerMessage) => {
     }
 }
 
-export const playBtn_Clicked = (isPlaying: boolean) => {
-    return {
-        type: PLAYER_PLAY,
-        isPlaying
-    }
-}
-
 export const fullScreenBtn_Clicked = (isFullScreen: boolean) => {
     return {
         type: PLAYER_ENTER_FULLSCREEN,

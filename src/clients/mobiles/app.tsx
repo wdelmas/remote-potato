@@ -1,5 +1,6 @@
 import * as React from "react";
 import Remote from "./remote/index";
+import Tabs from "./tabs/index";
 import { SocketService } from "./utils/socket";
 import { State, mapStateToProps, ReduxState } from "./store/index";
 import { connect } from "react-redux";
@@ -10,6 +11,7 @@ export interface AppProps {
 
 const App = (props: AppProps) => {
     return <Remote {...props} />
+    // return <Tabs {...props} />
 }
 
 export default connect(

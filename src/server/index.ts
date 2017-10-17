@@ -57,14 +57,14 @@ io.on('connection', (socket) => {
         Debugger.log('--' + MESSAGE_FROM_CLIENT + '--');
         Debugger.log(data);
         Debugger.log('--' + MESSAGE_FROM_CLIENT + '--');
-        socket.in(data.extensionId).broadcast.emit(MESSAGE_TO_EXTENSION, data);
+        socket.in(data.roomId).broadcast.emit(MESSAGE_TO_EXTENSION, data);
         // socket.broadcast.emit(MESSAGE_TO_EXTENSION, data);
     });
     socket.on(MESSAGE_FROM_EXTENSION, function (data: message) {
         Debugger.log('--' + MESSAGE_FROM_EXTENSION + '--');
         Debugger.log(data);
         Debugger.log('--' + MESSAGE_FROM_EXTENSION + '--');
-        socket.in(data.extensionId).broadcast.emit(MESSAGE_FROM_EXTENSION, data);
+        socket.in(data.roomId).broadcast.emit(MESSAGE_FROM_EXTENSION, data);
         // socket.broadcast.emit(MESSAGE_TO_EXTENSION, data);
     });
 });

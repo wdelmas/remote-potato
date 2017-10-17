@@ -1,4 +1,4 @@
-import { message, PLAYER_EXIT_FULLSCREEN, HANDSHAKE } from "../../../../communication/actions";
+import { message, PLAYER_EXIT_FULLSCREEN, HANDSHAKE, PLAYER_ACTIONS_MESSAGE_TYPE } from "../../../../communication/actions";
 import { initActions } from "./events";
 import { sendOkResponse } from "./messaging";
 const noop = () => { }
@@ -8,7 +8,7 @@ export const addMessageListener = (callback: any) => {
         callback(request, sender)
             .then((result: message) => {
                 if (result) {
-                    chrome.runtime.sendMessage( result);
+                    chrome.runtime.sendMessage(result);
                 }
             })
         return true
@@ -29,7 +29,8 @@ export const addKeyboardListeners = () => {
             case ESC_KEY:
                 initActions({
                     from: 'webapp',
-                    type: PLAYER_EXIT_FULLSCREEN
+                    type: PLAYER_ACTIONS_MESSAGE_TYPE,
+                    actionType: PLAYER_EXIT_FULLSCREEN
                 }, null);
                 break;
         }
