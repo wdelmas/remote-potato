@@ -1,5 +1,5 @@
 import { Debugger } from "../../../../../communication/Debugger";
-import { messageType, VideoPlayerMessage, message } from "../../../../../communication/actions";
+import { messageType, VideoPlayerMessage, message, actionType } from "../../../../../communication/actions";
 import { FeedbackComponent, appendFeedbackComponentToContainer } from "./feedbackAction";
 import { loadYoutubePlayer } from "./players/youtube";
 import { loadAmazonPlayer } from "./players/amazon";
@@ -23,13 +23,13 @@ const PLAYERS_DOMAIN = [FMOVIES, NINE_ANIME, MY_CLOUD, VIMEO, AMAZON]
 export interface VideoPlayer {
     play: () => void,
     pause: () => void,
+    goToTime: (seconds: number) => void,
     seekForward: (seconds: number) => void,
     seekBackward: (seconds: number) => void,
-    volumeUp: (seconds: number) => number,
-    volumeDown: (seconds: number) => number,
+    changeVolume: (seconds: number) => number,
     enterFullScreen: () => void,
     exitFullScreen: () => void,
-    setFeedBackAction: (messageType: messageType) => void
+    setFeedBackAction: (actionType: actionType) => void
     getResponse: () => Promise<VideoPlayerMessage>
     getTitle: () => string
     getPoster: () => string
@@ -95,33 +95,28 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
     const videoPlayer: VideoPlayer = {
         play: function () {
             wrapper.player.play()
-            wrapper.feedBackAction.value.textContent = getCurrentTimeAsPercentage(wrapper.player);
+            wrapper.feedBackAction.value.textContent = `${getCurrentTimeAsPercentage(wrapper.player)}%`;
         },
         pause: function () {
             wrapper.player.pause()
-            wrapper.feedBackAction.value.textContent = getCurrentTimeAsPercentage(wrapper.player);
+            wrapper.feedBackAction.value.textContent = `${getCurrentTimeAsPercentage(wrapper.player)}%`;
+        },
+        goToTime: function (seconds: number) {
+            wrapper.player.currentTime = seconds
+            wrapper.feedBackAction.value.textContent = `${getCurrentTimeAsPercentage(wrapper.player)}%`;
         },
         seekBackward: function (seconds: number) {
             wrapper.player.currentTime -= seconds
-            wrapper.feedBackAction.value.textContent = getCurrentTimeAsPercentage(wrapper.player);
+            wrapper.feedBackAction.value.textContent = `${getCurrentTimeAsPercentage(wrapper.player)}%`;
         },
         seekForward: function (seconds: number) {
             wrapper.player.currentTime += seconds
-            wrapper.feedBackAction.value.textContent = getCurrentTimeAsPercentage(wrapper.player);
+            wrapper.feedBackAction.value.textContent = `${getCurrentTimeAsPercentage(wrapper.player)}%`;
         },
-        volumeUp: function (seconds: number) {
-            if (wrapper.player.volume + seconds < 1)
-                wrapper.player.volume += seconds
-            else
-                wrapper.player.volume = 1
-            wrapper.feedBackAction.value.textContent = (wrapper.player.volume * 100).toFixed(0).toString();
-            return wrapper.player.volume
-        },
-        volumeDown: function (seconds: number) {
-            if (wrapper.player.volume - seconds > 0)
-                wrapper.player.volume -= seconds
-            else
-                wrapper.player.volume = 0
+        changeVolume: function (value: number) {
+            if (value >= 0 && value <= 1)
+                wrapper.player.volume = value
+
             wrapper.feedBackAction.value.textContent = (wrapper.player.volume * 100).toFixed(0).toString();
             return wrapper.player.volume
         },
@@ -131,11 +126,11 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
         exitFullScreen: function () {
             defaultExitFullScreenBehavior(wrapper)
         },
-        setFeedBackAction: function (messageType: messageType) {
+        setFeedBackAction: function (actionType: actionType) {
             clearTimeout(feedBackTimeout)
             if (wrapper.feedBackAction) {
                 wrapper.feedBackAction.component.className = 'visible';
-                wrapper.feedBackAction.component.className = messageType;
+                wrapper.feedBackAction.component.className = actionType;
 
                 feedBackTimeout = setTimeout(function () {
                     wrapper.feedBackAction.component.className = 'hidden';
@@ -157,7 +152,7 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
             }
             return images[0];
         },
-        getResponse: function():Promise<VideoPlayerMessage> {
+        getResponse: function (): Promise<VideoPlayerMessage> {
             return new Promise((resolve) => {
                 const getVideoPlayerMessage = (videoPlayerMessage: Partial<VideoPlayerMessage>) => Object.assign({}, {
                     currentTime: wrapper.player.currentTime,
@@ -165,11 +160,10 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                     domain: getCurrentDomain(),
                     duration: wrapper.player.duration,
                     title: this.getTitle(),
+                    isPlaying: !wrapper.player.paused,
                     poster: this.getPoster(),
                     volume: wrapper.player.volume,
-                    volumeAsPercentage: (wrapper.player.volume * 100).toFixed(0).toString() + '%'
                 }, videoPlayerMessage)
-
                 const favicon = getFavicon()
                 try {
                     if (favicon)
@@ -181,7 +175,7 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                                 }))
                             }
                         });
-                } catch (err){
+                } catch (err) {
                     resolve(getVideoPlayerMessage({
                         favicon
                     }))
@@ -229,7 +223,7 @@ export const defaultExitFullScreenBehavior = (wrapper: VideoPlayerWrapper) => {
         c.style.height = "inherit";
     })
 }
-function getCurrentTimeAsPercentage(player: HTMLVideoElement) {
-    const percentage = ((100 * player.currentTime) / player.duration).toFixed(0).toString();
-    return `${percentage}%`;
+function getCurrentTimeAsPercentage(player: HTMLVideoElement): number {
+    const percentage = Math.round((100 * player.currentTime) / player.duration)
+    return percentage;
 }

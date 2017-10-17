@@ -14,6 +14,10 @@ function preventZoom(e: any) {
 
     if (!dt || dt > 500 || fingers > 1) return; // not double-tap
 
-    e.preventDefault();
-    e.target.click();
+    if (e) {
+        e.preventDefault();
+
+        if (e.target && e.target.click)
+            e.target.click();
+    }
 }
