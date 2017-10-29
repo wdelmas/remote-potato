@@ -2,6 +2,8 @@ import * as React from "react";
 import * as classnames from 'classnames'
 import { Controller } from "../../store/videoPlayer/index";
 import { secondstoHHMMSS } from "../../utils/date";
+import { Slider } from "react-toolbox/lib/slider";
+import { changeCSSVar } from "../../utils/dom";
 
 const styles = require('./playback.css')
 
@@ -16,6 +18,7 @@ export interface PlaybackPops {
 }
 export interface State {
     timeAsPercentage: number
+    dominantBackgroundColor: string
 }
 export class Playback extends React.Component<PlaybackPops, State>  {
     public refs: {
@@ -25,7 +28,8 @@ export class Playback extends React.Component<PlaybackPops, State>  {
     public constructor(props: PlaybackPops) {
         super(props)
         this.state = {
-            timeAsPercentage: 0
+            timeAsPercentage: 0,
+            dominantBackgroundColor: 'rgb(0,0,0)'
         }
     }
 
@@ -35,25 +39,32 @@ export class Playback extends React.Component<PlaybackPops, State>  {
                 timeAsPercentage: props.currentTimeAsPercentage
             })
         }
+        if (this.state.dominantBackgroundColor! = props.dominantBackgroundColor) {
+            this.setState({
+                dominantBackgroundColor: props.dominantBackgroundColor
+            })
+
+            changeCSSVar('progress-main-color', this.state.dominantBackgroundColor);
+            changeCSSVar('slider-main-color', this.state.dominantBackgroundColor);
+        }
     }
 
-    public _onTimeChange = () => {
-        const timeAsPercentage = parseInt(this.refs.time.value)
-        const time = timeAsPercentage* this.props.duration /100
+    public _onTimeChange = (value: number) => {
+        const time = (value * this.props.duration) / 100
         this.setState({
-            timeAsPercentage: timeAsPercentage
+            timeAsPercentage: value
         })
         if (this.props.onTimeChange)
             this.props.onTimeChange(time)
     }
+
     public render() {
         return (
             <div className={styles.timeSlider}>
-                <input ref="time" type="range" min="1" max="100"
-                    value={this.state.timeAsPercentage.toString()}
+                <Slider value={this.state.timeAsPercentage}
+                    onChange={this._onTimeChange.bind(this)} 
                     className={styles.slider}
-                    onChange={() => this._onTimeChange()}
-                />
+                    theme={styles}/>
                 <div className={styles.sliderInfos}>
                     <span>{secondstoHHMMSS(this.props.currentTime)}</span>
                     <span>{secondstoHHMMSS(this.props.duration)}</span>
