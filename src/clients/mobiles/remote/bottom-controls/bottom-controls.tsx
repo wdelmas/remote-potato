@@ -21,7 +21,7 @@ export const BottomControls = (props: BottomControlsPops) => {
     }, 0);
     return (
         <div className={styles.bottomControls} id="bottomControls">
-            {
+            {/* {
                 !props.controller.isFullScreen ?
                     <button className={classnames(styles.button, styles.ripple)} onClick={() => props.exitFullScreen()}>
                         <StarBtnSvg className={styles.starsSvgs} style={{
@@ -32,7 +32,7 @@ export const BottomControls = (props: BottomControlsPops) => {
                     <button className={classnames(styles.button, styles.ripple)} onClick={() => props.enterFullScreen()}>
                         <StarFilledBtnSvg className={styles.starsSvgs}/>
                     </button>
-            }
+            } */}
             {
                 props.controller.isFullScreen ?
                     <button className={classnames(styles.button, styles.ripple)} onClick={() => props.exitFullScreen()}>
