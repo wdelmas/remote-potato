@@ -2,10 +2,13 @@ import { VideoPlayerWrapper, defaultFullScreenBehavior, defaultExitFullScreenBeh
 
 export const loadYoutubePlayer = (playerWrapper: VideoPlayerWrapper) => {
     playerWrapper.player = document.getElementsByTagName('video')[0] as HTMLVideoElement
-    playerWrapper.container = [document.getElementById("player-container") as any]
+    playerWrapper.container = [
+        document.getElementById("player-container")
+        || (document.getElementsByClassName("html5-video-container") && document.getElementsByClassName("html5-video-container")[0])
+    ] as any[]
 
     playerWrapper.customBehavior = {
-        getPoster: function() {
+        getPoster: function () {
             var searchParams = new URLSearchParams(window.location.search);
             let videoId = searchParams.get("v");
             return `https://img.youtube.com/vi/${videoId}/sddefault.jpg`;
