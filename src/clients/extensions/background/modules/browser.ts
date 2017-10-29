@@ -76,24 +76,23 @@ const exitFullScreenWindow = (windowId: number) => {
 
 export const initMessageEventListener = () => {
     chrome.runtime.onMessage.addListener((message: message) => {
-
-        if (message && message.roomId) {
-            return getSocketBackground().emit(MESSAGE_FROM_EXTENSION, message);
-        }
         switch (message.actionType) {
             case PLAYER_ENTER_FULLSCREEN:
                 enterFullScreenWindow(chrome.windows.WINDOW_ID_CURRENT);
-                break;
+                return;
             case PLAYER_EXIT_FULLSCREEN:
                 exitFullScreenWindow(chrome.windows.WINDOW_ID_CURRENT);
-                break;
+                return;
             case POPUP_OPENED:
                 chrome.runtime.sendMessage({
                     type: COMMONS_MESSAGE_TYPE,
                     actionType: WEB_APP_URL,
                     action: webAppUrl
                 } as message);
-                break
+                return;
+        }
+        if (message && message.roomId) {
+            return getSocketBackground().emit(MESSAGE_FROM_EXTENSION, message);
         }
     })
 }

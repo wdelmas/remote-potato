@@ -34,13 +34,20 @@ export const initActions = (request: message, sender: any): Promise<message | vo
                 }
                 if (!player)
                     return
+
                 Debugger.log(request)
+                
                 let result: message = {
                     from: 'extension',
                     roomId: request.roomId,
                     type: request.type,
                     actionType: request.actionType
                 }
+
+                if (request.actionType! === HANDSHAKE) {
+                    player.setFeedBackAction(request.actionType);
+                }
+
                 switch (request.actionType) {
                     case PLAYER_PLAY:
                         player.play()
@@ -70,9 +77,7 @@ export const initActions = (request: message, sender: any): Promise<message | vo
                         break
                 }
 
-                if (request.actionType! === HANDSHAKE) {
-                    player.setFeedBackAction(request.actionType);
-                }
+               
                 return player.getResponse()
                     .then((playInfo) => {
                         result.infos = playInfo

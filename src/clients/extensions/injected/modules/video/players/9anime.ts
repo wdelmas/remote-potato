@@ -1,4 +1,4 @@
-import { VideoPlayerWrapper, defaultFullScreenBehavior, defaultExitFullScreenBehavior } from "../index"
+import { VideoPlayerWrapper, defaultFullScreenBehavior } from "../index"
 import { eventFire } from "../../dom";
 
 export const load9animePlayer = (playerWrapper: VideoPlayerWrapper) => {
