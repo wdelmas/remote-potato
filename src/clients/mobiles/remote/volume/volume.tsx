@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as classnames from 'classnames'
+import Slider from 'react-toolbox/lib/slider';
 import { Controller } from "../../store/videoPlayer/index";
 
 const MuteBtnSvg = require('!babel-loader!svg-react-loader!image-webpack-loader?bypassOnDebug!../svg/mute.svg')
@@ -38,14 +39,14 @@ export class Volume extends React.Component<VolumePops, State>  {
         }
     }
 
-    public _onVolumeChanged = () => {
-        const value = parseInt(this.refs.volume.value) / 100
+    public _onVolumeChanged = (value: number) => {
+        // debugger;
+        value = value / 100;
         this.setState({
             volume: value
         })
         if (this.props.onVolumeChange)
             this.props.onVolumeChange(value)
-
     }
 
     public render() {
@@ -55,9 +56,9 @@ export class Volume extends React.Component<VolumePops, State>  {
                 fill: this.props.dominantBackgroundColor
             }} />
             <div className={styles.sliderContainer}>
-                <input ref="volume" type="range" min="1" max="100" value={volume} onChange={() => this._onVolumeChanged()} style={{
-                    background: this.props.dominantBackgroundColor
-                }} className={styles.slider} />
+                <Slider value={volume}  onChange={this._onVolumeChanged.bind(this)} theme={{
+                    knob: this.props.dominantBackgroundColor
+                }} className={styles.slider}/>
             </div>
             <VolumeUpBtnSvg className={styles.volumeSvgs} style={{
                 fill: this.props.dominantBackgroundColor
