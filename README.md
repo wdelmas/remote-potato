@@ -6,6 +6,12 @@
 
 # Remote
 
+
+| Youtube | Vimeo | Fmovies |
+| ------------- | ------------- | ------------ |
+| ![demo](./doc/img/youtube.jpg) | ![demo](./doc/img/vimeo.jpg) | ![demo](./doc/img/fmovies.jpg) |
+
+
 Remote as the name entails, is a remote, but for your browser 🎉
 
 Nowadays, most of the content is available through the browser. 
@@ -18,7 +24,7 @@ Remote is the missing controller for your browser,
 
 ## Demo
 
-![demo](./demo.gif)
+![demo](./doc/img/demo.gif)
 
 ## Installing
 
