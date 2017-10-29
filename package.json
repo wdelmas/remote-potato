@@ -1,6 +1,6 @@
 {
   "name": "remote",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Remote for browsers",
   "main": "index.js",
   "scripts": {
