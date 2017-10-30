@@ -50,6 +50,7 @@ export class Playback extends React.Component<PlaybackPops, State>  {
     }
 
     public _onTimeChange = (value: number) => {
+        if (typeof value == 'undefined') return;
         const time = (value * this.props.duration) / 100
         this.setState({
             timeAsPercentage: value

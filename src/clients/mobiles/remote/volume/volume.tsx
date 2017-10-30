@@ -40,7 +40,7 @@ export class Volume extends React.Component<VolumePops, State>  {
     }
 
     public _onVolumeChanged = (value: number) => {
-        // debugger;
+        if (typeof value == 'undefined') return;
         value = value / 100;
         this.setState({
             volume: value
