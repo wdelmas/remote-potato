@@ -20,9 +20,9 @@ const initMessageEventListener = () => {
                 const qr = new QRious({
                     value: message.action,
                     element: document.getElementById('qrcode'),
-                    background: 'white',
-                    padding: 25,
-                    size: 200
+                    background: 'WhiteSmoke',
+                    foreground: 'Teal',
+                    size: 175
                 });
                 document.getElementById('qrcode').appendChild(qr.image)
 
