@@ -3,6 +3,13 @@ const commonConfig = require('./common.webpack.config')
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path')
 
+let filesToCopy = [
+  'index.html',
+  'favicons',
+  'splash-screens',
+  'manifest.json'
+]
+
 module.exports = commonConfig({
   entry: {
     'index': ['./src/clients/mobiles/index.tsx']
@@ -11,16 +18,12 @@ module.exports = commonConfig({
   libraryTarget: 'umd',
   devtool: "source-map",
   pluginsAppend: [
-    new CopyWebpackPlugin([{
-      from: path.join(__dirname, '../src/clients/mobiles/dist/'),
-      to: path.join(__dirname, '../build/clients/dist/')
-    },
-    {
-      from: path.join(__dirname, '../src/clients/mobiles/index.html'),
-      to: path.join(__dirname, '../build/clients/index.html')
-    }
-
-    ]),
+    new CopyWebpackPlugin(filesToCopy.map(file => {
+      return {
+        from: path.join(__dirname, `../src/clients/mobiles/${file}`),
+        to: path.join(__dirname, `../build/clients/${file}`)
+      }
+    })),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('development')
