@@ -1,6 +1,7 @@
 import { MESSAGE_FROM_CLIENT, MESSAGE_TO_EXTENSION, LOCAL_PORT, MESSAGE_FROM_EXTENSION, IO_SERVER } from '../communication/constants';
 import * as http from 'http';
 const fs = require('fs');
+const path = require('path');
 import * as SocketIO from 'socket.io';
 import { Debugger } from "../communication/Debugger";
 import { message } from "../communication/actions";
@@ -15,16 +16,8 @@ app.listen(serverPort, () => {
 });
 
 export const rooter = (url: string) => {
-    switch (url) {
-        case '/client.js':
-            return '/../clients/index.js';
-        case '/index.css':
-            return '/../clients/index.css';
-        case '/styles.css':
-            return '/../clients/dist/styles/font-awesome.min.css';
-        default:
-            return '/../clients/index.html';
-    }
+    if (url.startsWith('/?id')) url = 'index.html';
+    return path.join('../clients/', url);
 }
 
 function handler(request: http.IncomingMessage, response: http.ServerResponse) {
@@ -32,7 +25,7 @@ function handler(request: http.IncomingMessage, response: http.ServerResponse) {
     const filePath = rooter(request.url)
     Debugger.log(request.url + ' => ' + __dirname + filePath)
 
-    fs.readFile(__dirname + filePath,
+    fs.readFile(path.join(__dirname, filePath),
         function (err: Error, data: any) {
             if (err) {
                 response.writeHead(500);
