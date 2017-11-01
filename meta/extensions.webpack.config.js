@@ -3,6 +3,16 @@ const commonConfig = require('./common.webpack.config')
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path')
 
+let filesToCopy = [
+  'manifest.json',
+  'icon.png',
+  'icon-128.png',
+  'popup.html',
+  'background.html',
+  'on-install.html',
+  'injected.css'
+]
+
 module.exports = commonConfig({
   entry: {
     'extensions': ['./src/clients/extensions/index.ts'],
@@ -12,31 +22,13 @@ module.exports = commonConfig({
   outputPath: path.join(__dirname, '../build/extensions'),
   libraryTarget: 'umd',
   pluginsAppend: [
-    new CopyWebpackPlugin([{
-        from: path.join(__dirname, '../src/clients/extensions/manifest.json'),
-        to: path.join(__dirname, '../build/extensions/manifest.json')
-      },
-      {
-        from: path.join(__dirname, '../src/clients/extensions/icon.png'),
-        to: path.join(__dirname, '../build/extensions/icon.png')
-      },
-      {
-        from: path.join(__dirname, '../src/clients/extensions/icon-128.png'),
-        to: path.join(__dirname, '../build/extensions/icon-128.png')
-      },
-      {
-        from: path.join(__dirname, '../src/clients/extensions/popup.html'),
-        to: path.join(__dirname, '../build/extensions/popup.html')
-      },
-      {
-        from: path.join(__dirname, '../src/clients/extensions/background.html'),
-        to: path.join(__dirname, '../build/extensions/background.html')
-      },
-      {
-        from: path.join(__dirname, '../src/clients/extensions/injected.css'),
-        to: path.join(__dirname, '../build/extensions/injected.css')
-      }
-    ]),
+    new CopyWebpackPlugin(
+      filesToCopy.map(file => {
+        return {
+          from: path.join(__dirname, `../src/clients/extensions/${file}`),
+          to: path.join(__dirname, `../build/extensions/${file}`)
+        }
+      })),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('development')
