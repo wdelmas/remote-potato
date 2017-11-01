@@ -56,13 +56,15 @@ export const sendMessageToCurrentTab = (data: any) => {
     return getCurrentTab()
         .then((tab: chrome.tabs.Tab) => {
             Debugger.log(data)
-            chrome.tabs.sendMessage(tab.id, data, function (response: message) {
-                if (response && response.roomId) {
-                    getSocketBackground().emit(MESSAGE_FROM_EXTENSION, response);
-                }
-                else
-                    Debugger.log('Answer from InjectedJS')
-            });
+            if (tab) {
+                chrome.tabs.sendMessage(tab.id, data, function (response: message) {
+                    if (response && response.roomId) {
+                        getSocketBackground().emit(MESSAGE_FROM_EXTENSION, response);
+                    }
+                    else
+                        Debugger.log('Answer from InjectedJS')
+                });
+            }
         })
 };
 
@@ -115,7 +117,7 @@ export const onInstalledListener = () => {
 
 const onInstalled = () => {
     let url = chrome.extension.getURL('on-install.html');
-    
+
     chrome.tabs.create({url}, tab =>  {
         Debugger.log(`New tab launched with local file ${url}`); 
     });

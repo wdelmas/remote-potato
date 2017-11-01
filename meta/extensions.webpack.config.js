@@ -18,6 +18,7 @@ module.exports = commonConfig({
     'extensions': ['./src/clients/extensions/index.ts'],
     'background': ['./src/clients/extensions/background/index.ts'],
     'injected': ['./src/clients/extensions/injected/index.ts'],
+    'on-install': ['./src/clients/extensions/on-install/index.ts'],
   },
   outputPath: path.join(__dirname, '../build/extensions'),
   libraryTarget: 'umd',
