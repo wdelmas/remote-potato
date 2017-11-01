@@ -96,3 +96,31 @@ export const initMessageEventListener = () => {
         }
     })
 }
+
+export const onInstalledListener = () => {
+    chrome.runtime.onInstalled.addListener(details => {
+        switch (details.reason) {
+            case 'install':
+                onInstalled();
+                break;
+            case 'update':
+                onUpdate();
+                break;
+            default:
+                break;
+
+        }
+    });
+}
+
+const onInstalled = () => {
+    let url = chrome.extension.getURL('on-install.html');
+    
+    chrome.tabs.create({url}, tab =>  {
+        Debugger.log(`New tab launched with local file ${url}`); 
+    });
+}
+
+const onUpdate = () => {
+    // Show update notif with link to changelog
+}
