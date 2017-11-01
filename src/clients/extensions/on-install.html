@@ -25,7 +25,7 @@
                 text-align: center;
             }
 
-            .container {
+            #container {
                 width: 450px;
                 background: rgb(255, 255, 255);
                 text-align: center;
@@ -42,26 +42,166 @@
 
             a {
                 text-decoration: none;
+                color:#2074e4;
+            }
+
+            #control {
+                padding: 20px;
+            }
+
+            .step2 {
+                display: none;
+            }
+
+            body.connected .step1 {
+                display: none;
+            }
+
+            body.connected .step2 {
+                display: inline-block;
+            }
+
+            .line1, .line2 {
+                stroke:rgba(28,142,55,1);
+                stroke-width:4;
+                stroke-linecap:round;
+                stroke-miterlimit:10;
+            }
+
+            .circle {
+                fill:none;
+                stroke:rgba(28,142,55,1);
+                stroke-width:3;
+                stroke-miterlimit:10;
+            }
+
+            .line1 {
+                stroke-dasharray: 180;
+                stroke-dashoffset: 0;
+                animation: line1 1.8s ease-in-out;
+            }
+
+            .line2 {
+                stroke-dasharray: 100;
+                stroke-dashoffset: 0;
+                animation: line2 0.9s ease-in-out;
+            }
+
+            @keyframes line1 {
+                0% {
+                    stroke-dashoffset: 180;
+                }
+                100% {
+                    stroke-dashoffset: 0;
+                }
+            }
+
+            @keyframes line2 {
+                0% {
+                    stroke-dashoffset: 100;
+                }
+                100% {
+                    stroke-dashoffset: 200;
+                }
+            }
+
+            .appearAfter {
+                opacity: 0;
+                animation: appear 0.5s;
+                animation-delay: 1s;
+                animation-fill-mode: forwards;
+            }
+
+            @keyframes appear {
+                0% {
+                    opacity: 0;
+                }
+                100% {
+                    opacity: 1;
+                }
+            }
+
+            body.connected .colorChange {
+                animation: colorChange 1s;
+            }
+
+            @keyframes colorChange {
+                0% {
+                    color: #292a2a;
+                }
+                100% {
+                    color: rgba(28,142,55,1);
+                }
+            }
+
+            svg {
+                margin-bottom: 40px;
+            }
+
+            .test-websites {
+                display: flex;
+                width: 100%;
+                align-items: center;
+            }
+
+            .website {
+                flex: 1;
+            }
+
+            .website img {
+                width: 50%;
+                margin: auto;
             }
         </style>
     </head>
 
     <body>
-        <h1>Installation was a success!</h1>
-        <h3>Next step : scan the QRCode</h3>
+        <h1 class="colorChange"><span class="step1">Installation</span><span class="step2">Connection</span> was a success!</h1>
+        <h3>Next step : <span class="step1">scan the QRCode</span><span class="step2 appearAfter">Play with your remote</span></h3>
 
-        <div class="container">
-            <p>Click on this icon in your browser navbar (top right)</p>
-            <img src="icon-128.png" alt="Remote icon">
+        <div id="container">
+            <div class="step1">
+                <p>Click on this icon in your browser navbar (top right)</p>
+                <img src="icon-128.png" alt="Remote icon">
+    
+                <p>
+                    Don't know how to scan QRCodes ? 
+                    <a href="https://www.unitag.io/qrcode/how-to-scan-a-qrcode"
+                        target="_blank">
+                        Check this
+                    </a>
+                </p>
+            </div>
 
-            <p>
-                Don't know how to scan QRCodes ? 
-                <a href="https://www.unitag.io/qrcode/how-to-scan-a-qrcode"
-                    target="_blank">
-                    Check this
-                </a>
-            </p>
+            <div id="control" class="step2">
+                <svg width="98" height="98" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                viewBox="0 0 98 98" style="enable-background:new 0 0 98 98;" xml:space="preserve">
+                   <line class="line1" x1="32.6" y1="54.5" x2="45.8" y2="71.6"/>
+                   <line class="line2" x1="72.4" y1="29.5" x2="46" y2="71.6"/>
+                   <circle class="circle" cx="49.1" cy="49.1" r="47.1"/>
+               </svg>
+
+               <p>Test your remote with one of these websites :</p>
+               <div class="test-websites">
+                    <div class="website">
+                        <a href="https://www.youtube.com/">
+                            <img src="https://www.youtube.com/yt/about/media/images/brand-resources/logos/YouTube-logo-full_color_light.svg" alt="">
+                        </a>
+                    </div>
+                    <div class="website">
+                        <a href="https://9anime.to/">
+                            <img src="data:image/png;base64,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" alt="">
+                        </a>
+                    </div>
+                    <div class="website">
+                        <a href="https://vimeo.com/">
+                            <img src="https://vignette.wikia.nocookie.net/hitlerparody/images/d/d3/Vimeo_logo.png/revision/latest?cb=20130412143914" alt="">
+                        </a>
+                    </div>
+               </div>
+            </div>
         </div>
+        <script src="./on-install.js"></script>
     </body>
 
 </html>
