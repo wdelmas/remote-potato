@@ -72,6 +72,37 @@ Enter and exit fullscreen for:
 - Production: https://remote-potato.herokuapp.com/
 - Staging - new design: https://remote-potato-new-design.herokuapp.com/
 
+## Contributors
+<table>
+    <tr align="center">
+        <td>
+            <img src="https://avatars0.githubusercontent.com/u/2158425" width="100px"><br>
+            <sub>
+                <strong>
+                    <a href="https://github.com/wdelmas">William Delmas</a>
+                </strong>
+            </sub><br>
+            <a href="https://github.com/wdelmas/remote-potato/commits?author=wdelmas">💻</a>
+            📖
+            👀
+        </td>
+        <td>
+            <img src="https://avatars1.githubusercontent.com/u/569053" width="100px"><br>
+            <sub>
+                <strong>
+                    <a href="https://github.com/bcldvd">David Boclé</a>
+                </strong>
+            </sub><br>
+            <a href="https://github.com/wdelmas/remote-potato/commits?author=bcldvd">💻</a>
+            📖
+            👀
+        </td>
+    </tr>
+</table>
+
+This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification.
+Contributions of any kind are welcome!
+
 ## Contributing
 Changes and improvements are more than welcome!
 
