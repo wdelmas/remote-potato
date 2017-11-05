@@ -24,7 +24,7 @@ Remote is the missing controller for your browser,
 
 ## Demo
 
-![demo](./doc/img/demo.gif)
+[![demo](./doc/img/demo.gif](https://www.youtube.com/watch?v=Di7TS9FbBLU)
 
 ## Installing
 
