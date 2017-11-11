@@ -32,6 +32,7 @@ export interface VideoPlayer {
     setFeedBackAction: (actionType: actionType) => void
     getResponse: () => Promise<VideoPlayerMessage>
     getTitle: () => string
+    getSubTitle: () => string
     getPoster: () => string
 }
 
@@ -140,6 +141,9 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
         getTitle: () => {
             return document.title;
         },
+        getSubTitle: () => {
+            return '';
+        },
         getPoster: () => {
             let metas = document.getElementsByTagName('meta');
             let images = [];
@@ -159,6 +163,7 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                     domain: getCurrentDomain(),
                     duration: wrapper.player.duration,
                     title: this.getTitle(),
+                    subTitle: this.getSubTitle(),
                     isPlaying: !wrapper.player.paused,
                     poster: this.getPoster(),
                     volume: wrapper.player.volume,

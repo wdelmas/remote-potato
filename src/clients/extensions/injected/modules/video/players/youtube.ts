@@ -14,8 +14,10 @@ export const loadYoutubePlayer = (playerWrapper: VideoPlayerWrapper) => {
             return `https://img.youtube.com/vi/${videoId}/sddefault.jpg`;
         },
         getTitle: function () {
-            let title = document.title;
-            return new RegExp(/(.*)\s- YouTube/g).exec(title)[1];
+            return document.getElementsByTagName('h1')[0].innerText;
+        },
+        getSubTitle: () => {
+            return document.getElementById('owner-name').innerText
         },
         enterFullScreen: function () {
             defaultFullScreenBehavior(playerWrapper)

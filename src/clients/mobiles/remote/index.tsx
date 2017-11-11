@@ -134,6 +134,7 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
             />
             <Title
                 title={current.title}
+                subTitle={current.subTitle}
                 dominantBackgroundColor={current.dominantBackgroundColor}
             />
             <Controls

@@ -41,6 +41,7 @@ export interface message {
 
 export interface VideoPlayerMessage {
     title: string
+    subTitle?: string
     domain: string
     currentTime: number
     duration: number
