@@ -126,6 +126,7 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
                 onTimeChange={this.onTimeChanged}
                 seekBackward={this.seekBackward}
                 seekForward={this.seekForward}
+                isPlaying={current.isPlaying}
                 duration={current.duration}
                 currentTime={current.currentTime}
                 currentTimeAsPercentage={current.currentTimeAsPercentage}

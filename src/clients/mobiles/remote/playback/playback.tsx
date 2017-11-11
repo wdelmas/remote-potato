@@ -8,6 +8,7 @@ import { changeCSSVar } from "../../utils/dom";
 const styles = require('./playback.css')
 
 export interface PlaybackPops {
+    isPlaying: boolean
     onTimeChange: (number: number) => void
     seekBackward: (number: number) => void
     seekForward: (number: number) => void
@@ -16,10 +17,15 @@ export interface PlaybackPops {
     currentTimeAsPercentage: number
     dominantBackgroundColor: string
 }
+
 export interface State {
     timeAsPercentage: number
+    time: number
     dominantBackgroundColor: string
 }
+
+let playbackInterval = null as any;
+
 export class Playback extends React.Component<PlaybackPops, State>  {
     public refs: {
         time: HTMLInputElement
@@ -29,23 +35,41 @@ export class Playback extends React.Component<PlaybackPops, State>  {
         super(props)
         this.state = {
             timeAsPercentage: 0,
+            time: 0,
             dominantBackgroundColor: 'rgb(0,0,0)'
         }
     }
 
-    public componentWillReceiveProps(props: PlaybackPops) {
-        if (this.state.timeAsPercentage! = props.currentTimeAsPercentage) {
+    public componentWillReceiveProps(nextProps: PlaybackPops) {
+        if (this.state.timeAsPercentage! = nextProps.currentTimeAsPercentage) {
             this.setState({
-                timeAsPercentage: props.currentTimeAsPercentage
+                timeAsPercentage: nextProps.currentTimeAsPercentage
             })
         }
-        if (this.state.dominantBackgroundColor! = props.dominantBackgroundColor) {
+        if (this.state.time! = nextProps.currentTime) {
             this.setState({
-                dominantBackgroundColor: props.dominantBackgroundColor
+                time: nextProps.currentTime
+            })
+        }
+        if (this.state.dominantBackgroundColor! = nextProps.dominantBackgroundColor) {
+            this.setState({
+                dominantBackgroundColor: nextProps.dominantBackgroundColor
             })
 
             changeCSSVar('progress-main-color', this.state.dominantBackgroundColor);
             changeCSSVar('slider-main-color', this.state.dominantBackgroundColor);
+        }
+        if (nextProps.isPlaying && !this.props.isPlaying) {
+            playbackInterval = setInterval(() => {
+                let time = this.state.time + 1
+                let timeAsPercentage = Math.ceil((time * 100) / nextProps.duration);
+                this.setState({
+                    time,
+                    timeAsPercentage
+                })
+            }, 1000);
+        } else if (!nextProps.isPlaying && this.props.isPlaying) {
+            clearInterval(playbackInterval);
         }
     }
 
@@ -67,7 +91,7 @@ export class Playback extends React.Component<PlaybackPops, State>  {
                     className={styles.slider}
                     theme={styles}/>
                 <div className={styles.sliderInfos}>
-                    <span>{secondstoHHMMSS(this.props.currentTime)}</span>
+                    <span>{secondstoHHMMSS(this.state.time)}</span>
                     <span>{secondstoHHMMSS(this.props.duration)}</span>
                 </div>
             </div>
