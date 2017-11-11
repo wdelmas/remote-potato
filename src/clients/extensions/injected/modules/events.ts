@@ -15,7 +15,7 @@ import {
     COMMONS_MESSAGE_TYPE,
     PLAYER_ACTIONS_MESSAGE_TYPE
 } from "../../../../communication/actions";
-import { getCurrentDomain } from "./browser";
+import { getCurrentDomain, addKeyboardListeners } from "./browser";
 import { Debugger } from "../../../../communication/Debugger";
 
 let player: VideoPlayer = null
@@ -25,29 +25,20 @@ const MAX_PLAYER_SEARCHED = 1
 export const initActions = (request: message, sender: any): Promise<message | void> => {
     return Promise.resolve()
         .then(() => {
-            if (request.type === PLAYER_ACTIONS_MESSAGE_TYPE || request.type === COMMONS_MESSAGE_TYPE) {
-
+            if (request.type === COMMONS_MESSAGE_TYPE){
                 if (!player && findPlayerTry < MAX_PLAYER_SEARCHED) {
                     const currentDomain = getCurrentDomain()
                     player = getCurrentPlayerByDomain(currentDomain)
                     findPlayerTry++
                 }
-                if (!player)
-                    return
-
+                if (!player) return
+                addKeyboardListeners();
+                return sendResponse(request);
+            } else if (request.type === PLAYER_ACTIONS_MESSAGE_TYPE ) {
+                if (!player) return
+                
                 Debugger.log(request)
                 
-                let result: message = {
-                    from: 'extension',
-                    roomId: request.roomId,
-                    type: request.type,
-                    actionType: request.actionType
-                }
-
-                if (request.actionType! === HANDSHAKE) {
-                    player.setFeedBackAction(request.actionType);
-                }
-
                 switch (request.actionType) {
                     case PLAYER_PLAY:
                         player.play()
@@ -65,7 +56,7 @@ export const initActions = (request: message, sender: any): Promise<message | vo
                         player.seekForward(parseInt(request.action))
                         break
                     case CHANGE_VOLUME:
-                        result.action = `${player.changeVolume(parseFloat(request.action))}`
+                        player.changeVolume(parseFloat(request.action));
                         break
                     case PLAYER_ENTER_FULLSCREEN:
                         player.enterFullScreen()
@@ -77,14 +68,26 @@ export const initActions = (request: message, sender: any): Promise<message | vo
                         break
                 }
 
+                player.setFeedBackAction(request.actionType);
                
-                return player.getResponse()
-                    .then((playInfo) => {
-                        result.infos = playInfo
-
-                        return result
-                    })
+                return sendResponse(request);
             }
         })
 
+}
+
+const sendResponse = (request: message): Promise<message | void> => {
+    let result: message = {
+        from: 'extension',
+        roomId: request.roomId,
+        type: request.type,
+        actionType: request.actionType
+    };
+
+    return player.getResponse()
+        .then((playInfo) => {
+            result.infos = playInfo
+
+            return result
+        });
 }

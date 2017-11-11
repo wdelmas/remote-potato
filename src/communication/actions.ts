@@ -2,11 +2,11 @@ export const COMMONS_MESSAGE_TYPE = 'COMMONS'
 export const TABS_MESSAGE_TYPE = 'TABS'
 export const PLAYER_ACTIONS_MESSAGE_TYPE = 'PLAYER_ACTIONS'
 
-
-export type COMMONS = 'HANDSHAKE' | 'POPUP_OPENED' | 'WEB_APP_URL'
+export type COMMONS = 'HANDSHAKE' | 'POPUP_OPENED' | 'WEB_APP_URL' | 'IS_CONNECTED'
 export const HANDSHAKE = 'HANDSHAKE'
 export const POPUP_OPENED = 'POPUP_OPENED'
 export const WEB_APP_URL = 'WEB_APP_URL'
+export const IS_CONNECTED = 'IS_CONNECTED'
 
 export type TABS = 'OPEN_NEW_TAB' | 'REMOVE_TAB' | 'REFRESH_TAB'
 export const OPEN_NEW_TAB = 'OPEN_NEW_TAB'
@@ -31,7 +31,7 @@ export type actionType = PLAYER_ACTIONS | COMMONS | TABS
 
 
 export interface message {
-    from: 'extension' | 'webapp'
+    from: 'extension' | 'webapp' | 'background'
     roomId?: string
     type: messageType
     actionType: actionType

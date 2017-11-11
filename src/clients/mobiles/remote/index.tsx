@@ -110,7 +110,7 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
             currentTime: 60,
             duration: 300,
             currentTimeAsPercentage: 40,
-            favicon: "https://9anime.to/favicons/favicon.png",
+            favicon: "http://remote-potato.herokuapp.com/favicons/favicon-32x32.png",
             volume: 0.4
         }
         const rgbColors = rgbToObject(current.dominantBackgroundColor)

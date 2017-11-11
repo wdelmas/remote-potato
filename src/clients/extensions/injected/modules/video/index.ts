@@ -136,7 +136,6 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                     wrapper.feedBackAction.component.className = 'hidden';
                 }, 1000);
             }
-
         },
         getTitle: () => {
             return document.title;
