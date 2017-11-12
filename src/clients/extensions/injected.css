@@ -24,6 +24,10 @@
 }
 
 #status-couch-potatoe.hidden {
+    opacity: 0;
+}
+
+#status-couch-potatoe.hidden-animated {
     animation: fade-out 1s ease-in;
     animation-fill-mode: forwards;
 }

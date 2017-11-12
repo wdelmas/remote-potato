@@ -134,7 +134,7 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                 wrapper.feedBackAction.component.className = actionType;
 
                 feedBackTimeout = setTimeout(function () {
-                    wrapper.feedBackAction.component.className = 'hidden';
+                    wrapper.feedBackAction.component.className = 'hidden-animated';
                 }, 1000);
             }
         },
