@@ -31,9 +31,9 @@ export const initActions = (request: message, sender: any): Promise<message | vo
                     player = getCurrentPlayerByDomain(currentDomain)
                     findPlayerTry++
                 }
-                if (!player) return
+                if (!player) return returnNoPlayer(request);
                 addKeyboardListeners();
-                return sendResponse(request);
+                return returnPlayerInfos(request);
             } else if (request.type === PLAYER_ACTIONS_MESSAGE_TYPE ) {
                 if (!player) return
                 
@@ -70,13 +70,28 @@ export const initActions = (request: message, sender: any): Promise<message | vo
 
                 player.setFeedBackAction(request.actionType);
                
-                return sendResponse(request);
+                return returnPlayerInfos(request);
             }
         })
 
 }
 
-const sendResponse = (request: message): Promise<message | void> => {
+const returnNoPlayer = (request: message): Promise<message | void> => {
+    let result: message = {
+        from: 'extension',
+        roomId: request.roomId,
+        type: request.type,
+        actionType: request.actionType
+    };
+
+    return Promise.resolve()
+        .then(() => {
+            result.infos = null
+            return result
+        });
+}
+
+const returnPlayerInfos = (request: message): Promise<message | void> => {
     let result: message = {
         from: 'extension',
         roomId: request.roomId,
