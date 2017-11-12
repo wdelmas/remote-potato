@@ -10,6 +10,7 @@ export interface FeedbackComponent {
 export const appendFeedbackComponentToContainer = (container: HTMLElement): FeedbackComponent => {
     let statusComponent = document.createElement('div');
     statusComponent.id = 'status-couch-potatoe';
+    statusComponent.className = 'hidden';
 
     let statusIcon = document.createElement('span');
     let statusValue = document.createElement('span');

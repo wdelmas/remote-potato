@@ -32,6 +32,7 @@ export interface VideoPlayer {
     setFeedBackAction: (actionType: actionType) => void
     getResponse: () => Promise<VideoPlayerMessage>
     getTitle: () => string
+    getSubTitle: () => string
     getPoster: () => string
 }
 
@@ -133,13 +134,15 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                 wrapper.feedBackAction.component.className = actionType;
 
                 feedBackTimeout = setTimeout(function () {
-                    wrapper.feedBackAction.component.className = 'hidden';
+                    wrapper.feedBackAction.component.className = 'hidden-animated';
                 }, 1000);
             }
-
         },
         getTitle: () => {
             return document.title;
+        },
+        getSubTitle: () => {
+            return '';
         },
         getPoster: () => {
             let metas = document.getElementsByTagName('meta');
@@ -160,6 +163,7 @@ export const loadVideoPlayer = (wrapper: VideoPlayerWrapper, customVideoPlayer?:
                     domain: getCurrentDomain(),
                     duration: wrapper.player.duration,
                     title: this.getTitle(),
+                    subTitle: this.getSubTitle(),
                     isPlaying: !wrapper.player.paused,
                     poster: this.getPoster(),
                     volume: wrapper.player.volume,

@@ -34,6 +34,7 @@ import { Controls } from "./controls/controls";
 import { Volume } from "./volume/volume";
 import { BottomControls } from "./bottom-controls/bottom-controls";
 import { Title } from "./title/title";
+import { NoPlayer } from "./no-player/no-player";
 import { debounce } from "../utils/debounce";
 
 export interface RemoteProps {
@@ -103,57 +104,59 @@ class RemoteContainer extends React.Component<RemoteProps & ReduxStore, {}>  {
     }
 
     public render() {
-        const current: VideoPlayerMessage = this.props.reduxState.videoPlayerReducer.current || {
-            title: "Nothing playing",
-            domain: "remote-potatoe",
-            isPlaying: false,
-            currentTime: 60,
-            duration: 300,
-            currentTimeAsPercentage: 40,
-            favicon: "https://9anime.to/favicons/favicon.png",
-            volume: 0.4
-        }
-        const rgbColors = rgbToObject(current.dominantBackgroundColor)
+        const current: VideoPlayerMessage = this.props.reduxState.videoPlayerReducer.current || null;
+        const rgbColors = rgbToObject(current && current.dominantBackgroundColor)
         const theme = isRGBForWhite(rgbColors) ? styles.dark : styles.white
-        return (<div className={classnames(
-            styles.container,
-            theme)}>
-            <Header favicon={current.favicon} domain={current.domain} />
-            <Poster
-                url={current.poster}
-            />
-            <Playback
-                onTimeChange={this.onTimeChanged}
-                seekBackward={this.seekBackward}
-                seekForward={this.seekForward}
-                duration={current.duration}
-                currentTime={current.currentTime}
-                currentTimeAsPercentage={current.currentTimeAsPercentage}
-                dominantBackgroundColor={current.dominantBackgroundColor}
-            />
-            <Title
-                title={current.title}
-                dominantBackgroundColor={current.dominantBackgroundColor}
-            />
-            <Controls
-                isPlaying={current.isPlaying}
-                play={this.play}
-                pause={this.pause}
-                seekBackward={this.seekBackward}
-                seekForward={this.seekForward}
-                dominantBackgroundColor={current.dominantBackgroundColor}
-            />
-            <Volume
-                onVolumeChange={this.onVolumeChanged}
-                volume={current.volume}
-                dominantBackgroundColor={current.dominantBackgroundColor}
-            />
-            <BottomControls
-                controller={this.props.reduxState.videoPlayerReducer.controller}
-                enterFullScreen={this.enterFullScreen}
-                exitFullScreen={this.exitFullScreen}
-                dominantBackgroundColor={current.dominantBackgroundColor}
-            />
+        return (<div>
+            
+            {
+                current ?
+                    <div className={classnames(
+                        styles.container,
+                        theme)}>
+                        <Header favicon={current.favicon} domain={current.domain} />
+                    <Poster
+                        url={current.poster}
+                    />
+                    <Playback
+                        onTimeChange={this.onTimeChanged}
+                        seekBackward={this.seekBackward}
+                        seekForward={this.seekForward}
+                        isPlaying={current.isPlaying}
+                        duration={current.duration}
+                        currentTime={current.currentTime}
+                        currentTimeAsPercentage={current.currentTimeAsPercentage}
+                        dominantBackgroundColor={current.dominantBackgroundColor}
+                    />
+                    <Title
+                        title={current.title}
+                        subTitle={current.subTitle}
+                        dominantBackgroundColor={current.dominantBackgroundColor}
+                    />
+                    <Controls
+                        isPlaying={current.isPlaying}
+                        play={this.play}
+                        pause={this.pause}
+                        seekBackward={this.seekBackward}
+                        seekForward={this.seekForward}
+                        dominantBackgroundColor={current.dominantBackgroundColor}
+                    />
+                    <Volume
+                        onVolumeChange={this.onVolumeChanged}
+                        volume={current.volume}
+                        dominantBackgroundColor={current.dominantBackgroundColor}
+                    />
+                    <BottomControls
+                        controller={this.props.reduxState.videoPlayerReducer.controller}
+                        enterFullScreen={this.enterFullScreen}
+                        exitFullScreen={this.exitFullScreen}
+                        dominantBackgroundColor={current.dominantBackgroundColor}
+                    />
+                    </div>
+                :
+                <NoPlayer/>
+            }
+
         </div>)
     }
 

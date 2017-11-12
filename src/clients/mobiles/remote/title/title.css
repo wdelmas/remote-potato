@@ -8,4 +8,9 @@
     justify-content: center;
     font-family: 'Lato', sans-serif;
     font-weight: 400;
+    flex-direction: column;
+}
+
+.subTitle {
+    color: #ccc;
 }

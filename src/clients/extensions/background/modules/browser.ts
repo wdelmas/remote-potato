@@ -1,5 +1,5 @@
 import { Debugger } from "../../../../communication/Debugger";
-import { PLAYER_ENTER_FULLSCREEN, PLAYER_EXIT_FULLSCREEN, message, POPUP_OPENED, WEB_APP_URL, PLAYER_FOUND, COMMONS_MESSAGE_TYPE } from "../../../../communication/actions";
+import { PLAYER_ENTER_FULLSCREEN, PLAYER_EXIT_FULLSCREEN, message, POPUP_OPENED, WEB_APP_URL, PLAYER_FOUND, COMMONS_MESSAGE_TYPE, HANDSHAKE, IS_CONNECTED } from "../../../../communication/actions";
 import { IO_SERVER, MESSAGE_FROM_EXTENSION } from "../../../../communication/constants";
 import { uuid } from "../../../../communication/helpers";
 import { getSocketBackground } from "./sockets";
@@ -79,6 +79,11 @@ const exitFullScreenWindow = (windowId: number) => {
 export const initMessageEventListener = () => {
     chrome.runtime.onMessage.addListener((message: message) => {
         switch (message.actionType) {
+            case IS_CONNECTED:
+                if (getSocketBackground().connected) {
+                    sendHandshakeToContenScript();
+                }
+                return;
             case PLAYER_ENTER_FULLSCREEN:
                 enterFullScreenWindow(chrome.windows.WINDOW_ID_CURRENT);
                 return;
@@ -97,6 +102,21 @@ export const initMessageEventListener = () => {
             return getSocketBackground().emit(MESSAGE_FROM_EXTENSION, message);
         }
     })
+}
+
+export const onTabChangeListener = () => {
+    chrome.tabs.onActivated.addListener(() => {
+            if (getSocketBackground().connected) {
+                sendHandshakeToContenScript();
+            }
+        }
+    );
+    chrome.tabs.onUpdated.addListener(() => {
+        if (getSocketBackground().connected) {
+            sendHandshakeToContenScript();
+        }
+    }
+);
 }
 
 export const onInstalledListener = () => {
@@ -125,4 +145,14 @@ const onInstalled = () => {
 
 const onUpdate = () => {
     // Show update notif with link to changelog
+}
+
+function sendHandshakeToContenScript() {
+    let data: message = {
+        from: 'background',
+        type: COMMONS_MESSAGE_TYPE,
+        actionType: HANDSHAKE,
+        roomId: getRoomId()
+    };
+    sendMessageToCurrentTab(data);
 }

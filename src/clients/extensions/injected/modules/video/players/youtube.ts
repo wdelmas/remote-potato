@@ -4,7 +4,8 @@ export const loadYoutubePlayer = (playerWrapper: VideoPlayerWrapper) => {
     playerWrapper.player = document.getElementsByTagName('video')[0] as HTMLVideoElement
     playerWrapper.container = [
         document.getElementById("player-container")
-        || (document.getElementsByClassName("html5-video-container") && document.getElementsByClassName("html5-video-container")[0])
+        || (document.getElementsByClassName("html5-video-container") && document.getElementsByClassName("html5-video-container")[0]),
+        (document.getElementsByClassName('html5-video-player') && document.getElementsByClassName('html5-video-player')[0])
     ] as any[]
 
     playerWrapper.customBehavior = {
@@ -17,11 +18,14 @@ export const loadYoutubePlayer = (playerWrapper: VideoPlayerWrapper) => {
             let title = document.title;
             return new RegExp(/(.*)\s- YouTube/g).exec(title)[1];
         },
+        getSubTitle: () => {
+            let ownerName = document.getElementById('owner-name')
+            return ownerName && ownerName.innerText
+        },
         enterFullScreen: function () {
             defaultFullScreenBehavior(playerWrapper)
             playerWrapper.player.style.minWidth = '100vw';
             playerWrapper.player.style.minHeight = '100vh';
-
         },
         exitFullScreen: function () {
             defaultExitFullScreenBehavior(playerWrapper)
