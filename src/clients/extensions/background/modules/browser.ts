@@ -81,13 +81,7 @@ export const initMessageEventListener = () => {
         switch (message.actionType) {
             case IS_CONNECTED:
                 if (getSocketBackground().connected) {
-                    let data:message = {
-                        from: 'background',
-                        type: COMMONS_MESSAGE_TYPE,
-                        actionType: HANDSHAKE,
-                        roomId: getRoomId()
-                    };
-                    sendMessageToCurrentTab(data);
+                    sendHandshakeToContenScript();
                 }
                 return;
             case PLAYER_ENTER_FULLSCREEN:
@@ -108,6 +102,16 @@ export const initMessageEventListener = () => {
             return getSocketBackground().emit(MESSAGE_FROM_EXTENSION, message);
         }
     })
+}
+
+export const onUpdatedListener = () => {
+    chrome.tabs.onUpdated.addListener(
+        (tabId, changeInfo, tab) => {
+            if (getSocketBackground().connected) {
+                sendHandshakeToContenScript();
+            }
+        }
+    );
 }
 
 export const onInstalledListener = () => {
@@ -136,4 +140,14 @@ const onInstalled = () => {
 
 const onUpdate = () => {
     // Show update notif with link to changelog
+}
+
+function sendHandshakeToContenScript() {
+    let data: message = {
+        from: 'background',
+        type: COMMONS_MESSAGE_TYPE,
+        actionType: HANDSHAKE,
+        roomId: getRoomId()
+    };
+    sendMessageToCurrentTab(data);
 }
