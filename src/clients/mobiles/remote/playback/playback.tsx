@@ -60,14 +60,7 @@ export class Playback extends React.Component<PlaybackPops, State>  {
             changeCSSVar('slider-main-color', this.state.dominantBackgroundColor);
         }
         if (nextProps.isPlaying && !this.props.isPlaying) {
-            playbackInterval = setInterval(() => {
-                let time = this.state.time + 1
-                let timeAsPercentage = Math.ceil((time * 100) / nextProps.duration);
-                this.setState({
-                    time,
-                    timeAsPercentage
-                })
-            }, 1000);
+            playbackInterval = setInterval(this.playbackTick(nextProps), 1000);
         } else if (!nextProps.isPlaying && this.props.isPlaying) {
             clearInterval(playbackInterval);
         }
@@ -81,6 +74,22 @@ export class Playback extends React.Component<PlaybackPops, State>  {
         })
         if (this.props.onTimeChange)
             this.props.onTimeChange(time)
+    }
+
+    private playbackTick(nextProps: PlaybackPops): (...args: any[]) => void {
+        return () => {
+            let time = this.state.time + 1;
+            let timeAsPercentage = Math.ceil((time * 100) / nextProps.duration);
+
+            if (time > this.props.duration) {
+                clearInterval(playbackInterval);
+            } else {
+                this.setState({
+                    time,
+                    timeAsPercentage
+                });
+            }
+        };
     }
 
     public render() {
