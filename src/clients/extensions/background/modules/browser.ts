@@ -104,14 +104,19 @@ export const initMessageEventListener = () => {
     })
 }
 
-export const onUpdatedListener = () => {
-    chrome.tabs.onUpdated.addListener(
-        (tabId, changeInfo, tab) => {
+export const onTabChangeListener = () => {
+    chrome.tabs.onActivated.addListener(() => {
             if (getSocketBackground().connected) {
                 sendHandshakeToContenScript();
             }
         }
     );
+    chrome.tabs.onUpdated.addListener(() => {
+        if (getSocketBackground().connected) {
+            sendHandshakeToContenScript();
+        }
+    }
+);
 }
 
 export const onInstalledListener = () => {
